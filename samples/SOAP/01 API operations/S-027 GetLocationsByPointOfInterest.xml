@@ -1,0 +1,19 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+   <soapenv:Header>
+      <RequestContext>
+         <Version>1.0</Version>
+         <Language>en</Language>
+         <GroupID>1</GroupID>
+         <RequestReference>{{RequestReference}}</RequestReference>
+      </RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <GetLocationsByPointOfInterestRequest>
+         <PointOfInterest>CN Tower</PointOfInterest>
+         <SearchOptions>
+            <RadialDistanceInKM>5</RadialDistanceInKM>
+            <MaxNumberOfLocations>5</MaxNumberOfLocations>
+         </SearchOptions>
+      </GetLocationsByPointOfInterestRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

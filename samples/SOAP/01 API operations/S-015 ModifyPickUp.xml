@@ -1,0 +1,36 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+   <soapenv:Header>
+      <RequestContext>
+         <Version>1.0</Version>
+         <Language>en</Language>
+         <GroupID>1</GroupID>
+         <RequestReference>{{RequestReference}}</RequestReference>
+      </RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <ModifyPickUpRequest>
+         <BillingAccountNumber>{{AccountNumber}}</BillingAccountNumber>
+         <ConfirmationNumber>{{PickUpConfirmationNumber}}</ConfirmationNumber>
+         <ModifyPickupInstruction>
+            <UntilTime>1800</UntilTime>
+            <PickUpLocation>BackDoor</PickUpLocation>
+            <TrailerAccessible>false</TrailerAccessible>
+            <LoadingDockAvailable>false</LoadingDockAvailable>
+            <ShipmentOnSkids>false</ShipmentOnSkids>
+            <NumberOfSkids>0</NumberOfSkids>
+         </ModifyPickupInstruction>
+         <ShipmentSummary>
+            <ShipmentSummaryDetails>
+               <ShipmentSummaryDetail>
+                  <DestinationCode>DOM</DestinationCode>
+                  <TotalPieces>2</TotalPieces>
+                  <TotalWeight>
+                     <Value>14</Value>
+                     <WeightUnit>lb</WeightUnit>
+                  </TotalWeight>
+               </ShipmentSummaryDetail>
+            </ShipmentSummaryDetails>
+         </ShipmentSummary>
+      </ModifyPickUpRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

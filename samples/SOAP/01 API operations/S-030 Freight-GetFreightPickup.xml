@@ -1,0 +1,75 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+   <soapenv:Header>
+      <RequestContext>
+         <Version>1.0</Version>
+         <Language>en</Language>
+         <GroupID>1</GroupID>
+         <RequestReference>{{RequestReference}}</RequestReference>
+      </RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <FreightGetPickUpRequest>
+         <PickUp>
+            <SenderInformation>
+               <Address>
+                  <Name>Shipping</Name>
+                  <Company>Sample Co</Company>
+                  <StreetNumber>5995</StreetNumber>
+                  <StreetName>Avebury</StreetName>
+                  <StreetType>Road</StreetType>
+                  <City>Mississauga</City>
+                  <Province>ON</Province>
+                  <Country>CA</Country>
+                  <PostalCode>L5R3T8</PostalCode>
+                  <PhoneNumber><CountryCode>1</CountryCode><AreaCode>416</AreaCode><Phone>1234567</Phone></PhoneNumber>
+               </Address>
+               <EmailAddress>shipping@example.com</EmailAddress>
+            </SenderInformation>
+            <ReceiverInformation>
+               <Address>
+                  <Name>Receiving</Name>
+                  <Company>Sample Receiver</Company>
+                  <StreetNumber>3700</StreetNumber>
+                  <StreetName>Jericho</StreetName>
+                  <StreetType>Road</StreetType>
+                  <City>Richmond</City>
+                  <Province>BC</Province>
+                  <Country>CA</Country>
+                  <PostalCode>V7B1M5</PostalCode>
+                  <PhoneNumber><CountryCode>1</CountryCode><AreaCode>604</AreaCode><Phone>1234567</Phone></PhoneNumber>
+               </Address>
+               <EmailAddress>receiving@example.com</EmailAddress>
+            </ReceiverInformation>
+            <PaymentInformation>
+               <PaymentType>Sender</PaymentType>
+               <RegisteredAccountNumber>{{Freight_account}}</RegisteredAccountNumber>
+               <BillingAccountNumber>{{Freight_account}}</BillingAccountNumber>
+            </PaymentInformation>
+            <ShipmentDetails>
+               <ServiceTypeCode>S</ServiceTypeCode>
+               <ShipmentDate>{{Current_Date}}</ShipmentDate>
+               <SpecialInstructions>Sample freight pickup</SpecialInstructions>
+               <LineItemDetails>
+                  <LineItem>
+                     <LineNumber>1</LineNumber>
+                     <Pieces>1</Pieces>
+                     <HandlingUnit>1</HandlingUnit>
+                     <HandlingUnitType>pallet</HandlingUnitType>
+                     <Description>Sample freight</Description>
+                     <Weight><Value>260</Value><WeightUnit>lb</WeightUnit></Weight>
+                     <Length><Value>48</Value><DimensionUnit>in</DimensionUnit></Length>
+                     <Width><Value>40</Value><DimensionUnit>in</DimensionUnit></Width>
+                     <Height><Value>48</Value><DimensionUnit>in</DimensionUnit></Height>
+                  </LineItem>
+               </LineItemDetails>
+            </ShipmentDetails>
+            <PickupInformation>
+               <PickupDate>{{Pickup_Date}}</PickupDate>
+               <ReadyTime>14:00</ReadyTime>
+               <CloseTime>17:00</CloseTime>
+               <PickUpConfirmationEmailFlag>true</PickUpConfirmationEmailFlag>
+            </PickupInformation>
+         </PickUp>
+      </FreightGetPickUpRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
