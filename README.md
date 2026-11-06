@@ -44,9 +44,28 @@ The yellow columns are yours:
 
 | Status | Meaning |
 |---|---|
-| **Verified** | This exact body succeeded live. SOAP: Development environment, 2026-10-29. REST: Certification, 2026-10-06. |
-| **Not yet verified** | Either a verified body with only this row's item changed (for example a different service ID, option value or document type), or — for pickups, ValidateCityPostalCodeZip, tracking by reference, the Point of Interest locator and freight pickup, tracking and documents — a request built from the published request format. Expected to work; not yet sent. |
+| **Verified** | This exact body succeeded live. The expected outcome says where: *Development / Certification* (SOAP Development 2026-10-29, REST Certification 2026-10-06) or *Production 2026-11-06*. |
+| **Not available** | Sent in Production on 2026-11-06 and refused. The expected outcome gives the exact error and what it means — for example a real service ID not offered on the test lane, an option not accepted on outbound shipments, or REST freight not enabled on the account. Your account or lane may differ, so these are worth testing yourself. |
+| **Not yet verified** | Not sent live yet: tracking by reference (needs a reference from one of your shipments) and the freight pickup, freight tracking and freight documents samples (they need a real freight shipment or pickup, which the API cannot cancel). |
 | **Not applicable** | No sample can be sent: a service ID spelling the REST API rejects (`9001-51`, the row names the right one), a field removed in Shipping Web Service 2.3, the 2.3 EU fields (not in the Development WSDL yet), or the REST Service Availability API (not published yet). |
+
+## Production run, 2026-11-06
+
+Every not-yet-verified sample was sent once in Production; every shipment and pickup it created was voided straight away (43 shipments, 2 pickups).
+
+| | Verified | Not available | Not yet verified | Not applicable |
+|---|---|---|---|---|
+| SOAP (186 rows) | 169 | 10 | 4 | 3 |
+| REST (229 rows) | 148 | 56 | 0 | 25 |
+
+What Production taught us, beyond pass/fail:
+
+- **SOAP pickups need `Version 1.2`** in the request header; `1.0` returns `3001136 Service version is invalid`.
+- **REST Express Cheque payment methods are words:** `Cheque`, `Post dated Cheque`, `Certified Cheque`, `Money Order`, `Bank Draft` (`9001-146`). SOAP uses `PostDatedCheque` etc.
+- **REST notifications:** `ShipmentNotification-Receiver` needs `notificationMessage` (`9001-273`); the proactive `NotifyWhen…` types need `notifications.requestorName` (`9001-322`).
+- **Sunday delivery / pickup** need an Express service (`9001-100` with Ground) and are lane-dependent.
+- **`ReturnPickup`, `PackageFree`, `OpenVerify`** are refused on outbound shipments (SOAP `1001107`, REST `9001-68`).
+- **REST `brokerageVendorAddress` / `brokerageExporterAddress`** are in the published spec but refused (`9001-276`).
 
 ## Placeholders
 

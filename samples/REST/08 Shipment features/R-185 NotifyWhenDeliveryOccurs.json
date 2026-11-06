@@ -53,6 +53,7 @@
       "shipmentReference1": "TC # 005"
     },
     "notifications": {
+      "requestorName": "Shipping",
       "requestorEmail": "myconf@abc.com",
       "subscriptions": [
         {

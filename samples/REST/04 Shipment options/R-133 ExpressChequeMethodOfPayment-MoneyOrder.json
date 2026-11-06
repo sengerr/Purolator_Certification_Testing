@@ -71,7 +71,7 @@
         },
         {
           "optionId": "ExpressChequeMethodOfPayment",
-          "optionIdValue": "MoneyOrder"
+          "optionIdValue": "Money Order"
         },
         {
           "optionId": "ExpressChequeAmount",
