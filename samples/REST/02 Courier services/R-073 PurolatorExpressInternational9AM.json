@@ -1,0 +1,64 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "validateOnly": false,
+  "returnsManagement": false,
+  "returnRates": false,
+  "outboundShipment": {
+    "pickupType": "DROPOFF",
+    "senderInformation": {
+      "attentionTo": "Tech A",
+      "streetAddress": [
+        "3700 Jericho Road"
+      ],
+      "city": "Richmond",
+      "provinceStateCode": "BC",
+      "country": "CA",
+      "postalZipCode": "V7B1M5",
+      "phoneNumber": "16042734333"
+    },
+    "receiverInformation": {
+      "attentionTo": "Tech B",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "Lang Strasse 59"
+      ],
+      "city": "Ottobrunn",
+      "country": "DE",
+      "postalZipCode": "85501",
+      "phoneNumber": "18004595599"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorExpressInternational9AM",
+      "unitOfMeasurement": "IMPERIAL",
+      "descriptionOfGoods": "Product matrix test",
+      "totalWeight": 2,
+      "totalPackages": 1,
+      "dangerousGoodsDeclarationDocumentIndicator": false,
+      "packageInformation": [
+        {
+          "packageWeight": 2,
+          "packageLength": 0,
+          "packageWidth": 0,
+          "packageHeight": 0
+        }
+      ]
+    },
+    "paymentInformation": {
+      "paymentType": "Sender",
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "billingAccountNumber": "{{AccountNumber}}"
+    },
+    "customerReferenceInformation": {
+      "costCenter": "Product Matrix",
+      "shipmentReference1": "PurolatorExpressInternational"
+    }
+  },
+  "shipmentDocuments": {
+    "label": {
+      "outputType": "ZPL",
+      "printerFormat": "thermal",
+      "responseType": "BASE64"
+    }
+  }
+}

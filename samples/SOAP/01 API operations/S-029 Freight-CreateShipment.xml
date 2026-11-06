@@ -1,0 +1,229 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+   <soapenv:Header>
+      <RequestContext>
+         <!--type: string-->
+         <Version>1.1</Version>
+         <!--type: Language - enumeration: [en,fr]-->
+         <Language>en</Language>
+         <!--type: string-->
+         <GroupID>0</GroupID>
+         <!--type: string-->
+         <RequestReference>FREIGHT SHIPMENT</RequestReference>
+      </RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <CreateShipmentRequest>
+         <Shipment>
+            <SenderInformation>
+                    <Address>
+                        <Name>Tech A</Name>
+                        <Company>Purolator</Company>
+                        <Department>External IT</Department>
+                        <StreetNumber>17718</StreetNumber>
+                        <StreetSuffix></StreetSuffix>
+                        <StreetName>114</StreetName>
+                        <StreetType>Ave</StreetType>
+                        <StreetDirection></StreetDirection>
+                        <Suite></Suite>
+                        <Floor></Floor>
+                        <StreetAddress2></StreetAddress2>
+                        <StreetAddress3></StreetAddress3>
+                        <City>Edmonton</City>
+                        <Province>AB</Province>
+                        <Country>CA</Country>
+                        <PostalCode>T5S2N4</PostalCode>
+                        <PhoneNumber>
+                            <CountryCode>1</CountryCode>
+                            <AreaCode>780</AreaCode>
+                            <Phone>4091270</Phone>
+                            <Extension></Extension>
+                        </PhoneNumber>
+                        <FaxNumber>
+                            <CountryCode>1</CountryCode>
+                            <AreaCode>800</AreaCode>
+                            <Phone>4595599</Phone>
+                            <Extension></Extension>
+                        </FaxNumber>
+                    </Address>
+                    <EmailAddress></EmailAddress>
+                </SenderInformation>
+            <ReceiverInformation>
+                    <Address>
+                        <Name>Tech B</Name>
+                        <Company>Purolator</Company>
+                        <Department>External IT</Department>
+                        <StreetNumber>3700</StreetNumber>
+                        <StreetSuffix></StreetSuffix>
+                        <StreetName>Jericho</StreetName>
+                        <StreetType>Road</StreetType>
+                        <StreetDirection></StreetDirection>
+                        <Suite></Suite>
+                        <Floor></Floor>
+                        <StreetAddress2></StreetAddress2>
+                        <StreetAddress3></StreetAddress3>
+                        <City>Richmond</City>
+                        <Province>BC</Province>
+                        <Country>CA</Country>
+                        <PostalCode>V7B1M5</PostalCode>
+                        <PhoneNumber>
+                            <CountryCode>1</CountryCode>
+                            <AreaCode>800</AreaCode>
+                            <Phone>4595599</Phone>
+                            <Extension></Extension>
+                        </PhoneNumber>
+                        <FaxNumber>
+                            <CountryCode></CountryCode>
+                            <AreaCode></AreaCode>
+                            <Phone></Phone>
+                            <Extension></Extension>
+                        </FaxNumber>
+                    </Address>
+                    <EmailAddress>webservices@purolator.com</EmailAddress>
+                </ReceiverInformation>
+             <PaymentInformation>
+               <!--type: PaymentType - enumeration: [Sender,Receiver,ThirdParty,CreditCard]-->
+               <PaymentType>Sender</PaymentType>
+               <!--type: string-->
+               <RegisteredAccountNumber>{{Freight_account}}</RegisteredAccountNumber>
+               <!--Optional:-->
+               <!--type: string-->
+               <BillingAccountNumber>{{Freight_account}}</BillingAccountNumber>
+
+            </PaymentInformation>
+            <ShipmentDetails>
+               <!--Optional:-->
+               <!--type: string -  I = Standard S= Expedited -->
+               <ServiceTypeCode>S</ServiceTypeCode>
+               <!--Optional:-->
+               <!--type: string-->
+               <ShipmentDate>{{Current_Date}}</ShipmentDate>
+               <!--Optional:-->
+               <!--type: decimal-->
+               <DeclaredValue>1350</DeclaredValue>
+               <!--Optional:-->
+               <!--type: decimal-->
+               <CODAmount>200</CODAmount>
+               <!--Optional:-->
+               <!--type: string-->
+               <SpecialInstructions>This is a test.</SpecialInstructions>
+               <LineItemDetails>
+                  <!--Zero or more repetitions:-->
+                  <LineItem>
+                     <!--type: int-->
+                     <LineNumber>1</LineNumber>
+                     <!--type: int-->
+                     <Pieces>1</Pieces>
+                     <!--type: int-->
+                     <HandlingUnit>1</HandlingUnit>
+                     <!--type: string-->
+                     <HandlingUnitType>pallet</HandlingUnitType>
+                     <!--Optional:-->
+                     <!--type: string-->
+                     <Description>Industrial Oven</Description>
+                     <Weight>
+                        <!--type: decimal-->
+                        <Value>260</Value>
+                        <!--type: WeightUnit - enumeration: [lb,kg]-->
+                        <WeightUnit>lb</WeightUnit>
+                     </Weight>
+                     <!--Optional:-->
+                     <Length>
+                        <!--type: decimal-->
+                        <Value>30</Value>
+                        <!--type: DimensionUnit - enumeration: [in,cm]-->
+                        <DimensionUnit>in</DimensionUnit>
+                     </Length>
+                     <!--Optional:-->
+                     <Width>
+                        <!--type: decimal-->
+                        <Value>50</Value>
+                        <!--type: DimensionUnit - enumeration: [in,cm]-->
+                        <DimensionUnit>in</DimensionUnit>
+                     </Width>
+                     <!--Optional:-->
+                     <Height>
+                        <!--type: decimal-->
+                        <Value>30</Value>
+                        <!--type: DimensionUnit - enumeration: [in,cm]-->
+                        <DimensionUnit>in</DimensionUnit>
+                     </Height>
+                     <!--Optional:-->
+                     <!--type: decimal-->
+                     <BasePrice>500</BasePrice>
+                     <!--Optional:-->
+                     <!--type: decimal-->
+                     <Charge>50</Charge>
+                  </LineItem>
+               </LineItemDetails>
+               <!--Optional:-->
+               <AccessorialParameters>
+                  <!--Zero or more repetitions:-->
+                  <BoolValuePair>
+                     <!--type: string-->
+                     <Keyword>2MEN</Keyword>
+                     <!--type: boolean-->
+                     <Value>true</Value>
+                  </BoolValuePair>
+               </AccessorialParameters>
+            </ShipmentDetails>
+            <!--type: boolean-->
+            <AppointmentFlag>false</AppointmentFlag>
+            <!--Optional:-->
+            <!--type: string-->
+            <AppointmentDate>false</AppointmentDate>
+            <!--Optional:-->
+            <!--type: string-->
+            <AppointmentStartTime></AppointmentStartTime>
+            <!--Optional:-->
+            <!--type: string-->
+            <AppointmentEndTime></AppointmentEndTime>
+            <!--type: boolean-->
+            <PickupFlag>false</PickupFlag>
+            <!--Optional:-->
+            <PickupInformation>
+               <!--type: string-->
+               <PickupDate>{{Date}}</PickupDate>
+               <!--type: string-->
+               <ReadyTime>15:00</ReadyTime>
+               <!--type: string-->
+               <CloseTime>18:00</CloseTime>
+               <!--Optional:-->
+               <PickUpOptions>
+                  <!--Zero or more repetitions:-->
+                  <BoolValuePair>
+                     <!--type: string-->
+                     <Keyword>2MEN</Keyword>
+                     <!--type: boolean-->
+                     <Value>true</Value>
+                  </BoolValuePair>
+               </PickUpOptions>
+               <!--Optional:-->
+               <!--type: string-->
+               <OtherOption></OtherOption>
+               <!--Optional:-->
+               <!--type: string-->
+               <StopNotes></StopNotes>
+               <!--Optional:-->
+               <!--type: string-->
+               <DriverNotes></DriverNotes>
+               <!--Optional:-->
+               <!--type: boolean-->
+               <PickUpConfirmationEmailFlag>true</PickUpConfirmationEmailFlag>
+            </PickupInformation>
+            <!--Optional:-->
+            <AlertInformation>
+               <!--Optional:-->
+               <AlertDetails>
+                  <!--Zero or more repetitions:-->
+                  <AlertDetail>
+                     <!--type: string-->
+                     <Type>POD</Type>
+                     <!--type: string-->
+                     <EmailAddress>test@purolator.com</EmailAddress>
+                  </AlertDetail>
+               </AlertDetails>
+            </AlertInformation>
+         </Shipment>
+      </CreateShipmentRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

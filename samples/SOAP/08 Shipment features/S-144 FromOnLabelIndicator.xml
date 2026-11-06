@@ -1,0 +1,184 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://purolator.com/pws/datatypes/v2">
+   <soapenv:Header>
+      <v2:RequestContext>
+         <v2:Version>2.1</v2:Version>
+         <v2:Language>en</v2:Language>
+         <v2:GroupID/>
+         <v2:RequestReference/>
+
+         <v2:UserToken/>
+      </v2:RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <v2:CreateShipmentRequest>
+         <v2:Shipment>
+            <v2:SenderInformation>
+               <v2:Address>
+                  <v2:Name>Tech A</v2:Name>
+                  <v2:Company>Purolator</v2:Company>
+                  <v2:Department/>
+                  <v2:StreetNumber>17718</v2:StreetNumber>
+                  <v2:StreetSuffix/>
+                  <v2:StreetName>114</v2:StreetName>
+                  <v2:StreetType>Ave</v2:StreetType>
+                  <v2:StreetDirection/>
+                  <v2:Suite/>
+                  <v2:Floor/>
+                  <v2:StreetAddress2/>
+                  <v2:StreetAddress3/>
+                  <v2:City>Edmonton</v2:City>
+                  <v2:Province>AB</v2:Province>
+                  <v2:Country>CA</v2:Country>
+                  <v2:PostalCode>T5S2N4</v2:PostalCode>
+                  <v2:PhoneNumber>
+                     <v2:CountryCode>1</v2:CountryCode>
+                     <v2:AreaCode>780</v2:AreaCode>
+                     <v2:Phone>4091270</v2:Phone>
+                     <v2:Extension></v2:Extension>
+                  </v2:PhoneNumber>  
+               </v2:Address>
+            </v2:SenderInformation>
+            <v2:ReceiverInformation>
+               <v2:Address>
+                  <v2:Name>Home Receiver</v2:Name>
+                  <v2:Company></v2:Company>
+                  <v2:Department>QA Test Dept</v2:Department>
+                  <v2:StreetNumber>24</v2:StreetNumber>
+                  <v2:StreetSuffix/>
+                  <v2:StreetName>Sussex</v2:StreetName>
+                  <v2:StreetType>Drive</v2:StreetType>
+                  <v2:StreetDirection/>
+                  <v2:Suite/>
+                  <v2:Floor/>
+                  <v2:StreetAddress2/>
+                  <v2:StreetAddress3/>
+                  <v2:City>Ottawa</v2:City>
+                  <v2:Province>ON</v2:Province>
+                  <v2:Country>CA</v2:Country>
+                  <v2:PostalCode>K1M1P5</v2:PostalCode>
+                  <v2:PhoneNumber>
+                     <v2:CountryCode>1</v2:CountryCode>
+                     <v2:AreaCode>800</v2:AreaCode>
+                     <v2:Phone>4595599</v2:Phone>
+                     <v2:Extension></v2:Extension>
+                  </v2:PhoneNumber>
+               </v2:Address>             
+            </v2:ReceiverInformation>
+            <v2:FromOnLabelIndicator>true</v2:FromOnLabelIndicator>
+            <v2:FromOnLabelInformation>
+               <v2:Address>
+                  <v2:Name>Blind Name</v2:Name>
+                  <v2:Company>Blind Company</v2:Company>
+                  <v2:Department>Blind Department</v2:Department>
+                  <v2:StreetNumber></v2:StreetNumber>
+                  <v2:StreetSuffix></v2:StreetSuffix>
+                  <v2:StreetName>362 Vulcan ST</v2:StreetName>
+                  <v2:StreetType></v2:StreetType>
+                  <v2:StreetDirection></v2:StreetDirection>
+                  <v2:Suite></v2:Suite>
+                  <v2:Floor></v2:Floor>
+                  <v2:StreetAddress2>Blind Add 2</v2:StreetAddress2>
+                  <v2:StreetAddress3>Blind Add 3</v2:StreetAddress3>
+                  <v2:City>ETOBICOKE</v2:City>
+                  <v2:Province>ON</v2:Province>
+                  <v2:Country>CA</v2:Country>
+                  <v2:PostalCode>M9W4W7</v2:PostalCode>
+                  <v2:PhoneNumber>
+                     <v2:CountryCode>1</v2:CountryCode>
+                     <v2:AreaCode>123</v2:AreaCode>
+                     <v2:Phone>1234567</v2:Phone>
+                     <v2:Extension></v2:Extension>
+                  </v2:PhoneNumber>
+               </v2:Address>
+            </v2:FromOnLabelInformation>
+            <v2:ShipmentDate/>
+            <v2:PackageInformation>
+               <v2:ServiceID>PurolatorExpress</v2:ServiceID>
+               <v2:Description/>
+               <v2:TotalWeight>
+                  <v2:Value>1</v2:Value>
+                  <v2:WeightUnit>lb</v2:WeightUnit>
+               </v2:TotalWeight>
+               <v2:TotalPieces>1</v2:TotalPieces>
+               <v2:PiecesInformation>
+                  <v2:Piece>
+                     <v2:Weight>
+                        <v2:Value>1</v2:Value>
+                        <v2:WeightUnit>lb</v2:WeightUnit>
+                     </v2:Weight>
+                     <v2:Length>
+                        <v2:Value>11</v2:Value>
+                        <v2:DimensionUnit>in</v2:DimensionUnit>
+                     </v2:Length>
+                     <v2:Width>
+                        <v2:Value>5</v2:Value>
+                        <v2:DimensionUnit>in</v2:DimensionUnit>
+                     </v2:Width>
+                     <v2:Height>
+                        <v2:Value>9</v2:Value>
+                        <v2:DimensionUnit>in</v2:DimensionUnit>
+                     </v2:Height>
+					 <v2:Options>
+                        <v2:OptionIDValuePair>
+                           <v2:ID>SpecialHandling</v2:ID>
+                           <v2:Value>false</v2:Value>
+                        </v2:OptionIDValuePair>
+
+                     </v2:Options>
+                  </v2:Piece>
+               </v2:PiecesInformation>
+               <v2:DangerousGoodsDeclarationDocumentIndicator>false</v2:DangerousGoodsDeclarationDocumentIndicator>
+               <v2:OptionsInformation> 
+  		 <v2:Options> 
+    		   <v2:OptionIDValuePair>
+      		     <v2:ID>ResidentialSignatureDomestic</v2:ID>
+      		     <v2:Value>true</v2:Value>
+		   </v2:OptionIDValuePair>
+		 </v2:Options>
+		</v2:OptionsInformation>
+            </v2:PackageInformation>
+            <v2:InternationalInformation>
+               <v2:DocumentsOnlyIndicator>false</v2:DocumentsOnlyIndicator>
+            </v2:InternationalInformation>
+            <v2:PaymentInformation>
+               <v2:PaymentType>Sender</v2:PaymentType>
+               <v2:RegisteredAccountNumber>{{AccountNumber}}</v2:RegisteredAccountNumber>
+               <v2:BillingAccountNumber/>
+            </v2:PaymentInformation>
+            <v2:PickupInformation>
+               <v2:PickupType>DropOff</v2:PickupType>
+            </v2:PickupInformation>
+            <v2:NotificationInformation>
+               <v2:ConfirmationEmailAddress>myconf@abc.com</v2:ConfirmationEmailAddress>
+               <v2:AdvancedShippingNotificationEmailAddress1>asn1@abc.com</v2:AdvancedShippingNotificationEmailAddress1>
+               <v2:AdvancedShippingNotificationEmailAddress2>asn2@abc.com</v2:AdvancedShippingNotificationEmailAddress2>
+               <v2:AdvancedShippingNotificationMessage>This is a test ASN message</v2:AdvancedShippingNotificationMessage>
+            </v2:NotificationInformation>
+            <v2:TrackingReferenceInformation>
+               <v2:Reference1></v2:Reference1>
+               <v2:Reference2/>
+               <v2:Reference3/>
+               <v2:Reference4/>
+            </v2:TrackingReferenceInformation>
+            <v2:OtherInformation>
+               <v2:CostCentre/>
+               <v2:SpecialInstructions>Blind Shipping</v2:SpecialInstructions>
+            </v2:OtherInformation>
+            <v2:ProactiveNotification>
+               <v2:RequestorName>Sub 1 Test Data</v2:RequestorName>
+               <v2:RequestorEmail>test@abc.com</v2:RequestorEmail>
+               <v2:Subscriptions>
+
+                  <v2:Subscription>
+                     <v2:Name>ABS Solutions 1</v2:Name>
+                     <v2:Email>test1@abc.com</v2:Email>
+                     <v2:NotifyWhenExceptionOccurs>false</v2:NotifyWhenExceptionOccurs>
+                     <v2:NotifyWhenDeliveryOccurs>false</v2:NotifyWhenDeliveryOccurs>
+                  </v2:Subscription>
+               </v2:Subscriptions>
+            </v2:ProactiveNotification>
+         </v2:Shipment>
+         <v2:PrinterType>Thermal</v2:PrinterType>
+      </v2:CreateShipmentRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

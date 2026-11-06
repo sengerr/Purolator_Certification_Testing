@@ -1,0 +1,67 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "validateOnly": false,
+  "returnsManagement": true,
+  "returnRates": false,
+  "rma": "123456789012345",
+  "outboundShipment": {
+    "pickupType": "DROPOFF",
+    "senderInformation": {
+      "attentionTo": "Tech A",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4",
+      "phoneNumber": "17804091270"
+    },
+    "receiverInformation": {
+      "attentionTo": "Tech B",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "62 Vulcan Street"
+      ],
+      "city": "Etobicoke",
+      "provinceStateCode": "ON",
+      "country": "CA",
+      "postalZipCode": "M9W1L2",
+      "phoneNumber": "18004595599"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorGroundReturn",
+      "unitOfMeasurement": "IMPERIAL",
+      "descriptionOfGoods": "Consolidation check",
+      "totalWeight": 1,
+      "totalPackages": 1,
+      "dangerousGoodsDeclarationDocumentIndicator": false,
+      "packageInformation": [
+        {
+          "packageWeight": 1,
+          "packageLength": 19,
+          "packageWidth": 12,
+          "packageHeight": 1
+        }
+      ]
+    },
+    "paymentInformation": {
+      "paymentType": "Sender",
+      "registeredAccountNumber": "{{Freight_account}}",
+      "billingAccountNumber": "{{Freight_account}}"
+    },
+    "customerReferenceInformation": {
+      "costCenter": "Consolidation",
+      "shipmentReference1": "PO123456"
+    }
+  },
+  "shipmentDocuments": {
+    "label": {
+      "outputType": "ZPL",
+      "printerFormat": "thermal",
+      "responseType": "BASE64"
+    }
+  }
+}

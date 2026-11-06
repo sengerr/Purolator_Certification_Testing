@@ -1,0 +1,73 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "validateOnly": false,
+  "returnsManagement": false,
+  "returnRates": false,
+  "outboundShipment": {
+    "pickupType": "DROPOFF",
+    "senderInformation": {
+      "attentionTo": "Tech A",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4",
+      "phoneNumber": "17804091270"
+    },
+    "receiverInformation": {
+      "attentionTo": "Home Receiver",
+      "streetAddress": [
+        "24 Sussex Drive"
+      ],
+      "city": "Ottawa",
+      "provinceStateCode": "ON",
+      "country": "CA",
+      "postalZipCode": "K1M1P5",
+      "phoneNumber": "18004595599"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorExpressEnvelope",
+      "unitOfMeasurement": "IMPERIAL",
+      "descriptionOfGoods": "Test Description",
+      "totalWeight": 1,
+      "totalPackages": 1,
+      "dangerousGoodsDeclarationDocumentIndicator": false,
+      "shipmentOptionsInformation": [
+        {
+          "optionId": "ResidentialSignatureDomestic",
+          "optionIdValue": "true"
+        }
+      ],
+      "packageInformation": [
+        {
+          "packageWeight": 1,
+          "packageLength": 0,
+          "packageWidth": 0,
+          "packageHeight": 0
+        }
+      ]
+    },
+    "paymentInformation": {
+      "paymentType": "Sender",
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "billingAccountNumber": "{{AccountNumber}}"
+    },
+    "customerReferenceInformation": {
+      "costCenter": "Cost Center",
+      "notes": "Special Instructions",
+      "shipmentReference1": "REF1",
+      "shipmentReference2": "REF2",
+      "shipmentReference3": "REF3"
+    }
+  },
+  "shipmentDocuments": {
+    "label": {
+      "outputType": "PDF",
+      "printerFormat": "Laser",
+      "responseType": "URL"
+    }
+  }
+}

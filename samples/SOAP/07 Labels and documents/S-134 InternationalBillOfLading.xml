@@ -1,0 +1,27 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://purolator.com/pws/datatypes/v1" xmlns:sys="http://schemas.datacontract.org/2004/07/System">
+   <soapenv:Header>
+      <v1:RequestContext>
+         <v1:Version>1.0</v1:Version>
+         <v1:Language>en</v1:Language>
+         <v1:GroupID>11</v1:GroupID>
+         <v1:RequestReference>test</v1:RequestReference>
+      </v1:RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <v1:GetDocumentsRequest>
+         <v1:DocumentCriterium>
+            <!--Zero or more repetitions:-->
+            <v1:DocumentCriteria>
+               <v1:PIN>
+                  <v1:Value>{{PIN}}</v1:Value>
+               </v1:PIN>
+               <!--Optional:-->
+               <v1:DocumentTypes>
+                  <!--Zero or more repetitions:-->
+                  <sys:DocumentType>InternationalBillOfLading</sys:DocumentType>
+               </v1:DocumentTypes>
+            </v1:DocumentCriteria>
+         </v1:DocumentCriterium>
+      </v1:GetDocumentsRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

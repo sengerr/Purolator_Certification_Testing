@@ -1,0 +1,74 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "validateOnly": false,
+  "returnsManagement": false,
+  "returnRates": false,
+  "outboundShipment": {
+    "pickupType": "DROPOFF",
+    "senderInformation": {
+      "attentionTo": "Tech A",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4",
+      "phoneNumber": "17804091270"
+    },
+    "receiverInformation": {
+      "attentionTo": "Tech B",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "30 Aero Drive NE"
+      ],
+      "city": "Calgary",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T2E8Z9",
+      "phoneNumber": "18004595599"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorGround",
+      "unitOfMeasurement": "IMPERIAL",
+      "totalWeight": 10,
+      "totalPackages": 1,
+      "dangerousGoodsDeclarationDocumentIndicator": false,
+      "shipmentOptionsInformation": [
+        {
+          "optionId": "SundayDelivery",
+          "optionIdValue": "true"
+        },
+        {
+          "optionId": "OriginSignatureNotRequired",
+          "optionIdValue": "true"
+        }
+      ],
+      "packageInformation": [
+        {
+          "packageWeight": 10,
+          "packageLength": 12,
+          "packageWidth": 12,
+          "packageHeight": 1
+        }
+      ]
+    },
+    "paymentInformation": {
+      "paymentType": "Sender",
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "billingAccountNumber": "{{AccountNumber}}"
+    },
+    "customerReferenceInformation": {
+      "notes": "East"
+    }
+  },
+  "shipmentDocuments": {
+    "label": {
+      "outputType": "PDF",
+      "printerFormat": "Laser",
+      "responseType": "BASE64"
+    }
+  }
+}

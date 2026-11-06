@@ -1,0 +1,47 @@
+{
+  "lineOfBusiness": "Freight",
+  "shipmentDate": "{{Current_Date}}",
+  "outboundShipment": {
+    "senderInformation": {
+      "companyName": "Purolator",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4"
+    },
+    "receiverInformation": {
+      "companyName": "Purolator",
+      "streetAddress": [
+        "30 Aero Drive NE"
+      ],
+      "city": "Calgary",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T2E8Z9"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorFreightStandard",
+      "unitOfMeasurement": "Imperial",
+      "lineItemDetails": [
+        {
+          "lineItem": 1,
+          "pieces": 1,
+          "handlingUnit": 1,
+          "handlingUnitType": "UNIT",
+          "description": "Sample freight",
+          "weight": 200,
+          "length": 48,
+          "width": 40,
+          "height": 48
+        }
+      ]
+    },
+    "billingInformation": {
+      "billingAccountNumber": "{{AccountNumber}}",
+      "displayPublishedRates": false
+    }
+  }
+}

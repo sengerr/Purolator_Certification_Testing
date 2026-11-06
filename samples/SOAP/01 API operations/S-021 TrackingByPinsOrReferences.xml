@@ -1,0 +1,31 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://purolator.com/pws/datatypes/v2">
+   <soapenv:Header>
+      <v2:RequestContext>
+         <v2:Version>2.0</v2:Version>
+         <v2:Language>en</v2:Language>
+         <v2:GroupID></v2:GroupID>
+         <v2:RequestReference>CallthePOD</v2:RequestReference>
+
+         <v2:UserToken></v2:UserToken>
+      </v2:RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <v2:TrackingByPinsOrReferencesRequest>
+         <v2:TrackingSearchCriteria>
+            <v2:searches>
+
+               <v2:search>
+                  <v2:trackingId>{{PIN}}</v2:trackingId>
+                  <v2:deliveryDetails>lastEvent</v2:deliveryDetails>
+                  <v2:shipmentView>true</v2:shipmentView>
+
+                  <v2:account>{{AccountNumber}}</v2:account>
+                  <v2:pod>true</v2:pod>
+
+                  <v2:destinationPostalZipCode>M9A0A5</v2:destinationPostalZipCode>
+               </v2:search>
+            </v2:searches>
+         </v2:TrackingSearchCriteria>
+      </v2:TrackingByPinsOrReferencesRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

@@ -1,0 +1,6 @@
+{
+  "language": "en",
+  "requestReference": "{{RequestReference}}",
+  "lineOfBusiness": "COURIER",
+  "accountNumber": "{{Freight_account}}"
+}

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+    <soapenv:Header>
+        <RequestContext>
+            <Version>1.0</Version>
+            <Language>en</Language>
+            <GroupID></GroupID>
+            <RequestReference></RequestReference>
+            <!--Optional:-->
+            <UserToken></UserToken>
+        </RequestContext>
+    </soapenv:Header>
+    <soapenv:Body>
+        <GetLocationsByCoordinatesRequest>
+            <Coordinates>
+            <!--Optional:-->
+            <!--type: decimal-->
+             <Latitude>43.6027043</Latitude>
+            <!--Optional:-->
+            <!--type: decimal-->
+             <Longitude>-79.7838751</Longitude>
+          </Coordinates>
+
+          <!--Optional:-->
+         <LocationTypes>
+            <!--Zero or more repetitions:-->
+            <!--type: string-->
+            <LocationType>BestBuy</LocationType>
+                <LocationType>DropBox</LocationType>
+                <LocationType>Michaels</LocationType>
+                <LocationType>MobileQuickStop</LocationType>
+                <LocationType>PenguinPickUp</LocationType>
+                <LocationType>PUDO</LocationType>
+                <LocationType>QSPickupLocker</LocationType>
+                <LocationType>QuickDropKiosk</LocationType>
+                <LocationType>QuickSetupKiosk</LocationType>
+                <LocationType>QuickStopAgent</LocationType>
+                <LocationType>QuickStopPopup</LocationType>
+                <LocationType>RetailPopup</LocationType>
+                <LocationType>ShippingAgent</LocationType>
+                <LocationType>ShippingCentre</LocationType>
+                <LocationType>Smarthub</LocationType>
+                <LocationType>Staples</LocationType>
+         </LocationTypes>
+        </GetLocationsByCoordinatesRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

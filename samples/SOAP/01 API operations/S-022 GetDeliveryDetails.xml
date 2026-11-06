@@ -1,0 +1,19 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://purolator.com/pws/datatypes/v1">
+   <soapenv:Header>
+      <v1:RequestContext>
+         <v1:Version>1.2</v1:Version>
+         <v1:Language>en</v1:Language>
+         <v1:GroupID/>
+         <v1:RequestReference>REF1</v1:RequestReference>
+         <!--Optional:-->
+         <v1:UserToken/>
+      </v1:RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <v1:GetDeliveryDetailsRequest>
+         <v1:PIN>
+            <v1:Value>{{PIN}}</v1:Value>
+         </v1:PIN>
+      </v1:GetDeliveryDetailsRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
