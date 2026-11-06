@@ -71,7 +71,7 @@
         },
         {
           "optionId": "ExpressChequeMethodOfPayment",
-          "optionIdValue": "BankDraft"
+          "optionIdValue": "Bank Draft"
         },
         {
           "optionId": "ExpressChequeAmount",

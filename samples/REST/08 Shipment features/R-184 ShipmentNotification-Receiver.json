@@ -58,7 +58,8 @@
         {
           "email": "myconf@abc.com",
           "notificationType": {
-            "notificationId": "ShipmentNotification-Receiver"
+            "notificationId": "ShipmentNotification-Receiver",
+            "notificationMessage": "Your shipment is on its way"
           },
           "name": "Tech A"
         }

@@ -71,7 +71,7 @@
         },
         {
           "optionId": "ExpressChequeMethodOfPayment",
-          "optionIdValue": "CertifiedCheque"
+          "optionIdValue": "Certified Cheque"
         },
         {
           "optionId": "ExpressChequeAmount",

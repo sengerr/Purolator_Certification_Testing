@@ -71,7 +71,7 @@
         },
         {
           "optionId": "ExpressChequeMethodOfPayment",
-          "optionIdValue": "PostDatedCheque"
+          "optionIdValue": "Post dated Cheque"
         },
         {
           "optionId": "ExpressChequeAmount",
