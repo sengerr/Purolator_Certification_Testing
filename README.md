@@ -45,9 +45,8 @@ The yellow columns are yours:
 | Status | Meaning |
 |---|---|
 | **Verified** | This exact body succeeded live. SOAP: Development environment, 2026-10-29. REST: Certification, 2026-10-06. |
-| **Not yet verified** | A verified body with only this row's item changed (for example a different service ID, option value or document type). Expected to work; not yet sent. |
-| **Not applicable** | A service ID spelling the REST API rejects (`9001-51`). The row says which spelling to use instead. |
-| **No sample yet** | No sample in this release (see below). |
+| **Not yet verified** | Either a verified body with only this row's item changed (for example a different service ID, option value or document type), or — for pickups, ValidateCityPostalCodeZip, tracking by reference, the Point of Interest locator and freight pickup, tracking and documents — a request built from the published request format. Expected to work; not yet sent. |
+| **Not applicable** | No sample can be sent: a service ID spelling the REST API rejects (`9001-51`, the row names the right one), a field removed in Shipping Web Service 2.3, the 2.3 EU fields (not in the Development WSDL yet), or the REST Service Availability API (not published yet). |
 
 ## Placeholders
 
@@ -62,6 +61,10 @@ Replace these before sending:
 | `{{Date}}` | A date relevant to the call (for example a manifest date) |
 | `{{Pickup_Date}}` | Pickup date, `YYYY-MM-DD` |
 | `{{PIN}}` | A shipment PIN you created earlier in your test run |
+| `{{Freight_PIN}}` | A freight shipment PIN (PRO number) you created earlier |
+| `{{PickUpConfirmationNumber}}` | The confirmation number returned when you scheduled a pickup |
+| `{{Reference}}` | A shipment reference you sent when creating a shipment |
+| `{{From_Date}}` / `{{To_Date}}` | Search date range, `YYYY-MM-DD` |
 | `{{RequestReference}}` | Any reference of yours (REST: up to 36 characters) |
 
 ## Headers
@@ -83,8 +86,10 @@ Content-Type: text/xml; charset=utf-8
 SOAPAction: <the value in the checklist's "Send to" column>
 ```
 
-## No sample yet in this release
+## Suggested order
 
-SOAP: ValidateCityPostalCodeZip, SchedulePickUp, ModifyPickUp, VoidPickUp, ValidatePickUp, GetPickUpHistory, TrackPackagesByReference, GetLocationsByPointOfInterest, Freight pickup, Freight tracking, Freight documents, and the FDA / USMCA / FCC / EU cross-border fields (USMCA and FCC indicators were removed in Shipping Web Service 2.3).
-
-REST: modify / history / void pickup, the Service Availability API (coming soon), buyer address and brokerage addresses.
+1. REST: get a token (`R-001`). SOAP: confirm your key works with a quick estimate (`S-005`).
+2. Estimates, then validate-only shipments (SOAP `ValidateShipment`, REST `validateOnly: true`).
+3. Create shipments, fetch their documents with the PIN, then void them.
+4. Schedule, modify and void a pickup, using the confirmation number from the schedule call.
+5. Close the day (consolidate / close manifest) and fetch the summary manifest.

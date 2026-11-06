@@ -1,0 +1,24 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+   <soapenv:Header>
+      <RequestContext>
+         <Version>1.6</Version>
+         <Language>en</Language>
+         <GroupID>1</GroupID>
+         <RequestReference>{{RequestReference}}</RequestReference>
+      </RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <GetDocumentsRequest>
+         <DocumentCriterium>
+            <DocumentCriteria>
+               <PIN>
+                  <Value>{{Freight_PIN}}</Value>
+               </PIN>
+               <!-- Leave DocumentTypes empty to receive every document for the freight shipment
+                    (Bill of Lading, pallet labels regular and thermal). -->
+               <DocumentTypes />
+            </DocumentCriteria>
+         </DocumentCriterium>
+      </GetDocumentsRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

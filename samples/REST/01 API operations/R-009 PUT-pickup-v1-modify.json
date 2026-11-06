@@ -1,0 +1,18 @@
+{
+  "lineOfBusiness": "Courier",
+  "registeredAccountNumber": "{{AccountNumber}}",
+  "pickupConfirmationNumber": "{{PickUpConfirmationNumber}}",
+  "pickupInstructions": {
+    "untilTime": "18:00",
+    "measurementUnit": "imperial",
+    "pickupLocation": "BackDoor",
+    "additionalInstructions": "Updated sample pickup"
+  },
+  "shipmentSummary": [
+    {
+      "destinationCode": "DOM",
+      "totalPieces": 2,
+      "totalWeight": 14
+    }
+  ]
+}

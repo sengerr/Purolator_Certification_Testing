@@ -1,0 +1,8 @@
+{
+  "lineOfBusiness": "Courier",
+  "registeredAccountNumber": "{{AccountNumber}}",
+  "pickupConfirmationNumber": [
+    "{{PickUpConfirmationNumber}}"
+  ],
+  "status": "Scheduled"
+}

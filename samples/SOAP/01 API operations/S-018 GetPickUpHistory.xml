@@ -1,0 +1,23 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+   <soapenv:Header>
+      <RequestContext>
+         <Version>1.0</Version>
+         <Language>en</Language>
+         <GroupID>1</GroupID>
+         <RequestReference>{{RequestReference}}</RequestReference>
+      </RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <GetPickUpHistoryRequest>
+         <PickUpHistorySearchCriteria>
+            <FromDate>{{From_Date}}</FromDate>
+            <ToDate>{{To_Date}}</ToDate>
+            <AccountNumber>{{AccountNumber}}</AccountNumber>
+            <Status>Scheduled</Status>
+            <MaxNumOfRecords>10</MaxNumOfRecords>
+            <SortColumn>1</SortColumn>
+            <SortDirection>A</SortDirection>
+         </PickUpHistorySearchCriteria>
+      </GetPickUpHistoryRequest>
+   </soapenv:Body>
+</soapenv:Envelope>
