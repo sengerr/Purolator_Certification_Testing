@@ -69,7 +69,7 @@ What Production taught us, beyond pass/fail:
 
 ## Placeholders
 
-Replace these before sending:
+Replace these before sending. They use the same names as the variables in the Purolator_2026 Postman collections, which fill the dates for you:
 
 | Placeholder | Replace with |
 |---|---|
@@ -77,13 +77,14 @@ Replace these before sending:
 | `{{Different_AccountNumber}}` | A second account (receiver / third-party billing) |
 | `{{Freight_account}}` | Your freight account number |
 | `{{Current_Date}}` | Ship date, `YYYY-MM-DD` (today up to 10 days ahead) |
-| `{{Date}}` | A date relevant to the call (for example a manifest date) |
-| `{{Pickup_Date}}` | Pickup date, `YYYY-MM-DD` |
+| `{{manifestDate}}` | Manifest date, `YYYY-MM-DD` (summary manifests cover a rolling 10-day window) |
+| `{{pickupDate}}` | Pickup date, `YYYY-MM-DD` (next business day) |
 | `{{PIN}}` | A shipment PIN you created earlier in your test run |
 | `{{Freight_PIN}}` | A freight shipment PIN (PRO number) you created earlier |
 | `{{PickUpConfirmationNumber}}` | The confirmation number returned when you scheduled a pickup |
 | `{{Reference}}` | A shipment reference you sent when creating a shipment |
-| `{{From_Date}}` / `{{To_Date}}` | Search date range, `YYYY-MM-DD` |
+| `{{pickupHistoryFromDate}}` / `{{pickupHistoryToDate}}` | Pickup history date range, `YYYY-MM-DD` |
+| `{{trackDateFrom}}` / `{{trackDateTo}}` | Tracking-by-reference date range, `YYYY-MM-DD` |
 | `{{RequestReference}}` | Any reference of yours (REST: up to 36 characters) |
 
 ## Headers

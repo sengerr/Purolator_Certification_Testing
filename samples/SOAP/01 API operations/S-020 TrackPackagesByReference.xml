@@ -14,8 +14,8 @@
             <DestinationPostalCode>L5R3T8</DestinationPostalCode>
             <DestinationCountryCode>CA</DestinationCountryCode>
             <BillingAccountNumber>{{AccountNumber}}</BillingAccountNumber>
-            <ShipmentFromDate>{{From_Date}}</ShipmentFromDate>
-            <ShipmentToDate>{{To_Date}}</ShipmentToDate>
+            <ShipmentFromDate>{{trackDateFrom}}</ShipmentFromDate>
+            <ShipmentToDate>{{trackDateTo}}</ShipmentToDate>
          </TrackPackageByReferenceSearchCriteria>
       </TrackPackagesByReferenceRequest>
    </soapenv:Body>

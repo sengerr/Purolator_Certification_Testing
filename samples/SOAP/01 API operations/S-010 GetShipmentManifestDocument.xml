@@ -20,7 +20,7 @@
                 <!--Zero or more repetitions:-->
                 <ShipmentManifestDocumentCriteria>
                     <!--type: string-->
-                    <ManifestDate>{{Date}}</ManifestDate>
+                    <ManifestDate>{{Current_Date}}</ManifestDate>
                 </ShipmentManifestDocumentCriteria>
             </ShipmentManifestDocumentCriterium>
         </GetShipmentManifestDocumentRequest>

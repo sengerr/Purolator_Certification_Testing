@@ -11,7 +11,7 @@
       <SchedulePickUpRequest>
          <BillingAccountNumber>{{AccountNumber}}</BillingAccountNumber>
          <PickupInstruction>
-            <Date>{{Pickup_Date}}</Date>
+            <Date>{{pickupDate}}</Date>
             <AnyTimeAfter>1300</AnyTimeAfter>
             <UntilTime>1700</UntilTime>
             <TotalWeight>

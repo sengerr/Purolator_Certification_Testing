@@ -64,7 +64,7 @@
                </LineItemDetails>
             </ShipmentDetails>
             <PickupInformation>
-               <PickupDate>{{Pickup_Date}}</PickupDate>
+               <PickupDate>{{pickupDate}}</PickupDate>
                <ReadyTime>14:00</ReadyTime>
                <CloseTime>17:00</CloseTime>
                <PickUpConfirmationEmailFlag>true</PickUpConfirmationEmailFlag>
