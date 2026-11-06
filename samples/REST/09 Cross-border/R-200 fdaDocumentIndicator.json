@@ -1,0 +1,85 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "validateOnly": false,
+  "returnsManagement": false,
+  "returnRates": false,
+  "outboundShipment": {
+    "pickupType": "DROPOFF",
+    "senderInformation": {
+      "attentionTo": "Tech A",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4",
+      "phoneNumber": "17804091270"
+    },
+    "receiverInformation": {
+      "attentionTo": "Retail Agent",
+      "streetAddress": [
+        "2310 East Gladwick Street"
+      ],
+      "city": "Compton",
+      "provinceStateCode": "CA",
+      "country": "US",
+      "postalZipCode": "90220",
+      "phoneNumber": "18004595599"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorExpressBoxU.S.",
+      "unitOfMeasurement": "IMPERIAL",
+      "descriptionOfGoods": "Consolidation check",
+      "totalWeight": 5,
+      "totalPackages": 1,
+      "dangerousGoodsDeclarationDocumentIndicator": false,
+      "packageInformation": [
+        {
+          "packageWeight": 5,
+          "packageLength": 11,
+          "packageWidth": 8,
+          "packageHeight": 1
+        }
+      ]
+    },
+    "crossBorderInformation": {
+      "nonDocumentsInformation": {
+        "importExportType": "Permanent",
+        "customsInvoiceDocumentIndicator": true
+      },
+      "contentDetails": [
+        {
+          "description": "Wireless Router",
+          "harmonizedCode": "8517620090",
+          "countryOfManufacture": "CN",
+          "unitValue": 120,
+          "productCode": "WR-AX6000",
+          "quantity": 1,
+          "usmcaDocumentIndicator": false,
+          "fdaDocumentIndicator": true,
+          "senderIsProducerIndicator": true,
+          "textileIndicator": false
+        }
+      ]
+    },
+    "paymentInformation": {
+      "paymentType": "Sender",
+      "registeredAccountNumber": "{{Freight_account}}",
+      "billingAccountNumber": "{{Freight_account}}"
+    },
+    "customerReferenceInformation": {
+      "costCenter": "Consolidation",
+      "shipmentReference1": "PO123456"
+    }
+  },
+  "shipmentDocuments": {
+    "label": {
+      "outputType": "ZPL",
+      "printerFormat": "thermal",
+      "responseType": "BASE64"
+    }
+  }
+}

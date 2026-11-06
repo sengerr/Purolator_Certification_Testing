@@ -1,0 +1,30 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+    <soapenv:Header>
+        <RequestContext>
+            <!--type: string-->
+            <Version>1.6</Version>
+            <!--type: Language - enumeration: [en,fr]-->
+            <Language>en</Language>
+            <!--type: string-->
+            <GroupID></GroupID>
+            <!--type: string-->
+            <RequestReference></RequestReference>
+            <!--Optional:-->
+            <!--type: string-->
+            <UserToken></UserToken>
+        </RequestContext>
+    </soapenv:Header>
+    <soapenv:Body>
+        <GetShipmentManifestDocumentRequest>
+            <ShipmentManifestDocumentCriterium>
+                <!--Zero or more repetitions:-->
+                <ShipmentManifestDocumentCriteria>
+                    <!--type: string-->
+                    <ManifestDate>{{Date}}</ManifestDate>
+                </ShipmentManifestDocumentCriteria>
+            </ShipmentManifestDocumentCriterium>
+        </GetShipmentManifestDocumentRequest>
+    </soapenv:Body>
+</soapenv:Envelope>
+
+<!-- Customer should check for <DocumentStatus>Pending</DocumentStatus>. If it shows pending, they need to recheck after a second until it changes to 'Completed'" -->

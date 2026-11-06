@@ -1,0 +1,149 @@
+<soapenv:Envelope xmlns="http://purolator.com/pws/datatypes/v2"
+    xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Header>
+        <RequestContext>
+            <Version>2.2</Version>
+            <Language>en</Language>
+            <GroupID />
+            <RequestReference />
+            <UserToken></UserToken>
+        </RequestContext>
+    </soapenv:Header>
+    <soapenv:Body>
+        <CreateShipmentRequest>
+            <Shipment>
+                <SenderInformation>
+                    <Address>
+                        <Name>Tech A</Name>
+                        <Company>Purolator</Company>
+                        <StreetNumber>17718</StreetNumber>
+                        <StreetName>114 Ave</StreetName>
+                        <StreetAddress2 p8:nil="true"
+                            xmlns:p8="http://www.w3.org/2001/XMLSchema-instance" />
+                        <StreetAddress3 p8:nil="true"
+                            xmlns:p8="http://www.w3.org/2001/XMLSchema-instance" />
+                        <City>Edmonton</City>
+                        <Province>AB</Province>
+                        <Country>CA</Country>
+                        <PostalCode>T5S2N4</PostalCode>
+                        <PhoneNumber>
+                            <CountryCode>1</CountryCode>
+                            <AreaCode>780</AreaCode>
+                            <Phone>4091270</Phone>
+                            <Extension p9:nil="true"
+                                xmlns:p9="http://www.w3.org/2001/XMLSchema-instance" />
+                        </PhoneNumber>
+                        <FaxNumber p8:nil="true"
+                            xmlns:p8="http://www.w3.org/2001/XMLSchema-instance" />
+                    </Address>
+                    <TaxNumber p7:nil="true" xmlns:p7="http://www.w3.org/2001/XMLSchema-instance" />
+                </SenderInformation>
+                <ReceiverInformation>
+                    <Address>
+                        <Name>Tech B</Name>
+                        <Company>Purolator</Company>
+                        <StreetNumber>3700</StreetNumber>
+                        <StreetName>Jericho Road</StreetName>
+                        <StreetAddress2 p8:nil="true"
+                            xmlns:p8="http://www.w3.org/2001/XMLSchema-instance" />
+                        <StreetAddress3 p8:nil="true"
+                            xmlns:p8="http://www.w3.org/2001/XMLSchema-instance" />
+                        <City>Richmond</City>
+                        <Province>BC</Province>
+                        <Country>CA</Country>
+                        <PostalCode>V7B1M5</PostalCode>
+                        <PhoneNumber>
+                            <CountryCode>1</CountryCode>
+                            <AreaCode>800</AreaCode>
+                            <Phone>4595599</Phone>
+                            <Extension p9:nil="true"
+                                xmlns:p9="http://www.w3.org/2001/XMLSchema-instance" />
+                        </PhoneNumber>
+                        <FaxNumber p8:nil="true"
+                            xmlns:p8="http://www.w3.org/2001/XMLSchema-instance" />
+                    </Address>
+                    <TaxNumber p7:nil="true" xmlns:p7="http://www.w3.org/2001/XMLSchema-instance" />
+                </ReceiverInformation>
+                <FromOnLabelIndicator>false</FromOnLabelIndicator>
+                <FromOnLabelInformation p6:nil="true"
+                    xmlns:p6="http://www.w3.org/2001/XMLSchema-instance" />
+                <ShipmentDate>{{Current_Date}}</ShipmentDate>
+                <PackageInformation>
+                    <ServiceID>PurolatorExpress</ServiceID>
+                    <Description>Test Pkg Desc</Description>
+                    <TotalWeight>
+                        <Value>5.44</Value>
+                        <WeightUnit>kg</WeightUnit>
+                    </TotalWeight>
+                    <TotalPieces>1</TotalPieces>
+                    <PiecesInformation>
+                        <Piece>
+                            <Weight>
+                                <Value>5.44</Value>
+                                <WeightUnit>kg</WeightUnit>
+                            </Weight>
+                            <Length>
+                                <Value>25.4</Value>
+                                <DimensionUnit>cm</DimensionUnit>
+                            </Length>
+                            <Width>
+                                <Value>63.5</Value>
+                                <DimensionUnit>cm</DimensionUnit>
+                            </Width>
+                            <Height>
+                                <Value>12.7</Value>
+                                <DimensionUnit>cm</DimensionUnit>
+                            </Height>
+                            <Options />
+                        </Piece>
+                    </PiecesInformation>
+                    <DangerousGoodsDeclarationDocumentIndicator>true</DangerousGoodsDeclarationDocumentIndicator>
+                    <OptionsInformation>
+                        <Options>
+                            <OptionIDValuePair>
+                                <ID>DangerousGoods</ID>
+                                <Value>true</Value>
+                            </OptionIDValuePair>
+                            <OptionIDValuePair>
+                                <ID>DangerousGoodsClass</ID>
+                                <Value>UN3373</Value>
+                            </OptionIDValuePair>
+                            <OptionIDValuePair>
+                                <ID>DangerousGoodsMode</ID>
+                                <Value>Air</Value>
+                            </OptionIDValuePair>
+                        </Options>
+                        <ExpressChequeAddress p8:nil="true"
+                            xmlns:p8="http://www.w3.org/2001/XMLSchema-instance" />
+                    </OptionsInformation>
+                </PackageInformation>
+                <InternationalInformation p6:nil="true"
+                    xmlns:p6="http://www.w3.org/2001/XMLSchema-instance" />
+                <ReturnShipmentInformation p6:nil="true"
+                    xmlns:p6="http://www.w3.org/2001/XMLSchema-instance" />
+                <PaymentInformation>
+                    <PaymentType>Sender</PaymentType>
+                    <RegisteredAccountNumber>{{AccountNumber}}</RegisteredAccountNumber>
+                    <BillingAccountNumber>{{AccountNumber}}</BillingAccountNumber>
+                </PaymentInformation>
+                <PickupInformation>
+                    <PickupType>PreScheduled</PickupType>
+                </PickupInformation>
+                <NotificationInformation p6:nil="true"
+                    xmlns:p6="http://www.w3.org/2001/XMLSchema-instance" />
+                <TrackingReferenceInformation>
+                    <Reference1>DG TEST</Reference1>
+                    <Reference2>8081717858</Reference2>
+                    <Reference3>DG RATE-1</Reference3>
+                    <Reference4 p7:nil="true" xmlns:p7="http://www.w3.org/2001/XMLSchema-instance" />
+                </TrackingReferenceInformation>
+                <OtherInformation>
+                    <CostCentre p7:nil="true" xmlns:p7="http://www.w3.org/2001/XMLSchema-instance" />
+                    <SpecialInstructions></SpecialInstructions>
+                </OtherInformation>
+                <PrinterType p6:nil="true" xmlns:p6="http://www.w3.org/2001/XMLSchema-instance" />
+            </Shipment>
+            <PrinterType>Thermal</PrinterType>
+        </CreateShipmentRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

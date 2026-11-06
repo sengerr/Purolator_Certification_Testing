@@ -1,0 +1,65 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "validateOnly": false,
+  "returnsManagement": false,
+  "returnRates": false,
+  "outboundShipment": {
+    "pickupType": "DROPOFF",
+    "senderInformation": {
+      "attentionTo": "Tech A",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4",
+      "phoneNumber": "17804091270"
+    },
+    "receiverInformation": {
+      "attentionTo": "Tech B",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "30 Aero Drive NE"
+      ],
+      "city": "Calgary",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T2E8Z9",
+      "phoneNumber": "18004595599"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorExpress10:30AM",
+      "unitOfMeasurement": "IMPERIAL",
+      "descriptionOfGoods": "Product matrix test",
+      "totalWeight": 2,
+      "totalPackages": 1,
+      "dangerousGoodsDeclarationDocumentIndicator": false,
+      "packageInformation": [
+        {
+          "packageWeight": 2,
+          "packageLength": 0,
+          "packageWidth": 0,
+          "packageHeight": 0
+        }
+      ]
+    },
+    "paymentInformation": {
+      "paymentType": "Sender",
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "billingAccountNumber": "{{AccountNumber}}"
+    },
+    "customerReferenceInformation": {
+      "costCenter": "Product Matrix",
+      "shipmentReference1": "PurolatorExpress10:30AM"
+    }
+  },
+  "shipmentDocuments": {
+    "label": {
+      "outputType": "ZPL",
+      "printerFormat": "thermal",
+      "responseType": "BASE64"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://purolator.com/pws/datatypes/v2">
+   <soapenv:Header>
+      <v2:RequestContext>
+         <v2:Version>2.0</v2:Version>
+         <v2:Language>en</v2:Language>
+         <v2:GroupID>11</v2:GroupID>
+         <v2:RequestReference>UserRef</v2:RequestReference>
+      </v2:RequestContext>
+   </soapenv:Header>
+   <soapenv:Body>
+      <v2:GetServiceRulesRequest>
+         <v2:BillingAccountNumber>{{AccountNumber}}</v2:BillingAccountNumber>
+         <v2:SenderAddress>
+            <v2:City>Edmonton</v2:City>
+            <v2:Province>AB</v2:Province>
+            <v2:Country>CA</v2:Country>
+            <v2:PostalCode>T5S2N4</v2:PostalCode>
+         </v2:SenderAddress>
+         <v2:ReceiverAddress>
+            <v2:City>Compton</v2:City>
+            <v2:Province>CA</v2:Province>
+            <v2:Country>US</v2:Country>
+            <v2:PostalCode>90220</v2:PostalCode>
+         </v2:ReceiverAddress>
+      </v2:GetServiceRulesRequest>
+   </soapenv:Body>
+</soapenv:Envelope>

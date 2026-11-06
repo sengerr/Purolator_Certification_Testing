@@ -1,0 +1,70 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+    <soapenv:Header>
+        <RequestContext>
+            <Version>1.0</Version>
+            <Language>en</Language>
+            <GroupID></GroupID>
+            <RequestReference></RequestReference>
+            <!--Optional:-->
+            <UserToken></UserToken>
+        </RequestContext>
+    </soapenv:Header>
+    <soapenv:Body>
+        <GetLocationsByAddressRequest>
+            <Address>
+                <AddressLine1>6000</AddressLine1>
+                <AddressLine2>Rue Armand Viau</AddressLine2>
+                <AddressLine3>Quebec</AddressLine3>
+            </Address>
+            <!--Optional:-->
+            <SearchOptions>
+                <!--Optional:-->
+                <RadialDistanceInKM>20</RadialDistanceInKM>
+                <!--Optional:-->
+                <HoldForPickup>false</HoldForPickup>
+                <!--Optional:-->
+                <DangerousGoods>false</DangerousGoods>
+                <!--Optional:-->
+                <Kiosk>false</Kiosk>
+                <!--Optional-->
+                <StreetAccess>true</StreetAccess>
+                <!--Optional-->
+                <WheelChairAccess>true</WheelChairAccess>
+                <!--Optional:-->
+                <MaxNumberOfLocations>10</MaxNumberOfLocations>
+            </SearchOptions>
+            <!--Optional:-->
+            <LocationTypes>
+                <LocationType>BestBuy</LocationType>
+                <LocationType>DropBox</LocationType>
+                <LocationType>Michaels</LocationType>
+                <LocationType>MobileQuickStop</LocationType>
+                <LocationType>PenguinPickUp</LocationType>
+                <LocationType>PUDO</LocationType>
+                <LocationType>QSPickupLocker</LocationType>
+                <LocationType>QuickDropKiosk</LocationType>
+                <LocationType>QuickSetupKiosk</LocationType>
+                <LocationType>QuickStopAgent</LocationType>
+                <LocationType>QuickStopPopup</LocationType>
+                <LocationType>RetailPopup</LocationType>
+                <LocationType>ShippingAgent</LocationType>
+                <LocationType>ShippingCentre</LocationType>
+                <LocationType>Smarthub</LocationType>
+                <LocationType>Staples</LocationType>
+            </LocationTypes>
+            <!--Optional:
+
+         <HoursOfOperation><OpenTime></OpenTime><CloseTime></CloseTime><CurrentlyOpen></CurrentlyOpen><GMTOffset></GMTOffset></HoursOfOperation> -->
+            <!--Optional:
+
+         <DaysOfOperation><DaysOfWeek></DaysOfWeek></DaysOfOperation> -->
+
+
+
+
+
+
+
+        </GetLocationsByAddressRequest>
+    </soapenv:Body>
+</soapenv:Envelope>

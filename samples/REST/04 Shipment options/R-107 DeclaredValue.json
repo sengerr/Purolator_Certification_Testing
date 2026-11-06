@@ -1,0 +1,80 @@
+{
+  "lineOfBusiness": "Courier",
+  "shipmentDate": "{{Current_Date}}",
+  "validateOnly": false,
+  "returnsManagement": false,
+  "returnRates": false,
+  "shipmentDocuments": {
+    "label": {
+      "outputType": "PDF",
+      "printerFormat": "Laser",
+      "responseType": "BASE64"
+    }
+  },
+  "outboundShipment": {
+    "pickupType": "PRESCHEDULED",
+    "paymentInformation": {
+      "paymentType": "SENDER",
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "billingAccountNumber": "{{AccountNumber}}"
+    },
+    "senderInformation": {
+      "attentionTo": "Tech A",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4",
+      "phoneNumber": "17804091270"
+    },
+    "receiverInformation": {
+      "attentionTo": "Tech B",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "30 Aero Drive NE"
+      ],
+      "city": "Calgary",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T2E8Z9",
+      "phoneNumber": "18004595599"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorExpress10:30AM",
+      "unitOfMeasurement": "IMPERIAL",
+      "descriptionOfGoods": "Test Goods",
+      "totalWeight": 5.0,
+      "totalPackages": 1,
+      "dangerousGoodsDeclarationDocumentIndicator": false,
+      "shipmentOptionsInformation": [
+        {
+          "optionId": "DeclaredValue",
+          "optionIdValue": "250.00"
+        }
+      ],
+      "packageInformation": [
+        {
+          "packageWeight": 5.0,
+          "packageLength": 12,
+          "packageWidth": 10,
+          "packageHeight": 8,
+          "packageReference1": "PKG-REF-1",
+          "packageOptionsInformation": [
+            {
+              "optionId": "SpecialHandling",
+              "optionIdValue": "false"
+            }
+          ]
+        }
+      ]
+    },
+    "customerReferenceInformation": {
+      "costCenter": "QA-ADDTL",
+      "notes": "Additional Postman tests",
+      "shipmentReference1": "ADDTL-REF-1"
+    }
+  }
+}

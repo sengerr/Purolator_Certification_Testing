@@ -1,0 +1,4 @@
+{
+  "grant_type": "client_credentials",
+  "scope": "portal_api"
+}

@@ -1,0 +1,58 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "outboundShipment": {
+    "senderInformation": {
+      "companyName": "Purolator",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4"
+    },
+    "receiverInformation": {
+      "streetAddress": [
+        "2310 East Gladwick Street"
+      ],
+      "city": "Compton",
+      "provinceStateCode": "CA",
+      "country": "US",
+      "postalZipCode": "90220"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorExpressU.S.",
+      "unitOfMeasurement": "IMPERIAL",
+      "totalWeight": 1,
+      "totalPackages": 1,
+      "showAlternativeServicesIndicator": true,
+      "shipmentOptionsInformation": [
+        {
+          "optionId": "DangerousGoods",
+          "optionIdValue": "false"
+        },
+        {
+          "optionId": "DangerousGoodsMode",
+          "optionIdValue": "Ground"
+        },
+        {
+          "optionId": "DangerousGoodsClass",
+          "optionIdValue": "UN1845"
+        }
+      ],
+      "packageInformation": [
+        {
+          "packageWeight": 1,
+          "packageLength": 0,
+          "packageWidth": 0,
+          "packageHeight": 0
+        }
+      ]
+    },
+    "billingInformation": {
+      "billingAccountNumber": "{{AccountNumber}}",
+      "displayPublishedRates": false
+    }
+  }
+}

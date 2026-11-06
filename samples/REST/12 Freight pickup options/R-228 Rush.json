@@ -1,0 +1,39 @@
+{
+  "lineOfBusiness": "Freight",
+  "registeredAccountNumber": "{{AccountNumber}}",
+  "pickupInstructions": {
+    "date": "{{Pickup_Date}}",
+    "anyTimeAfter": "13:00",
+    "untilTime": "17:00",
+    "measurementUnit": "Imperial",
+    "pickupLocation": "FrontDesk",
+    "additionalInstructions": "Sample pickup"
+  },
+  "pickupAddress": {
+    "address": [
+      "5995 Avebury Rd"
+    ],
+    "city": "Mississauga",
+    "province": "ON",
+    "country": "CA",
+    "postalCode": "L5R3T8"
+  },
+  "shipmentSummary": [
+    {
+      "destinationCode": "DOM",
+      "modeOfTransport": "Ground",
+      "totalPieces": 1,
+      "totalWeight": 5
+    }
+  ],
+  "contactInfo": {
+    "name": "Shipping",
+    "company": "Sample Co",
+    "phoneNumber": "4161234567"
+  },
+  "freight": {
+    "pickUpOptions": [
+      "Rush"
+    ]
+  }
+}

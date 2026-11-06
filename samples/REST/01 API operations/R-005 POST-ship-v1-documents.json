@@ -1,0 +1,11 @@
+{
+  "lineOfBusiness": "Courier",
+  "documentCriteria": [
+    {
+      "shipmentPIN": "{{PIN}}"
+    },
+    {
+      "shipmentPIN": "{{PIN}}"
+    }
+  ]
+}

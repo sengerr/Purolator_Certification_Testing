@@ -1,0 +1,27 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <soap:Header>
+        <RequestContext xmlns="http://purolator.com/pws/datatypes/v1">
+            <Version>1.3</Version>
+            <Language>en</Language>
+            <GroupID/>
+            <RequestReference>{{RequestReference}}</RequestReference>
+            <UserToken></UserToken>
+        </RequestContext>
+    </soap:Header>
+    <soap:Body>
+        <GetDocumentsRequest xmlns="http://purolator.com/pws/datatypes/v1">
+        <OutputType>PDF</OutputType>
+        <Synchronous>true</Synchronous>
+            <DocumentCriterium>
+                    <DocumentCriteria>
+                        <PIN>
+                            <Value>{{PIN}}</Value>
+                        </PIN>
+                        <DocumentTypes>
+                            <DocumentType>ExpressChequeReceipt</DocumentType>
+                        </DocumentTypes>
+                    </DocumentCriteria>
+                </DocumentCriterium>
+        </GetDocumentsRequest>
+    </soap:Body>
+</soap:Envelope>

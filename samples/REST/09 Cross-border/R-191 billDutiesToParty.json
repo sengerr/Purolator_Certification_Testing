@@ -1,0 +1,110 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "validateOnly": false,
+  "returnsManagement": false,
+  "returnRates": false,
+  "outboundShipment": {
+    "pickupType": "PRESCHEDULED",
+    "senderInformation": {
+      "attentionTo": "Tech A",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4",
+      "phoneNumber": "17804091270"
+    },
+    "receiverInformation": {
+      "attentionTo": "Retail Agent",
+      "streetAddress": [
+        "2310 East Gladwick Street"
+      ],
+      "city": "Compton",
+      "provinceStateCode": "CA",
+      "country": "US",
+      "postalZipCode": "90220",
+      "phoneNumber": "18004595599"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorExpressU.S.",
+      "unitOfMeasurement": "IMPERIAL",
+      "totalWeight": 2,
+      "totalPackages": 2,
+      "dangerousGoodsDeclarationDocumentIndicator": false,
+      "packageInformation": [
+        {
+          "packageWeight": 1,
+          "packageLength": 12,
+          "packageWidth": 10,
+          "packageHeight": 10
+        },
+        {
+          "packageWeight": 1,
+          "packageLength": 12,
+          "packageWidth": 10,
+          "packageHeight": 10
+        }
+      ]
+    },
+    "paymentInformation": {
+      "paymentType": "Sender",
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "billingAccountNumber": "{{AccountNumber}}"
+    },
+    "customerReferenceInformation": {
+      "notes": "INSTRUCTIONS",
+      "shipmentReference1": "testing",
+      "shipmentReference2": "0080012003"
+    },
+    "crossBorderInformation": {
+      "documentsOnlyIndicator": false,
+      "nonDocumentsInformation": {
+        "currencyForDutiableGoods": "CAD",
+        "importExportType": "Permanent",
+        "billDutiesToParty": "Sender",
+        "businessRelationship": "NotRelated",
+        "customsInvoiceDocumentIndicator": true,
+        "taxesPaid": "DDP"
+      },
+      "contentDetails": [
+        {
+          "description": "Material1",
+          "harmonizedCode": "3822000002",
+          "countryOfManufacture": "US",
+          "unitValue": 5,
+          "productCode": "71",
+          "quantity": 1,
+          "usmcaDocumentIndicator": false,
+          "fdaDocumentIndicator": false,
+          "senderIsProducerIndicator": false,
+          "textileIndicator": false,
+          "unitOfMeasure": "Each"
+        },
+        {
+          "description": "Material1",
+          "harmonizedCode": "3822000002",
+          "countryOfManufacture": "US",
+          "unitValue": 5,
+          "productCode": "71",
+          "quantity": 1,
+          "usmcaDocumentIndicator": false,
+          "fdaDocumentIndicator": false,
+          "senderIsProducerIndicator": false,
+          "textileIndicator": false,
+          "unitOfMeasure": "Each"
+        }
+      ]
+    }
+  },
+  "shipmentDocuments": {
+    "label": {
+      "outputType": "ZPL",
+      "printerFormat": "Thermal",
+      "responseType": "BASE64"
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "lineOfBusiness": "COURIER",
+  "requestReference": "{{RequestReference}}",
+  "documentCriteria": [
+    {
+      "shipmentPIN": "{{PIN}}",
+      "documentType": [
+        "ExpressChequeReceipt"
+      ]
+    }
+  ]
+}

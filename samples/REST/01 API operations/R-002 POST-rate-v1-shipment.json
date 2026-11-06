@@ -1,0 +1,51 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "outboundShipment": {
+    "senderInformation": {
+      "companyName": "Purolator",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4"
+    },
+    "receiverInformation": {
+      "companyName": "Purolator",
+      "streetAddress": [
+        "30 Aero Drive NE"
+      ],
+      "city": "Calgary",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T2E8Z9"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorGround",
+      "unitOfMeasurement": "IMPERIAL",
+      "totalWeight": 150,
+      "totalPackages": 1,
+      "showAlternativeServicesIndicator": false,
+      "packageInformation": [
+        {
+          "packageWeight": 75,
+          "packageLength": 12,
+          "packageWidth": 12,
+          "packageHeight": 1
+        },
+        {
+          "packageWeight": 75,
+          "packageLength": 12,
+          "packageWidth": 12,
+          "packageHeight": 1
+        }
+      ]
+    },
+    "billingInformation": {
+      "billingAccountNumber": "{{AccountNumber}}",
+      "displayPublishedRates": false
+    }
+  }
+}

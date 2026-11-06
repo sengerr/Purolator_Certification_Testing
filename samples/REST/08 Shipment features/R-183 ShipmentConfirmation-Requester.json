@@ -1,0 +1,75 @@
+{
+  "lineOfBusiness": "COURIER",
+  "shipmentDate": "{{Current_Date}}",
+  "validateOnly": false,
+  "returnsManagement": false,
+  "returnRates": false,
+  "outboundShipment": {
+    "pickupType": "DROPOFF",
+    "senderInformation": {
+      "attentionTo": "Tech A",
+      "streetAddress": [
+        "17718 114 Ave"
+      ],
+      "city": "Edmonton",
+      "provinceStateCode": "AB",
+      "country": "CA",
+      "postalZipCode": "T5S2N4",
+      "phoneNumber": "17804091270"
+    },
+    "receiverInformation": {
+      "attentionTo": "Tech B",
+      "companyName": "Purolator",
+      "streetAddress": [
+        "3700 Jericho Road"
+      ],
+      "city": "Richmond",
+      "provinceStateCode": "BC",
+      "country": "CA",
+      "postalZipCode": "V7B1M5",
+      "phoneNumber": "18004595599"
+    },
+    "shipmentInformation": {
+      "serviceId": "PurolatorExpress",
+      "unitOfMeasurement": "IMPERIAL",
+      "totalWeight": 1,
+      "totalPackages": 1,
+      "dangerousGoodsDeclarationDocumentIndicator": false,
+      "packageInformation": [
+        {
+          "packageWeight": 1,
+          "packageLength": 18.01,
+          "packageWidth": 5,
+          "packageHeight": 2
+        }
+      ]
+    },
+    "paymentInformation": {
+      "paymentType": "Sender",
+      "registeredAccountNumber": "{{AccountNumber}}"
+    },
+    "customerReferenceInformation": {
+      "notes": "SH05   S15 = AA",
+      "shipmentReference1": "TC # 005"
+    },
+    "notifications": {
+      "requestorEmail": "myconf@abc.com",
+      "subscriptions": [
+        {
+          "email": "myconf@abc.com",
+          "notificationType": {
+            "notificationId": "ShipmentConfirmation-Requester"
+          },
+          "name": "Tech A"
+        }
+      ]
+    }
+  },
+  "shipmentDocuments": {
+    "label": {
+      "outputType": "ZPL",
+      "printerFormat": "thermal",
+      "responseType": "BASE64"
+    }
+  }
+}
