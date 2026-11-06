@@ -182,7 +182,7 @@
             <!--Optional:-->
             <PickupInformation>
                <!--type: string-->
-               <PickupDate>{{Date}}</PickupDate>
+               <PickupDate>{{Current_Date}}</PickupDate>
                <!--type: string-->
                <ReadyTime>15:00</ReadyTime>
                <!--type: string-->

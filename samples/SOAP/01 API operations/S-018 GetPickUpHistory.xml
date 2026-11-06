@@ -10,8 +10,8 @@
    <soapenv:Body>
       <GetPickUpHistoryRequest>
          <PickUpHistorySearchCriteria>
-            <FromDate>{{From_Date}}</FromDate>
-            <ToDate>{{To_Date}}</ToDate>
+            <FromDate>{{pickupHistoryFromDate}}</FromDate>
+            <ToDate>{{pickupHistoryToDate}}</ToDate>
             <AccountNumber>{{AccountNumber}}</AccountNumber>
             <Status>Scheduled</Status>
             <MaxNumOfRecords>10</MaxNumOfRecords>

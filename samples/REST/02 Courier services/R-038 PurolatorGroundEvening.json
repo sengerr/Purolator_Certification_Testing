@@ -66,8 +66,8 @@
     },
     "paymentInformation": {
       "paymentType": "Sender",
-      "registeredAccountNumber": "{{Freight_account}}",
-      "billingAccountNumber": "{{Freight_account}}"
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "billingAccountNumber": "{{AccountNumber}}"
     },
     "customerReferenceInformation": {
       "costCenter": "Consolidation",

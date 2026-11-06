@@ -2,7 +2,7 @@
   "lineOfBusiness": "Freight",
   "registeredAccountNumber": "{{AccountNumber}}",
   "pickupInstructions": {
-    "date": "{{Pickup_Date}}",
+    "date": "{{pickupDate}}",
     "anyTimeAfter": "13:00",
     "untilTime": "17:00",
     "measurementUnit": "Imperial",

@@ -48,7 +48,7 @@
     "paymentInformation": {
       "paymentType": "ThirdParty",
       "registeredAccountNumber": "{{AccountNumber}}",
-      "billingAccountNumber": "{{Freight_account}}"
+      "billingAccountNumber": "{{AccountNumber}}"
     },
     "customerReferenceInformation": {
       "costCenter": "Weekly",
