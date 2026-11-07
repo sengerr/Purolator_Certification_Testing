@@ -1,0 +1,17 @@
+# Production SOAP — REAL, BILLABLE shipments. Test in Development first.
+# Run only after setting confirm_production: true below:
+#   node run.js runs/prod-soap.yaml --production
+# Every shipment the run creates is listed in results/production-soap-<stamp>-created.csv — void them straight away.
+name: Production SOAP — shipping options (no pickups, no freight shipments)
+protocol: SOAP
+tier: Production
+confirm_production: false         # set to true to allow this spec to run
+env_file: .env.production
+sections: all
+exclude_sections: []
+include: []
+# Pickups dispatch a real driver and freight shipments cannot be cancelled through the API:
+exclude: ["S-014", "S-015", "S-016", "S-029", "S-030", "S-083"]
+skip_not_available: true
+delay_ms: 250
+checklist: results/My Certification Checklist.xlsx
