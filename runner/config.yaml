@@ -1,0 +1,116 @@
+# =============================================================================
+# config.yaml — settings for the certification test runner (run-tests.js)
+#
+# This file is hand-maintained. The list of tests lives in tests.yaml, which
+# is generated from samples/index.csv by build-tests-yaml.js.
+#
+# Credentials are NEVER stored here. They come from environment variables
+# (see README.md in this folder).
+# =============================================================================
+
+# ---- Hosts per environment ----------------------------------------------------
+# The request bodies are identical in both; only the host and credentials change.
+environments:
+  dev:
+    label: Development
+    soapBase: https://devwebservices.purolator.com
+    restBase: https://shipapi-sandbox.purolator.com
+    # Development: run the end-of-day steps (Consolidate / Close Manifest) and
+    # leave test shipments in place (nothing is billed).
+    runCloseSteps: true
+    voidCreatedShipments: false
+  prod:
+    label: Production
+    soapBase: https://webservices.purolator.com
+    restBase: https://shipapi.purolator.com
+    # Production creates real, billable shipments:
+    #  - Consolidate / Close Manifest are skipped (a closed shipment can no
+    #    longer be voided). Add --allow-close to run them anyway.
+    #  - Every shipment and pickup the run creates is voided at the end.
+    runCloseSteps: false
+    voidCreatedShipments: true
+
+# ---- Run defaults (all can be changed on the command line) --------------------
+defaults:
+  # Sample statuses to send. "Not applicable" rows have no sample and are
+  # always reported as Skipped.
+  statuses: [Verified, Not available, Not yet verified]
+  delayMs: 250            # pause between calls (about 240 calls a minute)
+  timeoutMs: 60000        # per call
+  shipDaysAhead: 0        # {{Current_Date}} = today (Toronto time) + this many days
+  pendingRetries: 3       # documents still "Pending" are asked for again …
+  pendingRetryMs: 2000    # … after this many milliseconds
+
+# ---- Phases, in run order ------------------------------------------------------
+# Each test in tests.yaml has one phase. The runner finishes a phase before
+# starting the next, so PINs and pickup numbers exist before anything needs them.
+phases:
+  - token          # REST token (R-001)
+  - main           # estimates, validations, shipment creates (captures PINs)
+  - uses-pin       # documents, tracking, delivery details (need a PIN)
+  - pickups        # schedule → validate → modify → history → void
+  - void           # the Void Shipment samples (S-003, R-004)
+  - close          # Consolidate / Close Manifest (skipped in Production)
+  - after-close    # manifest documents
+  # cleanup is automatic: voids every shipment/pickup still open when the
+  # environment says voidCreatedShipments: true
+
+# ---- Which shipment's PIN each test gets -----------------------------------------
+# A test that needs {{PIN}} takes the PIN captured from the test named here.
+# Order of lookup: the test's own pinFrom in tests.yaml → void (for the Void
+# Shipment samples) → byDocumentType (document type found in the body) → default.
+# If the chosen test produced no PIN, the default shipment's PIN is used and
+# the result notes it.
+pinSources:
+  SOAP:
+    default: S-001                      # Create Shipment (PurolatorGround)
+    void: S-053                         # its own Ground shipment, so voiding it
+                                        # never breaks the document tests
+    byDocumentType:
+      DangerousGoodsDeclaration: S-148
+      CustomsInvoice: S-156
+      CustomsInvoiceThermal: S-156
+      InternationalBillOfLading: S-156
+      InternationalBillOfLadingThermal: S-156
+      ExpressChequeReceipt: S-098
+      ExpressChequeReceiptThermal: S-098
+  REST:
+    default: R-003                      # Create / validate shipment
+    void: R-035                         # Purolator Ground row
+    byDocumentType:
+      # REST fixes the document format when the shipment is created, so each
+      # document type reads a PIN from a shipment created in that format.
+      DangerousGoodsDeclaration: R-181
+      CustomsInvoice: R-195
+      CustomsInvoiceThermal: R-195
+      InternationalBillOfLading: R-195
+      InternationalBillOfLadingThermal: R-195
+      DomesticBillOfLadingThermal: R-151
+      ExpressChequeReceipt: R-117
+      ExpressChequeReceiptThermal: R-117
+      QRCode: R-150                     # QRCode needs outputType CODE128
+      FDA: R-200
+      USMCA: R-199
+
+# ---- Pickup confirmation numbers ---------------------------------------------------
+pickupSources:
+  SOAP: S-014     # Schedule Pick Up
+  REST: R-008     # Schedule pickup
+
+# ---- Values the run cannot create for itself -------------------------------------
+# A test whose body needs one of these is Skipped unless the environment
+# variable is set.
+externalInputs:
+  Reference:   PUROLATOR_TRACK_REFERENCE   # a shipmentReference from one of your shipments (S-020)
+  Freight_PIN: PUROLATOR_FREIGHT_PIN       # a real freight PRO number (S-031, S-032)
+
+# ---- Extra request details not in the sample files ---------------------------------
+requests:
+  R-013:
+    # The REST locator is a GET with query parameters (no body).
+    # Verified in Certification 2026-10-06.
+    query:
+      language: en
+      requestReference: "{{RequestReference}}"
+      postalCode: M9A0A5
+      maxNumberOfLocations: "2"

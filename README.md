@@ -12,6 +12,7 @@ Use it to decide what you will offer your clients, send each sample, and record 
 | `samples/SOAP/` | One SOAP request body (`.xml`) per checklist row, grouped by section. |
 | `samples/REST/` | One REST request body (`.json`) per checklist row, grouped by section. |
 | `samples/index.csv` | Every row: ID, item, where to send it, sample file, sample status, expected outcome. |
+| `runner/` | A YAML-driven runner that sends every sample and records the outcome. See [Run every test automatically](#run-every-test-automatically). |
 
 Row IDs (`S-001`, `R-001` …) are the same on the Development and Production sheets, in `index.csv` and in the sample file names.
 
@@ -105,6 +106,19 @@ RequestReference: <your reference>
 Content-Type: text/xml; charset=utf-8
 SOAPAction: <the value in the checklist's "Send to" column>
 ```
+
+## Run every test automatically
+
+`runner/` sends every checklist row for you — SOAP and REST, Development or Production — and writes a results CSV whose *Your outcome* and *Your date and time stamp* columns can be pasted straight into the checklist.
+
+```powershell
+cd runner
+npm install
+node run-tests.js --env dev --dry-run    # shows every request, sends nothing
+node run-tests.js --env dev              # runs everything in Development
+```
+
+The tests are listed in `runner/tests.yaml` (generated from `samples/index.csv`); settings are in `runner/config.yaml`. In Production the runner needs `--confirm-production`, skips the end-of-day close and voids everything it created. Full instructions: [runner/README.md](runner/README.md).
 
 ## Suggested order
 
