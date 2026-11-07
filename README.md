@@ -12,8 +12,37 @@ Use it to decide what you will offer your clients, send each sample, and record 
 | `samples/SOAP/` | One SOAP request body (`.xml`) per checklist row, grouped by section. |
 | `samples/REST/` | One REST request body (`.json`) per checklist row, grouped by section. |
 | `samples/index.csv` | Every row: ID, item, where to send it, sample file, sample status, expected outcome. |
+| `postman/` | Two Postman collections (SOAP, REST) with one request per checklist row, and `HOW-TO-LOAD.md`. |
+| `run.js` + `runs/*.yaml` | The YAML runner: sends a chosen set of rows with Newman and fills in your checklist. |
+| `.env.example` | The credential names the runner reads. Copy it to `.env.development` / `.env.production` (never committed). |
+| `tooling/build-postman.js` | Rebuilds the collections from `samples/index.csv`. |
 
 Row IDs (`S-001`, `R-001` …) are the same on the Development and Production sheets, in `index.csv` and in the sample file names.
+
+## Run the samples in Postman
+
+Import the two collections straight from GitHub, create a Development and a Production environment with your own keys, and send requests by checklist ID. Step by step: [`postman/HOW-TO-LOAD.md`](postman/HOW-TO-LOAD.md).
+
+## Run the samples with the YAML runner
+
+The runner sends a set of checklist rows through the same collections with [Newman](https://www.npmjs.com/package/newman), then writes the results and fills in **Your outcome** and **Your date and time stamp** on the matching sheet of your own copy of the checklist.
+
+Needs [Node.js 18+](https://nodejs.org). On Windows, from the repository folder:
+
+```bat
+npm install
+copy .env.example .env.development
+notepad .env.development
+node run.js runs\dev-soap.yaml --dry-run
+node run.js runs\dev-soap.yaml
+node run.js runs\dev-rest.yaml
+```
+
+- **Run specs** (`runs/*.yaml`) choose the protocol, tier and rows: `sections`, `exclude_sections`, `include` / `exclude` (checklist IDs), `skip_not_available`, `delay_ms` and the `checklist` file to fill. Copy one to make your own.
+- **Credentials** come from the spec's `env_file` (`.env.development` / `.env.production`) or from environment variables with the same names. They are never written to the repository or the results.
+- **Results** go to `results/` (git-ignored): `<tier>-<protocol>-<stamp>.csv` (one row per request with HTTP status, outcome and errors), `...-created.csv` (every shipment and pickup the run created) and `results/My Certification Checklist.xlsx` (created from the template on the first run, then updated by each run).
+- **Production** runs only when the spec says `confirm_production: true` **and** you add `--production`: `node run.js runs\prod-soap.yaml --production`. The production specs leave out pickups and freight shipments. Void every shipment listed in the `-created.csv` file straight away.
+- A row passes when the HTTP status is 2xx and the response has no errors in the body.
 
 ## Environments
 

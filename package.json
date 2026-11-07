@@ -1,0 +1,18 @@
+{
+  "name": "purolator-certification-testing",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Purolator API certification checklist, samples, Postman collections and a YAML test runner",
+  "license": "UNLICENSED",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "build:postman": "node tooling/build-postman.js",
+    "run:dev-soap": "node run.js runs/dev-soap.yaml",
+    "run:dev-rest": "node run.js runs/dev-rest.yaml"
+  },
+  "dependencies": {
+    "exceljs": "4.4.0",
+    "js-yaml": "4.1.0",
+    "newman": "6.2.1"
+  }
+}

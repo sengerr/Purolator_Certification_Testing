@@ -1,0 +1,17 @@
+# Production REST — REAL, BILLABLE shipments. Test in Development first.
+# Run only after setting confirm_production: true below:
+#   node run.js runs/prod-rest.yaml --production
+# Every shipment the run creates is listed in results/production-rest-<stamp>-created.csv — void them straight away.
+name: Production REST — shipping options (no pickups, no freight shipments)
+protocol: REST
+tier: Production
+confirm_production: false         # set to true to allow this spec to run
+env_file: .env.production
+sections: all
+exclude_sections: ["12 Freight pickup options"]
+include: []
+# Pickups dispatch a real driver and freight shipments cannot be cancelled through the API:
+exclude: ["R-008", "R-009", "R-011"]
+skip_not_available: true
+delay_ms: 250
+checklist: results/My Certification Checklist.xlsx

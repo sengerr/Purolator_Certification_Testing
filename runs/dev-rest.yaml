@@ -1,0 +1,13 @@
+# Development SOAP — every section of the "REST - Development" sheet.
+# Run:  node run.js runs/dev-rest.yaml          (add --dry-run to list the requests first)
+name: Development REST — all sections
+protocol: REST
+tier: Development
+env_file: .env.development        # your Development client ID, secret, x-api-key and account numbers (git-ignored)
+sections: all                     # or a list, e.g. ["01 API operations", "04 Shipment options"]
+exclude_sections: []              # sections to leave out
+include: []                       # run only these IDs, e.g. ["R-002", "R-003"]
+exclude: []                       # skip these IDs
+skip_not_available: false         # true = skip rows whose sample status is "Not available"
+delay_ms: 250                     # pause between calls
+checklist: results/My Certification Checklist.xlsx   # filled in after each run (created from the template the first time)
