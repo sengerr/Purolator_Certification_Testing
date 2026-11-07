@@ -1,0 +1,20 @@
+{
+  "name": "purolator-certification-runner",
+  "version": "1.0.0",
+  "description": "Runs every Purolator certification checklist test (SOAP and REST) from tests.yaml",
+  "main": "run-tests.js",
+  "scripts": {
+    "build-tests": "node build-tests-yaml.js",
+    "dry-run": "node run-tests.js --env dev --dry-run",
+    "test:dev": "node run-tests.js --env dev",
+    "test:prod": "node run-tests.js --env prod"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "yaml": "^2.9.1"
+  },
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  }
+}

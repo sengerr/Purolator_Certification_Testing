@@ -1,0 +1,7 @@
+# Runner
+runner/node_modules/
+runner/results/
+
+# Local secrets — never commit
+.env
+*.local.yaml
