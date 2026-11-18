@@ -1,0 +1,26 @@
+# Use this workspace to collaborate
+workspace:
+  id: f9b37050-b307-4446-b2ec-414b208981b5
+
+localResources:
+  specs:
+    - ../openapi/purolator-rest.openapi.json
+    - ../openapi/purolator-rest.openapi.yaml
+    - ../openapi/services/close_manifest_api.json
+    - ../openapi/services/close_manifest_api.yaml
+    - ../openapi/services/create_void_shipment_api.json
+    - ../openapi/services/create_void_shipment_api.yaml
+    - ../openapi/services/estimate_api.json
+    - ../openapi/services/estimate_api.yaml
+    - ../openapi/services/get_documents_api.json
+    - ../openapi/services/get_documents_api.yaml
+    - ../openapi/services/get_summary_manifest_api.json
+    - ../openapi/services/get_summary_manifest_api.yaml
+    - ../openapi/services/locator_api.json
+    - ../openapi/services/locator_api.yaml
+    - ../openapi/services/pickup_api.json
+    - ../openapi/services/pickup_api.yaml
+    - ../openapi/services/token_api.json
+    - ../openapi/services/token_api.yaml
+    - ../openapi/services/tracking_api.json
+    - ../openapi/services/tracking_api.yaml
