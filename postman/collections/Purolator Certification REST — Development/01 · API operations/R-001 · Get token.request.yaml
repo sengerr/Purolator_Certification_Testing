@@ -1,0 +1,26 @@
+$kind: http-request
+description: |-
+  **Get token** — POST /auth/v1/token
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · token_type Bearer · access_token · expires_in 3600
+url: "{{restBase}}/auth/v1/token"
+method: POST
+headers:
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "grant_type": "client_credentials",
+      "scope": "{{authScope}}"
+    }
+auth:
+  type: basic
+  credentials:
+    username: "{{REST_ClientId}}"
+    password: "{{REST_Secret}}"
+order: 1000

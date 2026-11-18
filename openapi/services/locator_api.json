@@ -1,0 +1,316 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Locator",
+    "version": "1.0",
+    "description": "Locator API\n\n## Authentication\n\nThis API requires **Bearer Token** authentication. Include your token in the `Authorization` header:\n\n```\nAuthorization: Bearer <your-token>\n```\n"
+  },
+  "servers": [
+    {
+      "url": "https://shipapi.purolator.com"
+    },
+    {
+      "url": "https://shipapi-sandbox.purolator.com"
+    }
+  ],
+  "paths": {
+    "/locator/v1/address": {
+      "get": {
+        "summary": "Retrieve locator address information",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "language",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "en"
+          },
+          {
+            "name": "requestReference",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "test"
+          },
+          {
+            "name": "streetAddress",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "9 Michael Power"
+          },
+          {
+            "name": "city",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Vancouver"
+          },
+          {
+            "name": "postalCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "M9A0A5"
+          },
+          {
+            "name": "provinceCode",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": true
+          },
+          {
+            "name": "radialDistanceInKm",
+            "in": "query",
+            "schema": {
+              "type": "number"
+            },
+            "example": 0.321
+          },
+          {
+            "name": "holdForPickup",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": false
+          },
+          {
+            "name": "dangerousGoods",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
+          },
+          {
+            "name": "kiosk",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": true
+          },
+          {
+            "name": "streetAccess",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": false
+          },
+          {
+            "name": "wheelChairAccess",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": false
+          },
+          {
+            "name": "maxNumberOfLocations",
+            "in": "query",
+            "schema": {
+              "type": "integer"
+            },
+            "example": 2
+          },
+          {
+            "name": "locationType",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Staples"
+          },
+          {
+            "name": "openTime",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "08:00:00"
+          },
+          {
+            "name": "closeTime",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "20:00:00"
+          },
+          {
+            "name": "currentlyOpen",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": false
+          },
+          {
+            "name": "gmtOffSet",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "05:00:00"
+          },
+          {
+            "name": "daysOfOperation",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "Monday,Tuesday"
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "REMOVED_SECRET"
+          },
+          {
+            "name": "x-origin-verify",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "4haNnWx99hnAk1IzK3hYrrByroWbhoTB"
+          },
+          {
+            "name": "access-control-allow-origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "*"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "location": {
+                      "type": "string",
+                      "example": "Example location"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "options": {
+        "summary": "CORS support",
+        "description": "Enable CORS by returning the correct headers",
+        "parameters": [
+          {
+            "name": "x-origin-verify",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "4haNnWx99hnAk1IzK3hYrrByroWbhoTB"
+            }
+          },
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "43q1L9ts9JDdoEnf89TAkYiYmm45qAI8"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Default response for CORS method",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "example": "*"
+                }
+              },
+              "Access-Control-Allow-Methods": {
+                "schema": {
+                  "type": "string",
+                  "example": "GET,OPTIONS"
+                }
+              },
+              "Access-Control-Allow-Headers": {
+                "schema": {
+                  "type": "string",
+                  "example": "Content-Type,X-Amz-Date,Authorization,x-api-key,X-Amz-Security-Token,x-origin-verify"
+                }
+              }
+            },
+            "content": {}
+          }
+        },
+        "x-amazon-apigateway-integration": {
+          "type": "mock",
+          "requestTemplates": {
+            "application/json": "{\"statusCode\": 200}"
+          },
+          "responses": {
+            "default": {
+              "statusCode": "200",
+              "responseParameters": {
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,x-api-key,X-Amz-Security-Token,x-origin-verify'",
+                "method.response.header.Access-Control-Allow-Methods": "'GET,OPTIONS'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "For secure access, this API uses Bearer Authentication (also known as token authentication). \nYou must send a Bearer token in the Authorization header when making requests to protected \nendpoints. The token should be prefixed with the word \"Bearer\" followed by a space. \nExample: \"Authorization: Bearer <YourTokenHere>\".\n"
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}

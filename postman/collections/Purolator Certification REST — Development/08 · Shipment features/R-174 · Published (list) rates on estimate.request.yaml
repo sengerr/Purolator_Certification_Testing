@@ -1,0 +1,69 @@
+$kind: http-request
+description: |-
+  **Published (list) rates on estimate** — displayPublishedRates
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Production 2026-11-06. HTTP 200 · validShipment: true · shipmentPIN returned · packagePINs returned · documentStatus: Completed · banner: "Quote is subject to change based on actual shipment characte…"
+url: "{{restBase}}/rate/v1/shipment"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "COURIER",
+      "shipmentDate": "{{Current_Date}}",
+      "outboundShipment": {
+        "senderInformation": {
+          "companyName": "Purolator",
+          "streetAddress": [
+            "17718 114 Ave"
+          ],
+          "city": "Edmonton",
+          "provinceStateCode": "AB",
+          "country": "CA",
+          "postalZipCode": "T5S2N4"
+        },
+        "receiverInformation": {
+          "companyName": "Purolator",
+          "streetAddress": [
+            "30 Aero Drive NE"
+          ],
+          "city": "Calgary",
+          "provinceStateCode": "AB",
+          "country": "CA",
+          "postalZipCode": "T2E8Z9"
+        },
+        "shipmentInformation": {
+          "serviceId": "PurolatorGround",
+          "unitOfMeasurement": "IMPERIAL",
+          "totalWeight": 150,
+          "totalPackages": 1,
+          "showAlternativeServicesIndicator": false,
+          "packageInformation": [
+            {
+              "packageWeight": 75,
+              "packageLength": 12,
+              "packageWidth": 12,
+              "packageHeight": 1
+            },
+            {
+              "packageWeight": 75,
+              "packageLength": 12,
+              "packageWidth": 12,
+              "packageHeight": 1
+            }
+          ]
+        },
+        "billingInformation": {
+          "displayPublishedRates": false,
+          "billingAccountNumber": "{{AccountNumber}}"
+        }
+      }
+    }
+order: 5000

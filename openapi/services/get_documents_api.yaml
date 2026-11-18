@@ -1,0 +1,331 @@
+openapi: 3.0.3
+info:
+  description: |-
+    Get documents API
+
+
+    ## Authentication
+
+
+    This API requires **Bearer Token** authentication. Include your token in the
+    `Authorization` header:
+
+
+    ```
+
+    Authorization: Bearer <your-token>
+
+    ```
+
+
+    All endpoints also require an `x-api-key` header.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Get Documents
+  version: 0.0.1
+servers:
+  - url: https://shipapi.purolator.com
+  - url: https://shipapi-sandbox.purolator.com
+tags:
+- name: Get Documents
+  description: Get documents endpoint
+security:
+- bearerAuth: []
+paths:
+  /ship/v1/documents:
+    post:
+      tags:
+      - Get Documents
+      summary: Get shipment documents
+      description: Retrieve documents for one or more shipment PINs. Freight is not
+        supported.
+      security:
+      - bearerAuth: []
+      parameters:
+      - in: header
+        name: x-api-key
+        required: true
+        schema:
+          type: string
+        description: x-api-key
+      - in: header
+        name: Language
+        schema:
+          $ref: '#/components/schemas/Language'
+        required: false
+      - in: header
+        name: RequestReference
+        schema:
+          $ref: '#/components/schemas/RequestReference'
+        required: false
+      requestBody:
+        description: Document criteria for the requested shipments.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetDocumentsRequest'
+      responses:
+        '200':
+          description: Documents retrieved successfully.
+          headers:
+            Language:
+              schema:
+                $ref: '#/components/schemas/Language'
+            RequestReference:
+              schema:
+                $ref: '#/components/schemas/RequestReference'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetDocumentsResponse'
+              example:
+                requestReference: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+                shipmentDocuments:
+                - shipmentPIN: '329016612345'
+                  documents:
+                  - documentType: DomesticBillOfLading
+                    description: Domestic Bill of Lading
+                    documentStatus: Completed
+                    url: https://example.com/documents/domestic-bol.pdf
+        '400':
+          description: An error based on user input occurred.
+          headers:
+            Language:
+              schema:
+                $ref: '#/components/schemas/Language'
+            RequestReference:
+              schema:
+                $ref: '#/components/schemas/RequestReference'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                requestReference: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+                language: en
+                errors:
+                - error:
+                    code: 9001-305
+                    description: PIN number is required.
+        '500':
+          description: An internal server error occurred.
+          headers:
+            Language:
+              schema:
+                $ref: '#/components/schemas/Language'
+            RequestReference:
+              schema:
+                $ref: '#/components/schemas/RequestReference'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                requestReference: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+                language: en
+                errors:
+                - error:
+                    code: 9001-308
+                    description: There is an unknown internal server error. Please
+                      try again later.
+        '401':
+          description: Authentication failed.
+          headers:
+            Language:
+              schema:
+                $ref: '#/components/schemas/Language'
+            RequestReference:
+              schema:
+                $ref: '#/components/schemas/RequestReference'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                requestReference: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+                language: en
+                errors:
+                - error:
+                    code: 9001-307
+                    description: The client ID or API key does not match the shipment.
+components:
+  schemas:
+    Language:
+      type: string
+      enum:
+      - EN
+      - FR
+      default: EN
+      description: Response language. Case-insensitive. If not provided, defaults
+        to EN (English).
+      example: EN
+    RequestReference:
+      type: string
+      maxLength: 36
+      description: A unique identifier for the request. Can be used to match request
+        with the response. If not provided, a random UUID is generated.
+      example: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+    LineOfBusiness:
+      type: string
+      enum:
+      - Courier
+      - Freight
+      description: Line of business. Case-insensitive. Only Courier is supported.
+      example: Courier
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: 9001-305
+        description:
+          type: string
+          description: Detailed error description in the requested language.
+          example: PIN number is required.
+    ErrorItem:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+    ErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        requestReference:
+          $ref: '#/components/schemas/RequestReference'
+        language:
+          type: string
+          example: en
+        bannerMessages:
+          type: array
+          items:
+            type: string
+          description: Optional informational banners.
+        errors:
+          type: array
+          description: Array of shipping errors.
+          items:
+            $ref: '#/components/schemas/ErrorItem'
+    DocumentEntry:
+      type: object
+      properties:
+        packagePIN:
+          type: string
+          description: Included only for CODE128 document entries.
+        documentType:
+          type: string
+          enum:
+          - CustomsInvoice
+          - CustomsInvoiceThermal
+          - DangerousGoodsDeclaration
+          - DomesticBillOfLading
+          - DomesticBillOfLadingThermal
+          - ExpressChequeReceipt
+          - ExpressChequeReceiptThermal
+          - FDA2877
+          - InternationalBillOfLading
+          - InternationalBillOfLadingThermal
+          - QRCode
+          - USMCA
+          example: DomesticBillOfLading
+        description:
+          type: string
+          example: Domestic Bill of Lading
+        documentStatus:
+          type: string
+          example: Completed
+        url:
+          type: string
+          format: uri
+        data:
+          type: string
+          description: Base64 document content when responseType is BASE64.
+        code128Value:
+          type: string
+    ShipmentDocumentGroup:
+      type: object
+      properties:
+        shipmentPIN:
+          type: string
+          example: '329016612345'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentEntry'
+    DocumentCriteria:
+      type: object
+      required:
+      - shipmentPIN
+      properties:
+        shipmentPIN:
+          type: string
+          example: '329016612345'
+          description: Shipment PIN whose documents should be retrieved.
+        documentType:
+          type: array
+          items:
+            type: string
+            enum:
+            - CustomsInvoice
+            - CustomsInvoiceThermal
+            - DangerousGoodsDeclaration
+            - DomesticBillOfLading
+            - DomesticBillOfLadingThermal
+            - ExpressChequeReceipt
+            - ExpressChequeReceiptThermal
+            - FDA2877
+            - InternationalBillOfLading
+            - InternationalBillOfLadingThermal
+            - QRCode
+            - USMCA
+          description: Optional filter. When omitted, eligible documents for the shipment
+            are returned.
+    GetDocumentsRequest:
+      type: object
+      required:
+      - lineOfBusiness
+      - documentCriteria
+      properties:
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+        requestReference:
+          $ref: '#/components/schemas/RequestReference'
+        documentCriteria:
+          type: array
+          minItems: 1
+          maxItems: 50
+          items:
+            $ref: '#/components/schemas/DocumentCriteria'
+    GetDocumentsResponse:
+      type: object
+      required:
+      - requestReference
+      properties:
+        requestReference:
+          $ref: '#/components/schemas/RequestReference'
+        bannerMessage:
+          type: string
+        shipmentDocuments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentDocumentGroup'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorItem'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'For secure access, this API uses Bearer Authentication (also known
+        as token authentication). You must send a Bearer token in the Authorization
+        header when making requests to protected endpoints. The token should be prefixed
+        with the word "Bearer" followed by a space. Example: "Authorization: Bearer
+        <YourTokenHere>".'

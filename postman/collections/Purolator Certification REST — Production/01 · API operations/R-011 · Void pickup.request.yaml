@@ -1,0 +1,22 @@
+$kind: http-request
+description: |-
+  **Void pickup** — PUT /pickup/v1/void
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Production 2026-11-06. HTTP 200 · pickup cancelled
+url: "{{restBase}}/pickup/v1/void"
+method: PUT
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "Courier",
+      "pickupConfirmationNumber": "{{PickUpConfirmationNumber}}"
+    }
+order: 11000

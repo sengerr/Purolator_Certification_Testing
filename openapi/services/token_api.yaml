@@ -1,0 +1,212 @@
+openapi: 3.0.1
+info:
+  title: Authentication API
+  version: "1.0"
+  description: |
+    Authentication API
+
+    ## Authentication
+
+    This API uses **Basic Authentication** (client credentials) to obtain a Bearer token. Provide your `client_id` as the username and `client_secret` as the password, Base64-encoded in the `Authorization` header:
+
+    ```
+    Authorization: Basic <base64(client_id:client_secret)>
+    ```
+
+    Use the token returned by this API as the `Bearer` token for all other API calls.
+servers:
+  - url: https://shipapi.purolator.com
+  - url: https://shipapi-sandbox.purolator.com
+security:
+  - basicAuth: []
+paths:
+  /auth/v1/token:
+    post:
+      tags:
+        - Authentication
+      summary: "Get"
+      operationId: oktaAuthentication
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                grant_type:
+                  type: string
+                  example: "client_credentials"
+                scope:
+                  type: string
+                  example: "portal_api"
+              required:
+                - grant_type
+                - scope
+      responses:
+        "200":
+          description: Authentication token generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/authentication200"
+        "400":
+          description: Bad request with detailed error causes
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/MissingGrantType"
+                  - $ref: "#/components/schemas/IncorrectGrantType"
+                  - $ref: "#/components/schemas/MissingScope"
+                  - $ref: "#/components/schemas/IncorrectScope"
+                  - $ref: "#/components/schemas/AuthorizationIDInvalid"
+                  - $ref: "#/components/schemas/AuthorizationIDMissing"
+                  - $ref: "#/components/schemas/General400Error"
+        "401":
+          description: Unauthorized due to incorrect credentials or missing information
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/IncorrectUsername"
+                  - $ref: "#/components/schemas/IncorrectPassword"
+
+    options:
+      summary: CORS support
+      description: Enable CORS by returning the correct headers
+      responses:
+        "200":
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: "*"
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: "POST"
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: '{"statusCode": 200}'
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type, X-Amz-Date, Authorization, X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+      security:
+        - AWSv4Auth: []
+
+components:
+  schemas:
+    authentication200:
+      type: object
+      properties:
+        token_type:
+          type: string
+        expires_in:
+          type: integer
+        access_token:
+          type: string
+        scope:
+          type: string
+      description: " Successful Authentication "
+    IncorrectUsername:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorSummary:
+          type: string
+        errorLink:
+          type: string
+        errorId:
+          type: string
+        errorCauses:
+          type: array
+          items: {}
+    IncorrectPassword:
+      type: object
+      properties:
+        status:
+          type: integer
+        error:
+          type: string
+        error_description:
+          type: string
+    MissingGrantType:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    IncorrectGrantType:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    MissingScope:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    IncorrectScope:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    AuthorizationIDInvalid:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    AuthorizationIDMissing:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    General400Error:
+      type: object
+      properties:
+        code:
+          type: string
+        error_description:
+          type: string
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: |
+        This API uses HTTP Basic Authentication to obtain a Bearer token. Provide your `client_id` as
+        the username and `client_secret` as the password, Base64-encoded in the `Authorization` header.
+        Example: "Authorization: Basic <base64(client_id:client_secret)>"
+    AWSv4Auth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: |
+        For authenticating requests using AWS Signature Version 4. The value of this header must be 
+        formed according to AWS Signature Version 4 specifications. This includes the algorithm 
+        identifier (AWS4-HMAC-SHA256), followed by credential scope, a list of signed headers, and 
+        the signature. Refer to AWS documentation for detailed instructions on forming this header.

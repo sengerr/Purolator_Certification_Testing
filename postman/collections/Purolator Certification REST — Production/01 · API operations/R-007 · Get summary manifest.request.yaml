@@ -1,0 +1,24 @@
+$kind: http-request
+description: |-
+  **Get summary manifest** — POST /ship/v1/documents/summary-manifest
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · documentStatus: Completed · manifestBatch with summary manifest URL
+url: "{{restBase}}/ship/v1/documents/summary-manifest"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "Courier",
+      "manifestDate": [
+        "{{manifestDate}}"
+      ]
+    }
+order: 7000

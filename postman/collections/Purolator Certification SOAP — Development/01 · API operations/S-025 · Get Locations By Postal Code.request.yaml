@@ -1,0 +1,54 @@
+$kind: http-request
+description: |-
+  **Get Locations By Postal Code** — GetLocationsByPostalCode
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · GetLocationsResponse · ResponseInformation/Errors empty · Locations returned
+url: "{{soapBase}}/EWS/V1/Locator/LocatorService.asmx"
+method: POST
+headers:
+  Content-Type: text/xml; charset=utf-8
+  SOAPAction: http://purolator.com/pws/service/v1/GetLocationsByPostalCode
+body:
+  type: xml
+  content: |-
+    <?xml version="1.0" encoding="utf-8"?>
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+        <soapenv:Header>
+            <RequestContext>
+                <Version>1.0</Version>
+                <Language>en</Language>
+                <GroupID></GroupID>
+                <RequestReference></RequestReference>
+                <!--Optional:-->
+                <UserToken></UserToken>
+            </RequestContext>
+        </soapenv:Header>
+        <soapenv:Body>
+            <GetLocationsByPostalCodeRequest>
+                <PostalCode>L4K5N1</PostalCode>
+                <LocationTypes>
+                    <!--Zero or more repetitions:-->
+                    <!--type: string-->
+                    <LocationType>BestBuy</LocationType>
+                    <LocationType>DropBox</LocationType>
+                    <LocationType>Michaels</LocationType>
+                    <LocationType>MobileQuickStop</LocationType>
+                    <LocationType>PenguinPickUp</LocationType>
+                    <LocationType>PUDO</LocationType>
+                    <LocationType>QSPickupLocker</LocationType>
+                    <LocationType>QuickDropKiosk</LocationType>
+                    <LocationType>QuickSetupKiosk</LocationType>
+                    <LocationType>QuickStopAgent</LocationType>
+                    <LocationType>QuickStopPopup</LocationType>
+                    <LocationType>RetailPopup</LocationType>
+                    <LocationType>ShippingAgent</LocationType>
+                    <LocationType>ShippingCentre</LocationType>
+                    <LocationType>Smarthub</LocationType>
+                    <LocationType>Staples</LocationType>
+                </LocationTypes>
+            </GetLocationsByPostalCodeRequest>
+        </soapenv:Body>
+    </soapenv:Envelope>
+order: 25000

@@ -1,0 +1,298 @@
+openapi: 3.0.3
+info:
+  description: |-
+    Get summary manifest API
+
+
+    ## Authentication
+
+
+    This API requires **Bearer Token** authentication. Include your token in the
+    `Authorization` header:
+
+
+    ```
+
+    Authorization: Bearer <your-token>
+
+    ```
+
+
+    All endpoints also require an `x-api-key` header.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: Get Summary Manifest
+  version: 0.0.1
+servers:
+  - url: https://shipapi.purolator.com
+  - url: https://shipapi-sandbox.purolator.com
+tags:
+- name: Get Summary Manifest
+  description: Get summary manifest endpoint
+security:
+- bearerAuth: []
+paths:
+  /ship/v1/documents/summary-manifest:
+    post:
+      tags:
+      - Get Summary Manifest
+      summary: Get summary manifest
+      description: Retrieve summary manifest artifacts for one or more manifest dates
+        (inclusive window of today minus 10 days through today). Freight is not supported.
+      security:
+      - bearerAuth: []
+      parameters:
+      - in: header
+        name: x-api-key
+        required: true
+        schema:
+          type: string
+        description: x-api-key
+      - in: header
+        name: Language
+        schema:
+          $ref: '#/components/schemas/Language'
+        required: false
+      - in: header
+        name: RequestReference
+        schema:
+          $ref: '#/components/schemas/RequestReference'
+        required: false
+      requestBody:
+        description: Manifest dates and line of business.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetSummaryManifestRequest'
+      responses:
+        '200':
+          description: Summary manifest retrieved successfully.
+          headers:
+            Language:
+              schema:
+                $ref: '#/components/schemas/Language'
+            RequestReference:
+              schema:
+                $ref: '#/components/schemas/RequestReference'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetSummaryManifestResponse'
+              example:
+                requestReference: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+                language: en
+                lineOfBusiness: Courier
+                manifestBatch:
+                - shipmentManifestDateTime: 2026-09-08 12:00:00 AM
+                  manifestCloseDateTime: 2026-09-08 02:49:57 AM
+                  manifestBatchDetail:
+                  - documentType: SummaryManifest
+                    description: Summary Manifest
+                    documentStatus: Completed
+                    url: https://example.com/documents/summary-manifest.pdf
+        '400':
+          description: An error based on user input occurred.
+          headers:
+            Language:
+              schema:
+                $ref: '#/components/schemas/Language'
+            RequestReference:
+              schema:
+                $ref: '#/components/schemas/RequestReference'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                requestReference: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+                language: en
+                errors:
+                - error:
+                    code: 9001-317
+                    description: Date parameter cannot be an empty string. Valid Format
+                      is YYYY-MM-DD
+        '500':
+          description: An internal server error occurred.
+          headers:
+            Language:
+              schema:
+                $ref: '#/components/schemas/Language'
+            RequestReference:
+              schema:
+                $ref: '#/components/schemas/RequestReference'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                requestReference: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+                language: en
+                errors:
+                - error:
+                    code: 9001-01
+                    description: There is an unknown internal server error. Please
+                      try again later.
+        '401':
+          description: Authentication failed.
+          headers:
+            Language:
+              schema:
+                $ref: '#/components/schemas/Language'
+            RequestReference:
+              schema:
+                $ref: '#/components/schemas/RequestReference'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                requestReference: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+                language: en
+                errors:
+                - error:
+                    code: 9001-313
+                    description: 'Language is missing or invalid. Valid values are:
+                      en, fr'
+components:
+  schemas:
+    Language:
+      type: string
+      enum:
+      - EN
+      - FR
+      default: EN
+      description: Response language. Case-insensitive. If not provided, defaults
+        to EN (English).
+      example: EN
+    RequestReference:
+      type: string
+      maxLength: 36
+      description: A unique identifier for the request. Can be used to match request
+        with the response. If not provided, a random UUID is generated.
+      example: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+    LineOfBusiness:
+      type: string
+      enum:
+      - Courier
+      - Freight
+      description: Line of business. Case-insensitive. Only Courier is supported.
+      example: Courier
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: 9001-317
+        description:
+          type: string
+          description: Detailed error description in the requested language.
+          example: Date parameter cannot be an empty string. Valid Format is YYYY-MM-DD
+    ErrorItem:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/Error'
+    ErrorResponse:
+      type: object
+      required:
+      - errors
+      properties:
+        requestReference:
+          $ref: '#/components/schemas/RequestReference'
+        language:
+          type: string
+          example: en
+        bannerMessages:
+          type: array
+          items:
+            type: string
+          description: Optional informational banners.
+        errors:
+          type: array
+          description: Array of shipping errors.
+          items:
+            $ref: '#/components/schemas/ErrorItem'
+    GetSummaryManifestRequest:
+      type: object
+      required:
+      - lineOfBusiness
+      - manifestDate
+      properties:
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+        requestReference:
+          $ref: '#/components/schemas/RequestReference'
+        manifestDate:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            format: date
+            example: '2026-09-08'
+          description: Manifest dates in YYYY-MM-DD. Each date must fall in the inclusive
+            window from today minus 10 days through today.
+    ManifestBatchDetail:
+      type: object
+      properties:
+        documentType:
+          type: string
+          example: SummaryManifest
+        description:
+          type: string
+          example: Summary Manifest
+        url:
+          type: string
+          format: uri
+        documentStatus:
+          type: string
+          example: Completed
+    ManifestBatch:
+      type: object
+      properties:
+        shipmentManifestDateTime:
+          type: string
+          example: 2026-09-08 12:00:00 AM
+          description: 12-hour clock datetime.
+        manifestCloseDateTime:
+          type: string
+          example: 2026-09-08 02:49:57 AM
+        manifestBatchDetail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManifestBatchDetail'
+    GetSummaryManifestResponse:
+      type: object
+      required:
+      - requestReference
+      - language
+      properties:
+        requestReference:
+          $ref: '#/components/schemas/RequestReference'
+        language:
+          type: string
+          example: en
+        lineOfBusiness:
+          $ref: '#/components/schemas/LineOfBusiness'
+        manifestBatch:
+          type: array
+          items:
+            $ref: '#/components/schemas/ManifestBatch'
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ErrorItem'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'For secure access, this API uses Bearer Authentication (also known
+        as token authentication). You must send a Bearer token in the Authorization
+        header when making requests to protected endpoints. The token should be prefixed
+        with the word "Bearer" followed by a space. Example: "Authorization: Bearer
+        <YourTokenHere>".'

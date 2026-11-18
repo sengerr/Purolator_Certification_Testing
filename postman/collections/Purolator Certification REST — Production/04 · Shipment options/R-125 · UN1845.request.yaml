@@ -1,0 +1,76 @@
+$kind: http-request
+description: |-
+  **UN1845** — DangerousGoodsClass=UN1845
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · outboundShipmentEstimates returned · totalPrice returned · banner: "Quote is subject to change based on actual shipment characte…"
+url: "{{restBase}}/rate/v1/shipment"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "COURIER",
+      "shipmentDate": "{{Current_Date}}",
+      "outboundShipment": {
+        "senderInformation": {
+          "companyName": "Purolator",
+          "streetAddress": [
+            "17718 114 Ave"
+          ],
+          "city": "Edmonton",
+          "provinceStateCode": "AB",
+          "country": "CA",
+          "postalZipCode": "T5S2N4"
+        },
+        "receiverInformation": {
+          "streetAddress": [
+            "2310 East Gladwick Street"
+          ],
+          "city": "Compton",
+          "provinceStateCode": "CA",
+          "country": "US",
+          "postalZipCode": "90220"
+        },
+        "shipmentInformation": {
+          "serviceId": "PurolatorExpressU.S.",
+          "unitOfMeasurement": "IMPERIAL",
+          "totalWeight": 1,
+          "totalPackages": 1,
+          "showAlternativeServicesIndicator": true,
+          "shipmentOptionsInformation": [
+            {
+              "optionId": "DangerousGoods",
+              "optionIdValue": "false"
+            },
+            {
+              "optionId": "DangerousGoodsMode",
+              "optionIdValue": "Ground"
+            },
+            {
+              "optionId": "DangerousGoodsClass",
+              "optionIdValue": "UN1845"
+            }
+          ],
+          "packageInformation": [
+            {
+              "packageWeight": 1,
+              "packageLength": 0,
+              "packageWidth": 0,
+              "packageHeight": 0
+            }
+          ]
+        },
+        "billingInformation": {
+          "billingAccountNumber": "{{AccountNumber}}",
+          "displayPublishedRates": false
+        }
+      }
+    }
+order: 24000

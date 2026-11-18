@@ -1,0 +1,52 @@
+$kind: http-request
+description: |-
+  **Schedule pickup** — POST /pickup/v1/schedule
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Production 2026-11-06. HTTP 200 · pickup scheduled · confirmation number returned
+url: "{{restBase}}/pickup/v1/schedule"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "Courier",
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "pickupInstructions": {
+        "date": "{{pickupDate}}",
+        "anyTimeAfter": "13:00",
+        "untilTime": "17:00",
+        "measurementUnit": "Imperial",
+        "pickupLocation": "FrontDesk",
+        "additionalInstructions": "Sample pickup"
+      },
+      "pickupAddress": {
+        "address": [
+          "5995 Avebury Rd"
+        ],
+        "city": "Mississauga",
+        "province": "ON",
+        "country": "CA",
+        "postalCode": "L5R3T8"
+      },
+      "shipmentSummary": [
+        {
+          "destinationCode": "DOM",
+          "modeOfTransport": "Ground",
+          "totalPieces": 1,
+          "totalWeight": 5
+        }
+      ],
+      "contactInfo": {
+        "name": "Shipping",
+        "company": "Sample Co",
+        "phoneNumber": "4161234567"
+      }
+    }
+order: 8000

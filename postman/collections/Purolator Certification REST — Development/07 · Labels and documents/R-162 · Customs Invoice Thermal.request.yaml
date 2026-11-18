@@ -1,0 +1,30 @@
+$kind: http-request
+description: |-
+  **Customs Invoice Thermal** — CustomsInvoiceThermal
+
+  Checklist status: **Not available**
+
+  Expected: Production 2026-11-06 returned 9001-312 Unsupport Document Type. This document type was not available for the test shipment.
+url: "{{restBase}}/ship/v1/documents"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "COURIER",
+      "requestReference": "{{RequestReference}}",
+      "documentCriteria": [
+        {
+          "shipmentPIN": "{{PIN}}",
+          "documentType": [
+            "CustomsInvoiceThermal"
+          ]
+        }
+      ]
+    }
+order: 17000

@@ -127,3 +127,13 @@ The tests are listed in `runner/tests.yaml` (generated from `samples/index.csv`)
 3. Create shipments, fetch their documents with the PIN, then void them.
 4. Schedule, modify and void a pickup, using the confirmation number from the schedule call.
 5. Close the day (consolidate / close manifest) and fetch the summary manifest.
+
+
+## File formats
+
+- `postman/collections/Purolator Certification SOAP|REST — Development|Production/` — the checklist as Postman **v3 collections** (Native Git YAML), one request per row that has a sample.
+- `exports/*.postman_collection.json` — the same four collections as Postman **v2.1 JSON**, for Newman and older Postman.
+- Both are generated from `samples/index.csv` by `node tooling/build-postman.js` (run `npm install` in `runner/` first). Do not edit them by hand.
+- No environments are committed: credentials and account numbers live only in your own local Postman environment.
+- `openapi/purolator-rest.openapi.yaml` / `.json` — all of Purolator's REST services merged into one OpenAPI 3.0.3 document, with Development, Certification and Production servers. Components that differ between services carry a service prefix (e.g. `Estimate_Tax`); two defects in Purolator's published specs are repaired here and listed in `info.description`.
+- `openapi/services/*.yaml` / `.json` — Purolator's nine published per-service specs, unchanged (YAML as published, JSON converted from it). SOAP is described by the WSDLs; OpenAPI covers REST only.

@@ -1,0 +1,82 @@
+$kind: http-request
+description: |-
+  **Purolator Express Box International 9AM** — PurolatorExpressBoxInternational9AM
+
+  Checklist status: **Not available**
+
+  Expected: Production 2026-11-06 returned 9001-99 '<service>' is invalid. Real service ID, not offered on the test lane / account.
+url: "{{restBase}}/ship/v1/shipment"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "COURIER",
+      "shipmentDate": "{{Current_Date}}",
+      "validateOnly": false,
+      "returnsManagement": false,
+      "returnRates": false,
+      "outboundShipment": {
+        "pickupType": "DROPOFF",
+        "senderInformation": {
+          "attentionTo": "Tech A",
+          "streetAddress": [
+            "3700 Jericho Road"
+          ],
+          "city": "Richmond",
+          "provinceStateCode": "BC",
+          "country": "CA",
+          "postalZipCode": "V7B1M5",
+          "phoneNumber": "16042734333"
+        },
+        "receiverInformation": {
+          "attentionTo": "Tech B",
+          "companyName": "Purolator",
+          "streetAddress": [
+            "Lang Strasse 59"
+          ],
+          "city": "Ottobrunn",
+          "country": "DE",
+          "postalZipCode": "85501",
+          "phoneNumber": "18004595599"
+        },
+        "shipmentInformation": {
+          "serviceId": "PurolatorExpressBoxInternational9AM",
+          "unitOfMeasurement": "IMPERIAL",
+          "descriptionOfGoods": "Product matrix test",
+          "totalWeight": 2,
+          "totalPackages": 1,
+          "dangerousGoodsDeclarationDocumentIndicator": false,
+          "packageInformation": [
+            {
+              "packageWeight": 2,
+              "packageLength": 0,
+              "packageWidth": 0,
+              "packageHeight": 0
+            }
+          ]
+        },
+        "paymentInformation": {
+          "paymentType": "Sender",
+          "registeredAccountNumber": "{{AccountNumber}}",
+          "billingAccountNumber": "{{AccountNumber}}"
+        },
+        "customerReferenceInformation": {
+          "costCenter": "Product Matrix",
+          "shipmentReference1": "PurolatorExpressBoxInternational"
+        }
+      },
+      "shipmentDocuments": {
+        "label": {
+          "outputType": "ZPL",
+          "printerFormat": "thermal",
+          "responseType": "BASE64"
+        }
+      }
+    }
+order: 57000

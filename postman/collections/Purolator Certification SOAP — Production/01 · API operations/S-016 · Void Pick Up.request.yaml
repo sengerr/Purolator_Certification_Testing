@@ -1,0 +1,31 @@
+$kind: http-request
+description: |-
+  **Void Pick Up** — VoidPickUp
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Production 2026-11-06. HTTP 200 · VoidPickUpResponse · ResponseInformation/Errors empty (pickup cancelled)
+url: "{{soapBase}}/EWS/V1/PickUp/PickUpService.asmx"
+method: POST
+headers:
+  Content-Type: text/xml; charset=utf-8
+  SOAPAction: http://purolator.com/pws/service/v1/VoidPickUp
+body:
+  type: xml
+  content: |-
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+       <soapenv:Header>
+          <RequestContext>
+             <Version>1.2</Version>
+             <Language>en</Language>
+             <GroupID>1</GroupID>
+             <RequestReference>{{RequestReference}}</RequestReference>
+          </RequestContext>
+       </soapenv:Header>
+       <soapenv:Body>
+          <VoidPickUpRequest>
+             <PickUpConfirmationNumber>{{PickUpConfirmationNumber}}</PickUpConfirmationNumber>
+          </VoidPickUpRequest>
+       </soapenv:Body>
+    </soapenv:Envelope>
+order: 16000

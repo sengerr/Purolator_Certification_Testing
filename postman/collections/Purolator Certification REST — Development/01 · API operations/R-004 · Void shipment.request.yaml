@@ -1,0 +1,22 @@
+$kind: http-request
+description: |-
+  **Void shipment** — PUT /ship/v1/shipment
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · shipmentVoided: "true" · banner: "Thanks for your Shipment cancellation request. Your request …"
+url: "{{restBase}}/ship/v1/shipment"
+method: PUT
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "Courier",
+      "shipmentPIN": "{{PIN}}"
+    }
+order: 4000

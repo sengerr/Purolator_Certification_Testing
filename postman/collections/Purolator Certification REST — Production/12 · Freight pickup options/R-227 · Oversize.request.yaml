@@ -1,0 +1,57 @@
+$kind: http-request
+description: |-
+  **Oversize** — Oversize
+
+  Checklist status: **Not available**
+
+  Expected: Production 2026-11-06 returned HTTP 400 with no error detail. Freight pickups over REST are not enabled on the account.
+url: "{{restBase}}/pickup/v1/schedule"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "Freight",
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "pickupInstructions": {
+        "date": "{{pickupDate}}",
+        "anyTimeAfter": "13:00",
+        "untilTime": "17:00",
+        "measurementUnit": "Imperial",
+        "pickupLocation": "FrontDesk",
+        "additionalInstructions": "Sample pickup"
+      },
+      "pickupAddress": {
+        "address": [
+          "5995 Avebury Rd"
+        ],
+        "city": "Mississauga",
+        "province": "ON",
+        "country": "CA",
+        "postalCode": "L5R3T8"
+      },
+      "shipmentSummary": [
+        {
+          "destinationCode": "DOM",
+          "modeOfTransport": "Ground",
+          "totalPieces": 1,
+          "totalWeight": 5
+        }
+      ],
+      "contactInfo": {
+        "name": "Shipping",
+        "company": "Sample Co",
+        "phoneNumber": "4161234567"
+      },
+      "freight": {
+        "pickUpOptions": [
+          "Oversize"
+        ]
+      }
+    }
+order: 2000

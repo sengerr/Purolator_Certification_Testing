@@ -1,0 +1,3582 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "description": "Create and void shipment API. Same resource path /ship/v1/shipment; create is POST, void is PUT.\n\n\n## Authentication\n\n\nThis API requires **Bearer Token** authentication. Include your token in the\n`Authorization` header:\n\n\n```\n\nAuthorization: Bearer <your-token>\n\n```\n\n\nAll endpoints also require an `x-api-key` header.",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "title": "Create Shipment",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "https://shipapi.purolator.com"
+    },
+    {
+      "url": "https://shipapi-sandbox.purolator.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Create Shipment",
+      "description": "Create shipment endpoint"
+    },
+    {
+      "name": "Void Shipment",
+      "description": "Void shipment endpoint"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/ship/v1/shipment": {
+      "post": {
+        "tags": [
+          "Create Shipment"
+        ],
+        "summary": "Create a shipment",
+        "description": "Create a courier outbound shipment, optional return shipment, or Returns Management (RMS) shipment. Freight is not supported.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "x-api-key"
+          },
+          {
+            "in": "header",
+            "name": "Language",
+            "schema": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "required": false
+          },
+          {
+            "in": "header",
+            "name": "RequestReference",
+            "schema": {
+              "$ref": "#/components/schemas/RequestReference"
+            },
+            "required": false
+          }
+        ],
+        "requestBody": {
+          "description": "Provide all the information needed to create a shipment.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateShipmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful shipment creation.",
+            "headers": {
+              "Language": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              },
+              "RequestReference": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestReference"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateShipmentResponse"
+                },
+                "example": {
+                  "requestReference": "d7173d5c-1b5d-4883-a6f0-5f77456ebf6e",
+                  "validShipment": true,
+                  "shipmentDetails": {
+                    "shipmentPIN": "329016612345",
+                    "packagePINs": [
+                      "329016612345"
+                    ]
+                  },
+                  "shipmentDocuments": [
+                    {
+                      "shipmentPIN": "329016612345",
+                      "documents": [
+                        {
+                          "documentType": "DomesticBillOfLading",
+                          "description": "Domestic Bill of Lading",
+                          "documentStatus": "Completed",
+                          "url": "https://example.com/documents/domestic-bol.pdf"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "An error based on user input occurred.",
+            "headers": {
+              "Language": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              },
+              "RequestReference": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestReference"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "requestReference": "d7173d5c-1b5d-4883-a6f0-5f77456ebf6e",
+                  "language": "en",
+                  "errors": [
+                    {
+                      "error": {
+                        "code": "9001-254",
+                        "description": "Outbound: The billing account is a mandatory field  if payment type is Receiver/ThirdParty."
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal server error occurred.",
+            "headers": {
+              "Language": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              },
+              "RequestReference": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestReference"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "requestReference": "d7173d5c-1b5d-4883-a6f0-5f77456ebf6e",
+                  "language": "en",
+                  "errors": [
+                    {
+                      "error": {
+                        "code": "9001-01",
+                        "description": "There is an unknown internal server error. Please try again later."
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed.",
+            "headers": {
+              "Language": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              },
+              "RequestReference": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestReference"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "requestReference": "d7173d5c-1b5d-4883-a6f0-5f77456ebf6e",
+                  "language": "en",
+                  "errors": [
+                    {
+                      "error": {
+                        "code": "9001-37",
+                        "description": "Outbound: The registered account number '9999999' is invalid."
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Void Shipment"
+        ],
+        "summary": "Void a shipment",
+        "description": "Void a previously created courier shipment by PIN. Same resource path as Create Shipment; this operation is PUT. Freight is not supported.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "x-api-key"
+          },
+          {
+            "in": "header",
+            "name": "Language",
+            "schema": {
+              "$ref": "#/components/schemas/Language"
+            },
+            "required": false
+          },
+          {
+            "in": "header",
+            "name": "RequestReference",
+            "schema": {
+              "$ref": "#/components/schemas/RequestReference"
+            },
+            "required": false
+          }
+        ],
+        "requestBody": {
+          "description": "Shipment PIN and line of business to void.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VoidShipmentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Shipment voided successfully.",
+            "headers": {
+              "Language": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              },
+              "RequestReference": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestReference"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoidShipmentResponse"
+                },
+                "example": {
+                  "requestReference": "d7173d5c-1b5d-4883-a6f0-5f77456ebf6e",
+                  "shipmentVoided": "true",
+                  "bannerMessage": "Shipment voided successfully."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "An error based on user input occurred.",
+            "headers": {
+              "Language": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              },
+              "RequestReference": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestReference"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoidShipmentResponse"
+                },
+                "example": {
+                  "requestReference": "d7173d5c-1b5d-4883-a6f0-5f77456ebf6e",
+                  "shipmentVoided": "false",
+                  "errors": [
+                    {
+                      "error": {
+                        "code": "9001-07",
+                        "description": "Shipment PIN is mandatory."
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An internal server error occurred.",
+            "headers": {
+              "Language": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              },
+              "RequestReference": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestReference"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoidShipmentResponse"
+                },
+                "example": {
+                  "requestReference": "d7173d5c-1b5d-4883-a6f0-5f77456ebf6e",
+                  "shipmentVoided": "false",
+                  "errors": [
+                    {
+                      "error": {
+                        "code": "9001-01",
+                        "description": "There is an unknown internal server error. Please try again later."
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication failed.",
+            "headers": {
+              "Language": {
+                "schema": {
+                  "$ref": "#/components/schemas/Language"
+                }
+              },
+              "RequestReference": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestReference"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "requestReference": "d7173d5c-1b5d-4883-a6f0-5f77456ebf6e",
+                  "language": "en",
+                  "errors": [
+                    {
+                      "error": {
+                        "code": "9001-37",
+                        "description": "Outbound: The registered account number '9999999' is invalid."
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Language": {
+        "type": "string",
+        "enum": [
+          "EN",
+          "FR"
+        ],
+        "default": "EN",
+        "description": "Response language. Case-insensitive. If not provided, defaults to EN (English).",
+        "example": "EN"
+      },
+      "RequestReference": {
+        "type": "string",
+        "maxLength": 36,
+        "description": "A unique identifier for the request. Can be used to match request with the response. If not provided, a random UUID is generated.",
+        "example": "d7173d5c-1b5d-4883-a6f0-5f77456ebf6e"
+      },
+      "LineOfBusiness": {
+        "type": "string",
+        "enum": [
+          "Courier",
+          "Freight"
+        ],
+        "description": "Line of business. Case-insensitive. Only Courier is supported.",
+        "example": "Courier"
+      },
+      "ShipmentDate": {
+        "type": "string",
+        "format": "date",
+        "example": "2026-09-20",
+        "description": "Date of shipment. Up to 10 days in advance. Date format: YYYY-MM-DD. If not present, defaults to today's date (America/Toronto)."
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Error code",
+            "example": "9001-254"
+          },
+          "description": {
+            "type": "string",
+            "description": "Detailed error description in the requested language.",
+            "example": "Outbound: The billing account is a mandatory field  if payment type is Receiver/ThirdParty."
+          }
+        }
+      },
+      "ErrorItem": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "$ref": "#/components/schemas/Error"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "errors"
+        ],
+        "properties": {
+          "requestReference": {
+            "$ref": "#/components/schemas/RequestReference"
+          },
+          "language": {
+            "type": "string",
+            "example": "en"
+          },
+          "bannerMessages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Optional informational banners."
+          },
+          "errors": {
+            "type": "array",
+            "description": "Array of shipping errors.",
+            "items": {
+              "$ref": "#/components/schemas/ErrorItem"
+            }
+          }
+        }
+      },
+      "SenderInformation": {
+        "type": "object",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "SHIPPER",
+            "description": "Company name."
+          },
+          "attentionTo": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "John Smith",
+            "description": "Attention to / contact name."
+          },
+          "streetAddress": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "example": [
+              "123 MAIN ST",
+              "SUITE 101"
+            ],
+            "description": "Maximum 3 address lines. Each line has a max length of 40 characters."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "MISSISSAUGA",
+            "description": "City."
+          },
+          "provinceStateCode": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "ON",
+            "description": "2-character province/state code. Required for Canadian and US addresses. Canadian provinces: AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT. US states: AL, AK, AZ, AR, CA, CO, CT, DE, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 2,
+            "example": "CA",
+            "enum": [
+              "CA"
+            ],
+            "description": "2-character country code. Sender must be CA."
+          },
+          "postalZipCode": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "L4W 5M8",
+            "description": "Canadian postal code, US ZIP code, or international postal code."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "9055551234",
+            "description": "Phone number, 10-15 digits. Conditionally required."
+          }
+        },
+        "required": [
+          "city",
+          "provinceStateCode",
+          "country",
+          "postalZipCode"
+        ]
+      },
+      "ReceiverInformation": {
+        "type": "object",
+        "description": "Outbound receiver address. CA, US, or international. For crossBorderInformation the receiver must not be Canada (typically US).",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "SHIPPER",
+            "description": "Company name."
+          },
+          "attentionTo": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "John Smith",
+            "description": "Attention to / contact name."
+          },
+          "streetAddress": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "example": [
+              "123 MAIN ST",
+              "SUITE 101"
+            ],
+            "description": "Maximum 3 address lines. Each line has a max length of 40 characters."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "Austin",
+            "description": "City."
+          },
+          "provinceStateCode": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "CA",
+            "description": "2-character province/state code. Required for Canadian and US addresses. Canadian provinces: AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT. US states: AL, AK, AZ, AR, CA, CO, CT, DE, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 2,
+            "example": "US",
+            "enum": [
+              "AD",
+              "AE",
+              "AF",
+              "AG",
+              "AI",
+              "AL",
+              "AM",
+              "AN",
+              "AO",
+              "AQ",
+              "AR",
+              "AS",
+              "AT",
+              "AU",
+              "AW",
+              "AX",
+              "AZ",
+              "BA",
+              "BB",
+              "BD",
+              "BE",
+              "BF",
+              "BG",
+              "BH",
+              "BI",
+              "BJ",
+              "BL",
+              "BM",
+              "BN",
+              "BO",
+              "BR",
+              "BS",
+              "BT",
+              "BV",
+              "BW",
+              "BY",
+              "BZ",
+              "CA",
+              "CC",
+              "CD",
+              "CF",
+              "CG",
+              "CH",
+              "CI",
+              "CK",
+              "CL",
+              "CM",
+              "CN",
+              "CO",
+              "CR",
+              "CU",
+              "CV",
+              "CX",
+              "CY",
+              "CZ",
+              "DE",
+              "DJ",
+              "DK",
+              "DM",
+              "DO",
+              "DZ",
+              "EC",
+              "EE",
+              "EG",
+              "EH",
+              "ER",
+              "ES",
+              "ET",
+              "EU",
+              "FI",
+              "FJ",
+              "FK",
+              "FM",
+              "FO",
+              "FR",
+              "GA",
+              "GB",
+              "GD",
+              "GE",
+              "GF",
+              "GG",
+              "GH",
+              "GI",
+              "GL",
+              "GM",
+              "GN",
+              "GP",
+              "GQ",
+              "GR",
+              "GS",
+              "GT",
+              "GU",
+              "GW",
+              "GY",
+              "HK",
+              "HM",
+              "HN",
+              "HR",
+              "HT",
+              "HU",
+              "IC",
+              "ID",
+              "IE",
+              "IL",
+              "IM",
+              "IN",
+              "IO",
+              "IQ",
+              "IR",
+              "IS",
+              "IT",
+              "JE",
+              "JM",
+              "JO",
+              "JP",
+              "KE",
+              "KG",
+              "KH",
+              "KI",
+              "KM",
+              "KN",
+              "KP",
+              "KR",
+              "KW",
+              "KY",
+              "KZ",
+              "LA",
+              "LB",
+              "LC",
+              "LI",
+              "LK",
+              "LR",
+              "LS",
+              "LT",
+              "LU",
+              "LV",
+              "LY",
+              "MA",
+              "MC",
+              "MD",
+              "ME",
+              "MG",
+              "MH",
+              "MK",
+              "ML",
+              "MM",
+              "MN",
+              "MO",
+              "MP",
+              "MQ",
+              "MR",
+              "MS",
+              "MT",
+              "MU",
+              "MV",
+              "MW",
+              "MX",
+              "MY",
+              "MZ",
+              "NA",
+              "NC",
+              "NE",
+              "NF",
+              "NG",
+              "NI",
+              "NL",
+              "NO",
+              "NP",
+              "NR",
+              "NT",
+              "NU",
+              "NZ",
+              "OM",
+              "OR",
+              "PA",
+              "PE",
+              "PF",
+              "PG",
+              "PH",
+              "PK",
+              "PL",
+              "PM",
+              "PN",
+              "PR",
+              "PS",
+              "PT",
+              "PW",
+              "PY",
+              "QA",
+              "RE",
+              "RO",
+              "RS",
+              "RU",
+              "RW",
+              "SA",
+              "SB",
+              "SC",
+              "SD",
+              "SE",
+              "SG",
+              "SH",
+              "SI",
+              "SJ",
+              "SK",
+              "SL",
+              "SM",
+              "SN",
+              "SO",
+              "SR",
+              "ST",
+              "SV",
+              "SY",
+              "SZ",
+              "TC",
+              "TD",
+              "TF",
+              "TG",
+              "TH",
+              "TJ",
+              "TK",
+              "TL",
+              "TM",
+              "TN",
+              "TO",
+              "TP",
+              "TR",
+              "TT",
+              "TV",
+              "TW",
+              "TZ",
+              "UA",
+              "UG",
+              "UM",
+              "UN",
+              "US",
+              "UY",
+              "UZ",
+              "VA",
+              "VC",
+              "VE",
+              "VG",
+              "VI",
+              "VN",
+              "VU",
+              "WF",
+              "WS",
+              "XB",
+              "XC",
+              "XE",
+              "XM",
+              "XN",
+              "XS",
+              "XY",
+              "YE",
+              "YT",
+              "ZA",
+              "ZM",
+              "ZW",
+              "ZZ"
+            ],
+            "description": "2-character country code. Province and postal code are required for CA/US."
+          },
+          "postalZipCode": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "95129",
+            "description": "Canadian postal code, US ZIP code, or international postal code."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "9055551234",
+            "description": "Phone number, 10-15 digits. Conditionally required."
+          }
+        },
+        "required": [
+          "city",
+          "country"
+        ]
+      },
+      "ReturnReceiverInformation": {
+        "type": "object",
+        "description": "Return shipment receiver address. Always Canadian (CA).",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "SHIPPER",
+            "description": "Company name."
+          },
+          "attentionTo": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "John Smith",
+            "description": "Attention to / contact name."
+          },
+          "streetAddress": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "example": [
+              "123 MAIN ST",
+              "SUITE 101"
+            ],
+            "description": "Maximum 3 address lines. Each line has a max length of 40 characters."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "MISSISSAUGA",
+            "description": "City."
+          },
+          "provinceStateCode": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "ON",
+            "description": "2-character Canadian province code. Required. Canadian provinces: AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 2,
+            "example": "CA",
+            "enum": [
+              "CA"
+            ],
+            "description": "2-character country code. Return receiver must be CA."
+          },
+          "postalZipCode": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "L4W 5M8",
+            "description": "Canadian postal code."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "9055551234",
+            "description": "Phone number, 10-15 digits. Conditionally required."
+          }
+        },
+        "required": [
+          "city",
+          "provinceStateCode",
+          "country",
+          "postalZipCode"
+        ]
+      },
+      "FromOnLabelInformation": {
+        "allOf": [
+          {
+            "type": "object",
+            "properties": {
+              "fromOnLabelIndicator": {
+                "type": "boolean",
+                "example": false,
+                "description": "When true, from-on-label address fields are required."
+              }
+            }
+          },
+          {
+            "type": "object",
+            "properties": {
+              "companyName": {
+                "type": "string",
+                "maxLength": 40,
+                "example": "SHIPPER",
+                "description": "Company name."
+              },
+              "attentionTo": {
+                "type": "string",
+                "maxLength": 40,
+                "example": "John Smith",
+                "description": "Attention to / contact name."
+              },
+              "streetAddress": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 3,
+                "items": {
+                  "type": "string",
+                  "maxLength": 40
+                },
+                "example": [
+                  "123 MAIN ST",
+                  "SUITE 101"
+                ],
+                "description": "Maximum 3 address lines. Each line has a max length of 40 characters."
+              },
+              "city": {
+                "type": "string",
+                "maxLength": 40,
+                "example": "MISSISSAUGA",
+                "description": "City."
+              },
+              "provinceStateCode": {
+                "type": "string",
+                "maxLength": 40,
+                "example": "ON",
+                "description": "2-character province/state code. Required for Canadian and US addresses. Canadian provinces: AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT. US states: AL, AK, AZ, AR, CA, CO, CT, DE, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY."
+              },
+              "country": {
+                "type": "string",
+                "maxLength": 2,
+                "example": "CA",
+                "enum": [
+                  "AD",
+                  "AE",
+                  "AF",
+                  "AG",
+                  "AI",
+                  "AL",
+                  "AM",
+                  "AN",
+                  "AO",
+                  "AQ",
+                  "AR",
+                  "AS",
+                  "AT",
+                  "AU",
+                  "AW",
+                  "AX",
+                  "AZ",
+                  "BA",
+                  "BB",
+                  "BD",
+                  "BE",
+                  "BF",
+                  "BG",
+                  "BH",
+                  "BI",
+                  "BJ",
+                  "BL",
+                  "BM",
+                  "BN",
+                  "BO",
+                  "BR",
+                  "BS",
+                  "BT",
+                  "BV",
+                  "BW",
+                  "BY",
+                  "BZ",
+                  "CA",
+                  "CC",
+                  "CD",
+                  "CF",
+                  "CG",
+                  "CH",
+                  "CI",
+                  "CK",
+                  "CL",
+                  "CM",
+                  "CN",
+                  "CO",
+                  "CR",
+                  "CU",
+                  "CV",
+                  "CX",
+                  "CY",
+                  "CZ",
+                  "DE",
+                  "DJ",
+                  "DK",
+                  "DM",
+                  "DO",
+                  "DZ",
+                  "EC",
+                  "EE",
+                  "EG",
+                  "EH",
+                  "ER",
+                  "ES",
+                  "ET",
+                  "EU",
+                  "FI",
+                  "FJ",
+                  "FK",
+                  "FM",
+                  "FO",
+                  "FR",
+                  "GA",
+                  "GB",
+                  "GD",
+                  "GE",
+                  "GF",
+                  "GG",
+                  "GH",
+                  "GI",
+                  "GL",
+                  "GM",
+                  "GN",
+                  "GP",
+                  "GQ",
+                  "GR",
+                  "GS",
+                  "GT",
+                  "GU",
+                  "GW",
+                  "GY",
+                  "HK",
+                  "HM",
+                  "HN",
+                  "HR",
+                  "HT",
+                  "HU",
+                  "IC",
+                  "ID",
+                  "IE",
+                  "IL",
+                  "IM",
+                  "IN",
+                  "IO",
+                  "IQ",
+                  "IR",
+                  "IS",
+                  "IT",
+                  "JE",
+                  "JM",
+                  "JO",
+                  "JP",
+                  "KE",
+                  "KG",
+                  "KH",
+                  "KI",
+                  "KM",
+                  "KN",
+                  "KP",
+                  "KR",
+                  "KW",
+                  "KY",
+                  "KZ",
+                  "LA",
+                  "LB",
+                  "LC",
+                  "LI",
+                  "LK",
+                  "LR",
+                  "LS",
+                  "LT",
+                  "LU",
+                  "LV",
+                  "LY",
+                  "MA",
+                  "MC",
+                  "MD",
+                  "ME",
+                  "MG",
+                  "MH",
+                  "MK",
+                  "ML",
+                  "MM",
+                  "MN",
+                  "MO",
+                  "MP",
+                  "MQ",
+                  "MR",
+                  "MS",
+                  "MT",
+                  "MU",
+                  "MV",
+                  "MW",
+                  "MX",
+                  "MY",
+                  "MZ",
+                  "NA",
+                  "NC",
+                  "NE",
+                  "NF",
+                  "NG",
+                  "NI",
+                  "NL",
+                  "NO",
+                  "NP",
+                  "NR",
+                  "NT",
+                  "NU",
+                  "NZ",
+                  "OM",
+                  "OR",
+                  "PA",
+                  "PE",
+                  "PF",
+                  "PG",
+                  "PH",
+                  "PK",
+                  "PL",
+                  "PM",
+                  "PN",
+                  "PR",
+                  "PS",
+                  "PT",
+                  "PW",
+                  "PY",
+                  "QA",
+                  "RE",
+                  "RO",
+                  "RS",
+                  "RU",
+                  "RW",
+                  "SA",
+                  "SB",
+                  "SC",
+                  "SD",
+                  "SE",
+                  "SG",
+                  "SH",
+                  "SI",
+                  "SJ",
+                  "SK",
+                  "SL",
+                  "SM",
+                  "SN",
+                  "SO",
+                  "SR",
+                  "ST",
+                  "SV",
+                  "SY",
+                  "SZ",
+                  "TC",
+                  "TD",
+                  "TF",
+                  "TG",
+                  "TH",
+                  "TJ",
+                  "TK",
+                  "TL",
+                  "TM",
+                  "TN",
+                  "TO",
+                  "TP",
+                  "TR",
+                  "TT",
+                  "TV",
+                  "TW",
+                  "TZ",
+                  "UA",
+                  "UG",
+                  "UM",
+                  "UN",
+                  "US",
+                  "UY",
+                  "UZ",
+                  "VA",
+                  "VC",
+                  "VE",
+                  "VG",
+                  "VI",
+                  "VN",
+                  "VU",
+                  "WF",
+                  "WS",
+                  "XB",
+                  "XC",
+                  "XE",
+                  "XM",
+                  "XN",
+                  "XS",
+                  "XY",
+                  "YE",
+                  "YT",
+                  "ZA",
+                  "ZM",
+                  "ZW",
+                  "ZZ"
+                ],
+                "description": "2-character country code."
+              },
+              "postalZipCode": {
+                "type": "string",
+                "maxLength": 10,
+                "example": "L4W 5M8",
+                "description": "Canadian postal code, US ZIP code, or international postal code."
+              },
+              "phoneNumber": {
+                "type": "string",
+                "maxLength": 15,
+                "example": "9055551234",
+                "description": "Phone number, 10-15 digits. Conditionally required."
+              }
+            },
+            "required": [
+              "city",
+              "provinceStateCode",
+              "country",
+              "postalZipCode"
+            ]
+          }
+        ]
+      },
+      "ExpressChequeInformation": {
+        "type": "object",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "SHIPPER",
+            "description": "Company name."
+          },
+          "attentionTo": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "John Smith",
+            "description": "Attention to / contact name."
+          },
+          "streetAddress": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "example": [
+              "123 MAIN ST",
+              "SUITE 101"
+            ],
+            "description": "Maximum 3 address lines. Each line has a max length of 40 characters."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "MISSISSAUGA",
+            "description": "City."
+          },
+          "provinceStateCode": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "ON",
+            "description": "2-character province/state code. Required for Canadian and US addresses. Canadian provinces: AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT. US states: AL, AK, AZ, AR, CA, CO, CT, DE, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 2,
+            "example": "CA",
+            "enum": [
+              "AD",
+              "AE",
+              "AF",
+              "AG",
+              "AI",
+              "AL",
+              "AM",
+              "AN",
+              "AO",
+              "AQ",
+              "AR",
+              "AS",
+              "AT",
+              "AU",
+              "AW",
+              "AX",
+              "AZ",
+              "BA",
+              "BB",
+              "BD",
+              "BE",
+              "BF",
+              "BG",
+              "BH",
+              "BI",
+              "BJ",
+              "BL",
+              "BM",
+              "BN",
+              "BO",
+              "BR",
+              "BS",
+              "BT",
+              "BV",
+              "BW",
+              "BY",
+              "BZ",
+              "CA",
+              "CC",
+              "CD",
+              "CF",
+              "CG",
+              "CH",
+              "CI",
+              "CK",
+              "CL",
+              "CM",
+              "CN",
+              "CO",
+              "CR",
+              "CU",
+              "CV",
+              "CX",
+              "CY",
+              "CZ",
+              "DE",
+              "DJ",
+              "DK",
+              "DM",
+              "DO",
+              "DZ",
+              "EC",
+              "EE",
+              "EG",
+              "EH",
+              "ER",
+              "ES",
+              "ET",
+              "EU",
+              "FI",
+              "FJ",
+              "FK",
+              "FM",
+              "FO",
+              "FR",
+              "GA",
+              "GB",
+              "GD",
+              "GE",
+              "GF",
+              "GG",
+              "GH",
+              "GI",
+              "GL",
+              "GM",
+              "GN",
+              "GP",
+              "GQ",
+              "GR",
+              "GS",
+              "GT",
+              "GU",
+              "GW",
+              "GY",
+              "HK",
+              "HM",
+              "HN",
+              "HR",
+              "HT",
+              "HU",
+              "IC",
+              "ID",
+              "IE",
+              "IL",
+              "IM",
+              "IN",
+              "IO",
+              "IQ",
+              "IR",
+              "IS",
+              "IT",
+              "JE",
+              "JM",
+              "JO",
+              "JP",
+              "KE",
+              "KG",
+              "KH",
+              "KI",
+              "KM",
+              "KN",
+              "KP",
+              "KR",
+              "KW",
+              "KY",
+              "KZ",
+              "LA",
+              "LB",
+              "LC",
+              "LI",
+              "LK",
+              "LR",
+              "LS",
+              "LT",
+              "LU",
+              "LV",
+              "LY",
+              "MA",
+              "MC",
+              "MD",
+              "ME",
+              "MG",
+              "MH",
+              "MK",
+              "ML",
+              "MM",
+              "MN",
+              "MO",
+              "MP",
+              "MQ",
+              "MR",
+              "MS",
+              "MT",
+              "MU",
+              "MV",
+              "MW",
+              "MX",
+              "MY",
+              "MZ",
+              "NA",
+              "NC",
+              "NE",
+              "NF",
+              "NG",
+              "NI",
+              "NL",
+              "NO",
+              "NP",
+              "NR",
+              "NT",
+              "NU",
+              "NZ",
+              "OM",
+              "OR",
+              "PA",
+              "PE",
+              "PF",
+              "PG",
+              "PH",
+              "PK",
+              "PL",
+              "PM",
+              "PN",
+              "PR",
+              "PS",
+              "PT",
+              "PW",
+              "PY",
+              "QA",
+              "RE",
+              "RO",
+              "RS",
+              "RU",
+              "RW",
+              "SA",
+              "SB",
+              "SC",
+              "SD",
+              "SE",
+              "SG",
+              "SH",
+              "SI",
+              "SJ",
+              "SK",
+              "SL",
+              "SM",
+              "SN",
+              "SO",
+              "SR",
+              "ST",
+              "SV",
+              "SY",
+              "SZ",
+              "TC",
+              "TD",
+              "TF",
+              "TG",
+              "TH",
+              "TJ",
+              "TK",
+              "TL",
+              "TM",
+              "TN",
+              "TO",
+              "TP",
+              "TR",
+              "TT",
+              "TV",
+              "TW",
+              "TZ",
+              "UA",
+              "UG",
+              "UM",
+              "UN",
+              "US",
+              "UY",
+              "UZ",
+              "VA",
+              "VC",
+              "VE",
+              "VG",
+              "VI",
+              "VN",
+              "VU",
+              "WF",
+              "WS",
+              "XB",
+              "XC",
+              "XE",
+              "XM",
+              "XN",
+              "XS",
+              "XY",
+              "YE",
+              "YT",
+              "ZA",
+              "ZM",
+              "ZW",
+              "ZZ"
+            ],
+            "description": "2-character country code."
+          },
+          "postalZipCode": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "L4W 5M8",
+            "description": "Canadian postal code, US ZIP code, or international postal code."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "9055551234",
+            "description": "Phone number, 10-15 digits. Conditionally required."
+          }
+        },
+        "required": [
+          "city",
+          "provinceStateCode",
+          "country",
+          "postalZipCode"
+        ]
+      },
+      "BuyerInformation": {
+        "type": "object",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "SHIPPER",
+            "description": "Company name."
+          },
+          "attentionTo": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "John Smith",
+            "description": "Attention to / contact name."
+          },
+          "streetAddress": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "example": [
+              "123 MAIN ST",
+              "SUITE 101"
+            ],
+            "description": "Maximum 3 address lines. Each line has a max length of 40 characters."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "MISSISSAUGA",
+            "description": "City."
+          },
+          "provinceStateCode": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "ON",
+            "description": "2-character province/state code. Required for Canadian and US addresses. Canadian provinces: AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT. US states: AL, AK, AZ, AR, CA, CO, CT, DE, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 2,
+            "example": "CA",
+            "enum": [
+              "AD",
+              "AE",
+              "AF",
+              "AG",
+              "AI",
+              "AL",
+              "AM",
+              "AN",
+              "AO",
+              "AQ",
+              "AR",
+              "AS",
+              "AT",
+              "AU",
+              "AW",
+              "AX",
+              "AZ",
+              "BA",
+              "BB",
+              "BD",
+              "BE",
+              "BF",
+              "BG",
+              "BH",
+              "BI",
+              "BJ",
+              "BL",
+              "BM",
+              "BN",
+              "BO",
+              "BR",
+              "BS",
+              "BT",
+              "BV",
+              "BW",
+              "BY",
+              "BZ",
+              "CA",
+              "CC",
+              "CD",
+              "CF",
+              "CG",
+              "CH",
+              "CI",
+              "CK",
+              "CL",
+              "CM",
+              "CN",
+              "CO",
+              "CR",
+              "CU",
+              "CV",
+              "CX",
+              "CY",
+              "CZ",
+              "DE",
+              "DJ",
+              "DK",
+              "DM",
+              "DO",
+              "DZ",
+              "EC",
+              "EE",
+              "EG",
+              "EH",
+              "ER",
+              "ES",
+              "ET",
+              "EU",
+              "FI",
+              "FJ",
+              "FK",
+              "FM",
+              "FO",
+              "FR",
+              "GA",
+              "GB",
+              "GD",
+              "GE",
+              "GF",
+              "GG",
+              "GH",
+              "GI",
+              "GL",
+              "GM",
+              "GN",
+              "GP",
+              "GQ",
+              "GR",
+              "GS",
+              "GT",
+              "GU",
+              "GW",
+              "GY",
+              "HK",
+              "HM",
+              "HN",
+              "HR",
+              "HT",
+              "HU",
+              "IC",
+              "ID",
+              "IE",
+              "IL",
+              "IM",
+              "IN",
+              "IO",
+              "IQ",
+              "IR",
+              "IS",
+              "IT",
+              "JE",
+              "JM",
+              "JO",
+              "JP",
+              "KE",
+              "KG",
+              "KH",
+              "KI",
+              "KM",
+              "KN",
+              "KP",
+              "KR",
+              "KW",
+              "KY",
+              "KZ",
+              "LA",
+              "LB",
+              "LC",
+              "LI",
+              "LK",
+              "LR",
+              "LS",
+              "LT",
+              "LU",
+              "LV",
+              "LY",
+              "MA",
+              "MC",
+              "MD",
+              "ME",
+              "MG",
+              "MH",
+              "MK",
+              "ML",
+              "MM",
+              "MN",
+              "MO",
+              "MP",
+              "MQ",
+              "MR",
+              "MS",
+              "MT",
+              "MU",
+              "MV",
+              "MW",
+              "MX",
+              "MY",
+              "MZ",
+              "NA",
+              "NC",
+              "NE",
+              "NF",
+              "NG",
+              "NI",
+              "NL",
+              "NO",
+              "NP",
+              "NR",
+              "NT",
+              "NU",
+              "NZ",
+              "OM",
+              "OR",
+              "PA",
+              "PE",
+              "PF",
+              "PG",
+              "PH",
+              "PK",
+              "PL",
+              "PM",
+              "PN",
+              "PR",
+              "PS",
+              "PT",
+              "PW",
+              "PY",
+              "QA",
+              "RE",
+              "RO",
+              "RS",
+              "RU",
+              "RW",
+              "SA",
+              "SB",
+              "SC",
+              "SD",
+              "SE",
+              "SG",
+              "SH",
+              "SI",
+              "SJ",
+              "SK",
+              "SL",
+              "SM",
+              "SN",
+              "SO",
+              "SR",
+              "ST",
+              "SV",
+              "SY",
+              "SZ",
+              "TC",
+              "TD",
+              "TF",
+              "TG",
+              "TH",
+              "TJ",
+              "TK",
+              "TL",
+              "TM",
+              "TN",
+              "TO",
+              "TP",
+              "TR",
+              "TT",
+              "TV",
+              "TW",
+              "TZ",
+              "UA",
+              "UG",
+              "UM",
+              "UN",
+              "US",
+              "UY",
+              "UZ",
+              "VA",
+              "VC",
+              "VE",
+              "VG",
+              "VI",
+              "VN",
+              "VU",
+              "WF",
+              "WS",
+              "XB",
+              "XC",
+              "XE",
+              "XM",
+              "XN",
+              "XS",
+              "XY",
+              "YE",
+              "YT",
+              "ZA",
+              "ZM",
+              "ZW",
+              "ZZ"
+            ],
+            "description": "2-character country code."
+          },
+          "postalZipCode": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "L4W 5M8",
+            "description": "Canadian postal code, US ZIP code, or international postal code."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "9055551234",
+            "description": "Phone number, 10-15 digits. Conditionally required."
+          }
+        },
+        "required": [
+          "city",
+          "provinceStateCode",
+          "country",
+          "postalZipCode"
+        ]
+      },
+      "ThirdPartyBillingInformation": {
+        "type": "object",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "SHIPPER",
+            "description": "Company name."
+          },
+          "attentionTo": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "John Smith",
+            "description": "Attention to / contact name."
+          },
+          "streetAddress": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "example": [
+              "123 MAIN ST",
+              "SUITE 101"
+            ],
+            "description": "Maximum 3 address lines. Each line has a max length of 40 characters."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "MISSISSAUGA",
+            "description": "City."
+          },
+          "provinceStateCode": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "ON",
+            "description": "2-character province/state code. Required for Canadian and US addresses. Canadian provinces: AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT. US states: AL, AK, AZ, AR, CA, CO, CT, DE, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY."
+          },
+          "country": {
+            "type": "string",
+            "maxLength": 2,
+            "example": "CA",
+            "enum": [
+              "AD",
+              "AE",
+              "AF",
+              "AG",
+              "AI",
+              "AL",
+              "AM",
+              "AN",
+              "AO",
+              "AQ",
+              "AR",
+              "AS",
+              "AT",
+              "AU",
+              "AW",
+              "AX",
+              "AZ",
+              "BA",
+              "BB",
+              "BD",
+              "BE",
+              "BF",
+              "BG",
+              "BH",
+              "BI",
+              "BJ",
+              "BL",
+              "BM",
+              "BN",
+              "BO",
+              "BR",
+              "BS",
+              "BT",
+              "BV",
+              "BW",
+              "BY",
+              "BZ",
+              "CA",
+              "CC",
+              "CD",
+              "CF",
+              "CG",
+              "CH",
+              "CI",
+              "CK",
+              "CL",
+              "CM",
+              "CN",
+              "CO",
+              "CR",
+              "CU",
+              "CV",
+              "CX",
+              "CY",
+              "CZ",
+              "DE",
+              "DJ",
+              "DK",
+              "DM",
+              "DO",
+              "DZ",
+              "EC",
+              "EE",
+              "EG",
+              "EH",
+              "ER",
+              "ES",
+              "ET",
+              "EU",
+              "FI",
+              "FJ",
+              "FK",
+              "FM",
+              "FO",
+              "FR",
+              "GA",
+              "GB",
+              "GD",
+              "GE",
+              "GF",
+              "GG",
+              "GH",
+              "GI",
+              "GL",
+              "GM",
+              "GN",
+              "GP",
+              "GQ",
+              "GR",
+              "GS",
+              "GT",
+              "GU",
+              "GW",
+              "GY",
+              "HK",
+              "HM",
+              "HN",
+              "HR",
+              "HT",
+              "HU",
+              "IC",
+              "ID",
+              "IE",
+              "IL",
+              "IM",
+              "IN",
+              "IO",
+              "IQ",
+              "IR",
+              "IS",
+              "IT",
+              "JE",
+              "JM",
+              "JO",
+              "JP",
+              "KE",
+              "KG",
+              "KH",
+              "KI",
+              "KM",
+              "KN",
+              "KP",
+              "KR",
+              "KW",
+              "KY",
+              "KZ",
+              "LA",
+              "LB",
+              "LC",
+              "LI",
+              "LK",
+              "LR",
+              "LS",
+              "LT",
+              "LU",
+              "LV",
+              "LY",
+              "MA",
+              "MC",
+              "MD",
+              "ME",
+              "MG",
+              "MH",
+              "MK",
+              "ML",
+              "MM",
+              "MN",
+              "MO",
+              "MP",
+              "MQ",
+              "MR",
+              "MS",
+              "MT",
+              "MU",
+              "MV",
+              "MW",
+              "MX",
+              "MY",
+              "MZ",
+              "NA",
+              "NC",
+              "NE",
+              "NF",
+              "NG",
+              "NI",
+              "NL",
+              "NO",
+              "NP",
+              "NR",
+              "NT",
+              "NU",
+              "NZ",
+              "OM",
+              "OR",
+              "PA",
+              "PE",
+              "PF",
+              "PG",
+              "PH",
+              "PK",
+              "PL",
+              "PM",
+              "PN",
+              "PR",
+              "PS",
+              "PT",
+              "PW",
+              "PY",
+              "QA",
+              "RE",
+              "RO",
+              "RS",
+              "RU",
+              "RW",
+              "SA",
+              "SB",
+              "SC",
+              "SD",
+              "SE",
+              "SG",
+              "SH",
+              "SI",
+              "SJ",
+              "SK",
+              "SL",
+              "SM",
+              "SN",
+              "SO",
+              "SR",
+              "ST",
+              "SV",
+              "SY",
+              "SZ",
+              "TC",
+              "TD",
+              "TF",
+              "TG",
+              "TH",
+              "TJ",
+              "TK",
+              "TL",
+              "TM",
+              "TN",
+              "TO",
+              "TP",
+              "TR",
+              "TT",
+              "TV",
+              "TW",
+              "TZ",
+              "UA",
+              "UG",
+              "UM",
+              "UN",
+              "US",
+              "UY",
+              "UZ",
+              "VA",
+              "VC",
+              "VE",
+              "VG",
+              "VI",
+              "VN",
+              "VU",
+              "WF",
+              "WS",
+              "XB",
+              "XC",
+              "XE",
+              "XM",
+              "XN",
+              "XS",
+              "XY",
+              "YE",
+              "YT",
+              "ZA",
+              "ZM",
+              "ZW",
+              "ZZ"
+            ],
+            "description": "2-character country code."
+          },
+          "postalZipCode": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "L4W 5M8",
+            "description": "Canadian postal code, US ZIP code, or international postal code."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "9055551234",
+            "description": "Phone number, 10-15 digits. Conditionally required."
+          }
+        },
+        "required": [
+          "city",
+          "provinceStateCode",
+          "country",
+          "postalZipCode"
+        ]
+      },
+      "USOriginInformation": {
+        "type": "object",
+        "properties": {
+          "companyName": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "SHIPPER",
+            "description": "Company name."
+          },
+          "attentionTo": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "John Smith",
+            "description": "Attention to / contact name."
+          },
+          "streetAddress": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 3,
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "example": [
+              "123 MAIN ST",
+              "SUITE 101"
+            ],
+            "description": "Maximum 3 address lines. Each line has a max length of 40 characters."
+          },
+          "city": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "MISSISSAUGA",
+            "description": "City."
+          },
+          "provinceStateCode": {
+            "type": "string",
+            "maxLength": 40,
+            "example": "ON",
+            "description": "2-character province/state code. Required for Canadian and US addresses. Canadian provinces: AB, BC, MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT. US states: AL, AK, AZ, AR, CA, CO, CT, DE, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD, MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VT, VA, WA, WV, WI, WY."
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "US"
+            ],
+            "example": "US",
+            "description": "Must be US for US-origin shipments (not required for RMS)."
+          },
+          "postalZipCode": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "95129",
+            "description": "Canadian postal code, US ZIP code, or international postal code."
+          },
+          "phoneNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "example": "9055551234",
+            "description": "Phone number, 10-15 digits. Conditionally required."
+          }
+        },
+        "required": [
+          "city",
+          "provinceStateCode",
+          "country",
+          "postalZipCode"
+        ]
+      },
+      "PaymentInformation": {
+        "type": "object",
+        "required": [
+          "registeredAccountNumber",
+          "paymentType"
+        ],
+        "properties": {
+          "registeredAccountNumber": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "9999999",
+            "description": "Registered (shipper) account number. Numeric, max 10 digits."
+          },
+          "billingAccountNumber": {
+            "type": "string",
+            "maxLength": 10,
+            "example": "9999999",
+            "description": "Billing account number. Mandatory when paymentType is RECEIVER or THIRDPARTY. When paymentType is SENDER, if provided it must match registeredAccountNumber."
+          },
+          "paymentType": {
+            "type": "string",
+            "enum": [
+              "SENDER",
+              "RECEIVER",
+              "THIRDPARTY"
+            ],
+            "example": "SENDER",
+            "description": "Who pays for the shipment. Case-insensitive."
+          }
+        }
+      },
+      "ShipmentOptionIdValuePair": {
+        "type": "object",
+        "properties": {
+          "optionId": {
+            "type": "string",
+            "enum": [
+              "AdultSignatureRequired",
+              "ChainOfSignature",
+              "DangerousGoods",
+              "DangerousGoodsClass",
+              "DangerousGoodsMode",
+              "DeclaredValue",
+              "ExpressCheque",
+              "ExpressChequeMethodOfPayment",
+              "ExpressChequeAmount",
+              "HealthCare",
+              "HoldForPickup",
+              "OriginSignatureNotRequired",
+              "ResidentialSignatureDomestic",
+              "ResidentialSignatureIntl",
+              "SaturdayDelivery",
+              "SaturdayPickup",
+              "SundayDelivery",
+              "SundayPickup",
+              "ReturnPickup",
+              "PackageFree",
+              "OpenVerify"
+            ],
+            "example": "AdultSignatureRequired",
+            "maxLength": 30,
+            "description": "Shipment option identifier. Case-insensitive."
+          },
+          "optionIdValue": {
+            "type": "string",
+            "example": "false",
+            "maxLength": 30,
+            "description": "Value for the option. Conditionally required depending on optionId. Typical values: true, false, Air, Ground, FullyRegulated, UN3373, UN1845, LessThan500kgExempt, LimitedQuantities. ExpressChequeAmount is numeric."
+          }
+        }
+      },
+      "PackageOptionIdValuePair": {
+        "type": "object",
+        "properties": {
+          "optionId": {
+            "type": "string",
+            "enum": [
+              "SpecialHandling",
+              "SpecialHandlingType"
+            ],
+            "example": "SpecialHandling",
+            "description": "Piece option identifier. Case-insensitive."
+          },
+          "optionIdValue": {
+            "type": "string",
+            "enum": [
+              "true",
+              "false",
+              "ResidentialAreaHeavyweight",
+              "FlatPackage",
+              "AdditionalHandling",
+              "LargePackage",
+              "Oversized"
+            ],
+            "example": "true",
+            "description": "Value for the piece option. Conditionally required."
+          }
+        }
+      },
+      "PackageInformation": {
+        "type": "object",
+        "required": [
+          "packageWeight"
+        ],
+        "properties": {
+          "packageWeight": {
+            "type": "number",
+            "format": "double",
+            "multipleOf": 0.01,
+            "exclusiveMinimum": true,
+            "example": 12.21,
+            "description": "Weight of the piece in the selected unit of measure (kg or lb). Must be greater than 0."
+          },
+          "packageLength": {
+            "type": "number",
+            "format": "double",
+            "example": 12.21,
+            "description": "Length of the piece (in or cm). If any dimension is supplied, length, width, and height are all required. Not required for Express Pack/Box/Envelope services."
+          },
+          "packageWidth": {
+            "type": "number",
+            "format": "double",
+            "example": 12.21,
+            "description": "Width of the piece (in or cm)."
+          },
+          "packageHeight": {
+            "type": "number",
+            "format": "double",
+            "example": 12.21,
+            "description": "Height of the piece (in or cm)."
+          },
+          "packageReference1": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "packageReference2": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "packageReference3": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "packageReference4": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "packageReference5": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "packageOptionsInformation": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "$ref": "#/components/schemas/PackageOptionIdValuePair"
+            }
+          },
+          "brokeragePackageNumber": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "Optional ICP brokerage package number. Generated when omitted for ICP shipments whose brokerage provider is not No Broker/Other."
+          }
+        }
+      },
+      "CustomerReferenceInformation": {
+        "type": "object",
+        "properties": {
+          "costCenter": {
+            "type": "string",
+            "maxLength": 30
+          },
+          "notes": {
+            "type": "string",
+            "maxLength": 70
+          },
+          "shipmentReference1": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "shipmentReference2": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "shipmentReference3": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "shipmentReference4": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "shipmentReference5": {
+            "type": "string",
+            "maxLength": 40
+          },
+          "costCenterReference": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "Optional. Alphanumeric only (A-Z, a-z, 0-9). No hyphens, spaces, or special characters. Max 20 characters."
+          }
+        }
+      },
+      "NotificationType": {
+        "type": "object",
+        "required": [
+          "notificationId"
+        ],
+        "properties": {
+          "notificationId": {
+            "type": "string",
+            "enum": [
+              "NotifyWhenExceptionOccurs",
+              "NotifyWhenDeliveryOccurs",
+              "ShipmentConfirmation-Requester",
+              "ShipmentNotification-Receiver"
+            ],
+            "example": "NotifyWhenDeliveryOccurs"
+          },
+          "notificationMessage": {
+            "type": "string",
+            "maxLength": 70,
+            "description": "Mandatory when notificationId is ShipmentNotification-Receiver."
+          }
+        }
+      },
+      "Subscription": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 70,
+            "description": "Mandatory when notificationId is NotifyWhenExceptionOccurs, NotifyWhenDeliveryOccurs, ShipmentConfirmation-Requester, or ShipmentNotification-Receiver."
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 70,
+            "example": "notify@example.com"
+          },
+          "notificationType": {
+            "$ref": "#/components/schemas/NotificationType"
+          }
+        }
+      },
+      "Notifications": {
+        "type": "object",
+        "properties": {
+          "requestorName": {
+            "type": "string",
+            "maxLength": 70
+          },
+          "requestorEmail": {
+            "type": "string",
+            "format": "email",
+            "maxLength": 70,
+            "description": "Required when subscriptions are present."
+          },
+          "subscriptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Subscription"
+            }
+          }
+        }
+      },
+      "NonDocumentsInformation": {
+        "type": "object",
+        "properties": {
+          "taxesPaid": {
+            "type": "string",
+            "enum": [
+              "DDU",
+              "DDP"
+            ],
+            "example": "DDU",
+            "description": "Required for non-domestic, non-documents-only shipments."
+          },
+          "currencyForDutiableGoods": {
+            "type": "string",
+            "enum": [
+              "CAD",
+              "USD",
+              "EUR"
+            ],
+            "example": "CAD"
+          },
+          "importExportType": {
+            "type": "string",
+            "enum": [
+              "Permanent",
+              "Temporary",
+              "Repair",
+              "Return"
+            ],
+            "example": "Permanent"
+          },
+          "extraCharges": {
+            "type": "integer"
+          },
+          "extraChargeCode": {
+            "type": "string",
+            "example": "S"
+          },
+          "specialInstructionFlag": {
+            "type": "string",
+            "enum": [
+              "Y",
+              "N"
+            ],
+            "example": "N"
+          },
+          "billDutiesToParty": {
+            "type": "string",
+            "enum": [
+              "Sender",
+              "Receiver",
+              "Buyer"
+            ],
+            "example": "Sender",
+            "description": "Who pays duties/taxes. Case-insensitive."
+          },
+          "businessRelationship": {
+            "type": "string",
+            "enum": [
+              "TRUE",
+              "FALSE"
+            ],
+            "example": "Related",
+            "description": "Required for non-domestic, non-documents-only shipments."
+          },
+          "customsInvoiceDocumentIndicator": {
+            "type": "boolean",
+            "example": true
+          },
+          "brokerageReferenceNumber": {
+            "type": "string",
+            "maxLength": 26,
+            "description": "Optional ICP shipment-level brokerage billing reference. Alphanumeric, no control characters. Ignored when brokerage provider is No Broker/Other."
+          }
+        }
+      },
+      "ContentDetails": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string",
+            "maxLength": 50,
+            "example": "Electronics"
+          },
+          "harmonizedCode": {
+            "type": "string",
+            "example": "8471.30"
+          },
+          "countryOfManufacture": {
+            "type": "string",
+            "maxLength": 2,
+            "example": "CA",
+            "description": "ISO 2-character country code."
+          },
+          "unitValue": {
+            "type": "number",
+            "format": "double",
+            "example": 100.0,
+            "maximum": 99999.99
+          },
+          "productCode": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "example": 1
+          },
+          "unitOfMeasure": {
+            "type": "string",
+            "example": "Barrel"
+          },
+          "usmcaDocumentIndicator": {
+            "type": "boolean",
+            "example": false
+          },
+          "fdaDocumentIndicator": {
+            "type": "boolean",
+            "example": false
+          },
+          "senderIsProducerIndicator": {
+            "type": "boolean",
+            "example": false
+          },
+          "textileIndicator": {
+            "type": "boolean",
+            "example": true
+          },
+          "textileManufacturer": {
+            "type": "string"
+          },
+          "manufacturersFDARegistrationNumber": {
+            "type": "string"
+          },
+          "shippersFDARegistrationNumber": {
+            "type": "string"
+          },
+          "priorNoticeConfirmationNumber": {
+            "type": "string"
+          },
+          "netWeight": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "CrossBorderInformation": {
+        "type": "object",
+        "properties": {
+          "documentsOnlyIndicator": {
+            "type": "boolean",
+            "example": false,
+            "description": "When true, omitted, or null, non-document and content details are not required and taxesPaid defaults to DDU. Must not be present on domestic (CA to CA) shipments."
+          },
+          "currency": {
+            "type": "string",
+            "enum": [
+              "CAD",
+              "USD"
+            ],
+            "example": "CAD",
+            "description": "Optional. Only CAD or USD are permitted for ICP Northbound shipments."
+          },
+          "nonDocumentsInformation": {
+            "$ref": "#/components/schemas/NonDocumentsInformation"
+          },
+          "contentDetails": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ContentDetails"
+            },
+            "description": "Required (non-empty) for non-domestic, non-documents-only shipments."
+          }
+        }
+      },
+      "Label": {
+        "type": "object",
+        "required": [
+          "outputType"
+        ],
+        "properties": {
+          "outputType": {
+            "type": "string",
+            "enum": [
+              "PDF",
+              "ZPL",
+              "DPL",
+              "PNG",
+              "CODE128"
+            ],
+            "example": "PDF",
+            "description": "Document output type. Case-insensitive."
+          },
+          "printerFormat": {
+            "type": "string",
+            "enum": [
+              "Thermal",
+              "Regular",
+              "Laser"
+            ],
+            "example": "Regular",
+            "description": "Printer format. Optional for PNG/PDF/ZPL/DPL. Forced to NA for CODE128."
+          },
+          "responseType": {
+            "type": "string",
+            "enum": [
+              "BASE64",
+              "URL",
+              "String"
+            ],
+            "example": "URL",
+            "description": "How document content is returned. Mandatory for some output types."
+          }
+        }
+      },
+      "ShipmentDocuments": {
+        "type": "object",
+        "required": [
+          "label"
+        ],
+        "properties": {
+          "label": {
+            "$ref": "#/components/schemas/Label"
+          }
+        }
+      },
+      "ShipmentInformation": {
+        "type": "object",
+        "required": [
+          "serviceId",
+          "totalWeight",
+          "totalPackages"
+        ],
+        "properties": {
+          "serviceId": {
+            "type": "string",
+            "enum": [
+              "PurolatorExpress",
+              "PurolatorExpress10:30AM",
+              "PurolatorExpress12PM",
+              "PurolatorExpress9AM",
+              "PurolatorExpressEvening",
+              "PurolatorExpressInternational",
+              "PurolatorExpressInternational10:30AM",
+              "PurolatorExpressInternational12PM",
+              "PurolatorExpressInternational9AM",
+              "PurolatorExpressU.S.",
+              "PurolatorExpressU.S.10:30AM",
+              "PurolatorExpressU.S.12PM",
+              "PurolatorExpressU.S.9AM",
+              "PurolatorExpressBox",
+              "PurolatorExpressBox10:30AM",
+              "PurolatorExpressBox12PM",
+              "PurolatorExpressBox9AM",
+              "PurolatorExpressBoxEvening",
+              "PurolatorExpressBoxInternational",
+              "PurolatorExpressBoxU.S.",
+              "PurolatorExpressBoxInternational10:30AM",
+              "PurolatorExpressBoxInternational12PM",
+              "PurolatorExpressBoxInternational9AM",
+              "PurolatorExpressBoxU.S.10:30AM",
+              "PurolatorExpressBoxU.S.12PM",
+              "PurolatorExpressBoxU.S.9AM",
+              "PurolatorExpressEnvelope",
+              "PurolatorExpressEnvelope10:30AM",
+              "PurolatorExpressEnvelope12PM",
+              "PurolatorExpressEnvelope9AM",
+              "PurolatorExpressEnvelopeEvening",
+              "PurolatorExpressEnvelopeInternational",
+              "PurolatorExpressEnvelopeU.S.",
+              "PurolatorExpressEnvelopeInternational10:30AM",
+              "PurolatorExpressEnvelopeInternational12PM",
+              "PurolatorExpressEnvelopeInternational9AM",
+              "PurolatorExpressEnvelopeU.S.10:30AM",
+              "PurolatorExpressEnvelopeU.S.12PM",
+              "PurolatorExpressEnvelopeU.S.9AM",
+              "PurolatorExpressPack",
+              "PurolatorExpressPack10:30AM",
+              "PurolatorExpressPack12PM",
+              "PurolatorExpressPack9AM",
+              "PurolatorExpressPackEvening",
+              "PurolatorExpressPackInternational",
+              "PurolatorExpressPackInternational10:30AM",
+              "PurolatorExpressPackInternational12PM",
+              "PurolatorExpressPackInternational9AM",
+              "PurolatorExpressPackU.S.",
+              "PurolatorExpressPackU.S.10:30AM",
+              "PurolatorExpressPackU.S.12PM",
+              "PurolatorExpressPackU.S.9AM",
+              "PurolatorGround",
+              "PurolatorGround10:30AM",
+              "PurolatorGround9AM",
+              "PurolatorGroundEvening",
+              "PurolatorGroundU.S.",
+              "PurolatorQuickShip",
+              "PurolatorStandard"
+            ],
+            "example": "PurolatorExpressU.S.",
+            "description": "Courier service. Case-insensitive."
+          },
+          "unitOfMeasurement": {
+            "type": "string",
+            "enum": [
+              "METRIC",
+              "IMPERIAL"
+            ],
+            "example": "IMPERIAL",
+            "description": "Imperial uses lb/in; metric uses kg/cm. Defaults to imperial if omitted."
+          },
+          "descriptionOfGoods": {
+            "type": "string",
+            "maxLength": 50
+          },
+          "totalWeight": {
+            "type": "number",
+            "format": "double",
+            "example": 5.5,
+            "description": "Total shipment weight. Recalculated from packageInformation when that array is present."
+          },
+          "totalPackages": {
+            "type": "integer",
+            "example": 1,
+            "description": "Total number of pieces. Set from packageInformation length when that array is present."
+          },
+          "dangerousGoodsDeclarationDocumentIndicator": {
+            "type": "boolean",
+            "default": false
+          },
+          "declaredValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "internationalOrderNumber": {
+            "type": "string",
+            "maxLength": 20,
+            "description": "ICP shipment-level international order number. Used when provided; otherwise generated for ICP shipments whose brokerage provider is not No Broker/Other."
+          },
+          "codAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "specialInstructions": {
+            "type": "string",
+            "maxLength": 250
+          },
+          "shipmentOptionsInformation": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShipmentOptionIdValuePair"
+            }
+          },
+          "packageInformation": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PackageInformation"
+            }
+          }
+        }
+      },
+      "ReturnShipmentInformation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ShipmentInformation"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "serviceId": {
+                "type": "string",
+                "enum": [
+                  "PurolatorExpress",
+                  "PurolatorExpress10:30AM",
+                  "PurolatorExpress12PM",
+                  "PurolatorExpress9AM",
+                  "PurolatorExpressEvening",
+                  "PurolatorExpressInternational",
+                  "PurolatorExpressInternational10:30AM",
+                  "PurolatorExpressInternational12PM",
+                  "PurolatorExpressInternational9AM",
+                  "PurolatorExpressU.S.",
+                  "PurolatorExpressU.S.10:30AM",
+                  "PurolatorExpressU.S.12PM",
+                  "PurolatorExpressU.S.9AM",
+                  "PurolatorExpressBox",
+                  "PurolatorExpressBox10:30AM",
+                  "PurolatorExpressBox12PM",
+                  "PurolatorExpressBox9AM",
+                  "PurolatorExpressBoxEvening",
+                  "PurolatorExpressBoxInternational",
+                  "PurolatorExpressBoxU.S.",
+                  "PurolatorExpressBoxInternational10:30AM",
+                  "PurolatorExpressBoxInternational12PM",
+                  "PurolatorExpressBoxInternational9AM",
+                  "PurolatorExpressBoxU.S.10:30AM",
+                  "PurolatorExpressBoxU.S.12PM",
+                  "PurolatorExpressBoxU.S.9AM",
+                  "PurolatorExpressEnvelope",
+                  "PurolatorExpressEnvelope10:30AM",
+                  "PurolatorExpressEnvelope12PM",
+                  "PurolatorExpressEnvelope9AM",
+                  "PurolatorExpressEnvelopeEvening",
+                  "PurolatorExpressEnvelopeInternational",
+                  "PurolatorExpressEnvelopeU.S.",
+                  "PurolatorExpressEnvelopeInternational10:30AM",
+                  "PurolatorExpressEnvelopeInternational12PM",
+                  "PurolatorExpressEnvelopeInternational9AM",
+                  "PurolatorExpressEnvelopeU.S.10:30AM",
+                  "PurolatorExpressEnvelopeU.S.12PM",
+                  "PurolatorExpressEnvelopeU.S.9AM",
+                  "PurolatorExpressPack",
+                  "PurolatorExpressPack10:30AM",
+                  "PurolatorExpressPack12PM",
+                  "PurolatorExpressPack9AM",
+                  "PurolatorExpressPackEvening",
+                  "PurolatorExpressPackInternational",
+                  "PurolatorExpressPackInternational10:30AM",
+                  "PurolatorExpressPackInternational12PM",
+                  "PurolatorExpressPackInternational9AM",
+                  "PurolatorExpressPackU.S.",
+                  "PurolatorExpressPackU.S.10:30AM",
+                  "PurolatorExpressPackU.S.12PM",
+                  "PurolatorExpressPackU.S.9AM",
+                  "PurolatorGround",
+                  "PurolatorGround10:30AM",
+                  "PurolatorGround9AM",
+                  "PurolatorGroundEvening",
+                  "PurolatorGroundU.S.",
+                  "PurolatorQuickShip",
+                  "PurolatorStandard",
+                  "PurolatorExpressReturn",
+                  "PurolatorGroundReturn",
+                  "PurolatorDeferredReturn"
+                ],
+                "example": "PurolatorExpressReturn",
+                "description": "Return or RMS service. Includes dedicated return products PurolatorExpressReturn, PurolatorGroundReturn, PurolatorDeferredReturn."
+              }
+            }
+          }
+        ]
+      },
+      "OutboundShipment": {
+        "type": "object",
+        "required": [
+          "paymentInformation",
+          "pickupType",
+          "senderInformation",
+          "receiverInformation",
+          "shipmentInformation"
+        ],
+        "properties": {
+          "paymentInformation": {
+            "$ref": "#/components/schemas/PaymentInformation"
+          },
+          "pickupType": {
+            "type": "string",
+            "enum": [
+              "PRESCHEDULED",
+              "DROPOFF"
+            ],
+            "example": "DROPOFF",
+            "description": "Pickup type. Case-insensitive."
+          },
+          "senderInformation": {
+            "$ref": "#/components/schemas/SenderInformation"
+          },
+          "receiverInformation": {
+            "$ref": "#/components/schemas/ReceiverInformation"
+          },
+          "usOriginInformation": {
+            "$ref": "#/components/schemas/USOriginInformation"
+          },
+          "fromOnLabelInformation": {
+            "$ref": "#/components/schemas/FromOnLabelInformation"
+          },
+          "expressChequeInformation": {
+            "$ref": "#/components/schemas/ExpressChequeInformation"
+          },
+          "buyerInformation": {
+            "$ref": "#/components/schemas/BuyerInformation"
+          },
+          "brokerageVendorAddress": {
+            "$ref": "#/components/schemas/BuyerInformation",
+            "description": "Mandatory for ICP when brokerage provider is not No Broker/Other. US and CA only."
+          },
+          "brokerageExporterAddress": {
+            "$ref": "#/components/schemas/BuyerInformation",
+            "description": "Optional ICP exporter address. US and CA only."
+          },
+          "thirdPartyBillingInformation": {
+            "$ref": "#/components/schemas/ThirdPartyBillingInformation"
+          },
+          "shipmentInformation": {
+            "$ref": "#/components/schemas/ShipmentInformation"
+          },
+          "customerReferenceInformation": {
+            "$ref": "#/components/schemas/CustomerReferenceInformation"
+          },
+          "notifications": {
+            "$ref": "#/components/schemas/Notifications"
+          },
+          "crossBorderInformation": {
+            "$ref": "#/components/schemas/CrossBorderInformation"
+          }
+        }
+      },
+      "ReturnShipment": {
+        "type": "object",
+        "required": [
+          "numberOfReturnShipments",
+          "pickupType",
+          "paymentInformation",
+          "senderInformation",
+          "receiverInformation",
+          "shipmentInformation"
+        ],
+        "properties": {
+          "numberOfReturnShipments": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "example": 1,
+            "description": "Number of return shipments to generate. Min 1, max 100."
+          },
+          "pickupType": {
+            "type": "string",
+            "enum": [
+              "PRESCHEDULED",
+              "DROPOFF"
+            ],
+            "example": "DROPOFF"
+          },
+          "paymentInformation": {
+            "$ref": "#/components/schemas/PaymentInformation"
+          },
+          "senderInformation": {
+            "$ref": "#/components/schemas/SenderInformation"
+          },
+          "receiverInformation": {
+            "$ref": "#/components/schemas/ReturnReceiverInformation"
+          },
+          "shipmentInformation": {
+            "$ref": "#/components/schemas/ReturnShipmentInformation"
+          },
+          "customerReferenceInformation": {
+            "$ref": "#/components/schemas/CustomerReferenceInformation"
+          },
+          "notifications": {
+            "$ref": "#/components/schemas/Notifications"
+          }
+        }
+      },
+      "CreateShipmentRequest": {
+        "type": "object",
+        "required": [
+          "lineOfBusiness",
+          "outboundShipment",
+          "shipmentDocuments"
+        ],
+        "properties": {
+          "lineOfBusiness": {
+            "$ref": "#/components/schemas/LineOfBusiness"
+          },
+          "shipmentDate": {
+            "$ref": "#/components/schemas/ShipmentDate"
+          },
+          "returnsManagement": {
+            "type": "boolean",
+            "example": false,
+            "description": "When true, outbound is treated as an RMS (returns management) shipment and returnShipment is ignored."
+          },
+          "rma": {
+            "type": "string",
+            "description": "Return merchandise authorization number."
+          },
+          "validateOnly": {
+            "type": "boolean",
+            "example": false,
+            "description": "When true, validates the request without creating a shipment or generating PINs."
+          },
+          "returnRates": {
+            "type": "boolean",
+            "example": false,
+            "description": "When true, include rate estimates in the response. 930-division accounts (Account Lookup SALES_DISTRICT 930) also receive estimates when this flag is false. The flag is stored as sent."
+          },
+          "shipmentDocuments": {
+            "$ref": "#/components/schemas/ShipmentDocuments"
+          },
+          "outboundShipment": {
+            "$ref": "#/components/schemas/OutboundShipment"
+          },
+          "returnShipment": {
+            "$ref": "#/components/schemas/ReturnShipment"
+          }
+        }
+      },
+      "ShipmentDetails": {
+        "type": "object",
+        "properties": {
+          "shipmentPIN": {
+            "type": "string",
+            "example": "329016612345"
+          },
+          "packagePINs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "329016612345"
+            ]
+          },
+          "returnShipmentPIN": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Present for outbound+return when returnsManagement is false."
+          },
+          "expressChequePIN": {
+            "type": "string"
+          },
+          "internationalOrderNumber": {
+            "type": "string",
+            "description": "International order number returned for ICP shipments when brokerage provider is not No Broker/Other."
+          },
+          "brokeragePackageNumbers": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Brokerage package numbers returned for ICP shipments when brokerage provider is not No Broker/Other."
+          }
+        }
+      },
+      "DocumentEntry": {
+        "type": "object",
+        "properties": {
+          "packagePIN": {
+            "type": "string",
+            "description": "Included only for CODE128 document entries."
+          },
+          "documentType": {
+            "type": "string",
+            "enum": [
+              "CustomsInvoice",
+              "CustomsInvoiceThermal",
+              "DangerousGoodsDeclaration",
+              "DomesticBillOfLading",
+              "DomesticBillOfLadingThermal",
+              "ExpressChequeReceipt",
+              "ExpressChequeReceiptThermal",
+              "FDA2877",
+              "InternationalBillOfLading",
+              "InternationalBillOfLadingThermal",
+              "QRCode",
+              "USMCA"
+            ],
+            "example": "DomesticBillOfLading"
+          },
+          "description": {
+            "type": "string",
+            "example": "Domestic Bill of Lading"
+          },
+          "documentStatus": {
+            "type": "string",
+            "example": "Completed"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "data": {
+            "type": "string",
+            "description": "Base64 document content when responseType is BASE64."
+          },
+          "code128Value": {
+            "type": "string"
+          }
+        }
+      },
+      "ShipmentDocumentGroup": {
+        "type": "object",
+        "properties": {
+          "shipmentPIN": {
+            "type": "string",
+            "example": "329016612345"
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentEntry"
+            }
+          }
+        }
+      },
+      "Surcharge": {
+        "type": "object",
+        "properties": {
+          "surcharge": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "format": "double",
+                "example": 4.71
+              },
+              "type": {
+                "type": "string",
+                "example": "Fuel"
+              },
+              "description": {
+                "type": "string",
+                "example": "Fuel Surcharge"
+              }
+            }
+          }
+        }
+      },
+      "Tax": {
+        "type": "object",
+        "properties": {
+          "tax": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "format": "double",
+                "example": 12.96
+              },
+              "type": {
+                "type": "string",
+                "example": "HST"
+              },
+              "description": {
+                "type": "string",
+                "example": "HST"
+              }
+            }
+          }
+        }
+      },
+      "OptionPrice": {
+        "type": "object",
+        "properties": {
+          "option": {
+            "type": "object",
+            "properties": {
+              "amount": {
+                "type": "number",
+                "format": "double"
+              },
+              "id": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "ShipmentEstimate": {
+        "type": "object",
+        "properties": {
+          "lineOfBusiness": {
+            "$ref": "#/components/schemas/LineOfBusiness"
+          },
+          "serviceId": {
+            "type": "string",
+            "example": "PurolatorExpressU.S."
+          },
+          "unitOfMeasurement": {
+            "type": "string",
+            "enum": [
+              "METRIC",
+              "IMPERIAL"
+            ]
+          },
+          "shipmentDate": {
+            "$ref": "#/components/schemas/ShipmentDate"
+          },
+          "expectedDeliveryDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2026-09-09"
+          },
+          "estimatedTransitDays": {
+            "type": "integer",
+            "example": 1
+          },
+          "basePrice": {
+            "type": "number",
+            "format": "double",
+            "example": 18.55
+          },
+          "surcharges": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Surcharge"
+            }
+          },
+          "optionPrices": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionPrice"
+            }
+          },
+          "subTotal": {
+            "type": "number",
+            "format": "double",
+            "example": 99.7
+          },
+          "taxes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tax"
+            }
+          },
+          "totalPrice": {
+            "type": "number",
+            "format": "double",
+            "example": 112.66
+          }
+        }
+      },
+      "ShipmentEstimateWrapper": {
+        "type": "object",
+        "properties": {
+          "shipmentEstimate": {
+            "$ref": "#/components/schemas/ShipmentEstimate"
+          }
+        }
+      },
+      "CreateShipmentResponse": {
+        "type": "object",
+        "properties": {
+          "requestReference": {
+            "$ref": "#/components/schemas/RequestReference"
+          },
+          "validShipment": {
+            "type": "boolean",
+            "example": true
+          },
+          "bannerMessages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "shipmentDetails": {
+            "$ref": "#/components/schemas/ShipmentDetails"
+          },
+          "shipmentDocuments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShipmentDocumentGroup"
+            },
+            "description": "Omitted when the response would exceed API Gateway size limits."
+          },
+          "outboundShipmentEstimates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShipmentEstimateWrapper"
+            },
+            "description": "Present when returnRates is true, or when the outbound account sales district is 930."
+          },
+          "returnShipmentEstimates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ShipmentEstimateWrapper"
+            },
+            "description": "Present when returnRates is true, or when the return account sales district is 930."
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorItem"
+            }
+          }
+        }
+      },
+      "VoidShipmentRequest": {
+        "type": "object",
+        "required": [
+          "lineOfBusiness",
+          "shipmentPIN"
+        ],
+        "properties": {
+          "lineOfBusiness": {
+            "$ref": "#/components/schemas/LineOfBusiness"
+          },
+          "shipmentPIN": {
+            "type": "string",
+            "example": "329016612345",
+            "description": "PIN of the shipment to void. Also accepts shipmentPin."
+          },
+          "requestReference": {
+            "$ref": "#/components/schemas/RequestReference"
+          },
+          "language": {
+            "$ref": "#/components/schemas/Language"
+          }
+        }
+      },
+      "VoidShipmentResponse": {
+        "type": "object",
+        "required": [
+          "requestReference",
+          "shipmentVoided"
+        ],
+        "properties": {
+          "requestReference": {
+            "$ref": "#/components/schemas/RequestReference"
+          },
+          "shipmentVoided": {
+            "type": "string",
+            "enum": [
+              "true",
+              "false"
+            ],
+            "example": "true"
+          },
+          "bannerMessage": {
+            "type": "string",
+            "description": "Present on successful void."
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ErrorItem"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "For secure access, this API uses Bearer Authentication (also known as token authentication). You must send a Bearer token in the Authorization header when making requests to protected endpoints. The token should be prefixed with the word \"Bearer\" followed by a space. Example: \"Authorization: Bearer <YourTokenHere>\"."
+      }
+    }
+  }
+}

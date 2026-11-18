@@ -1,0 +1,1029 @@
+openapi: 3.0.3
+info:
+  title: Pickup Shipment
+  version: "1.0"
+  description: |
+    Pickup shipment API
+
+    ## Authentication
+
+    This API requires **Bearer Token** authentication. Include your token in the `Authorization` header:
+
+    ```
+    Authorization: Bearer <your-token>
+    ```
+
+    All endpoints also require an `x-api-key` header.
+servers:
+  - url: https://shipapi.purolator.com
+  - url: https://shipapi-sandbox.purolator.com
+tags:
+  - name: pickup
+    description: Pickup endpoitns
+security:
+  - bearerAuth: []
+paths:
+  /pickup/v1/schedule:
+    post:
+      tags:
+        - pickup
+      summary: Schedule pickup
+      description: "The schedule pickup method is used to schedule pickups using Purolator E-Ship Web Services"
+      operationId: "post_pickup"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: x-api-key
+          required: true
+          schema:
+            type: string
+          description: "AWS API KEY"
+        - in: header
+          name: Language
+          description: "Language for the error descriptions."
+          schema:
+            type: string
+            enum: ["EN", "FR"]
+            default: "EN"
+          required: true
+        - in: header
+          name: RequestReference
+          schema:
+            $ref: "#/components/schemas/RequestReference"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/PickupCourier"
+                - $ref: "#/components/schemas/PickupFreight"
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "503":
+          description: Service Unavailable
+        "504":
+          description: Gateway Timeout
+
+  /pickup/v1/modify:
+    put:
+      tags:
+        - pickup
+      summary: Modify a scheduled pickup
+      description: "The modify pickup method is used to modify scheduled pickup using Purolator E-Ship Web Services"
+      operationId: "modify_pickup"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: x-api-key
+          required: true
+          schema:
+            type: string
+          description: "AWS API KEY"
+        - in: header
+          name: Language
+          description: "Language for the error descriptions."
+          schema:
+            type: string
+            enum: ["EN", "FR"]
+            default: "EN"
+          required: true
+        - in: header
+          name: RequestReference
+          schema:
+            $ref: "#/components/schemas/RequestReference"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModifyPickup"
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "503":
+          description: Service Unavailable
+        "504":
+          description: Gateway Timeout
+
+  /pickup/v1/getHistory:
+    post:
+      tags:
+        - pickup
+      summary: Shows history for pickup
+      description: "The GetHistory method returns an array of all pickups found based on a set of search criteria.<b>Maximum 50 pickups can be returned</b>"
+      operationId: "history_pickup"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: x-api-key
+          required: true
+          schema:
+            type: string
+          description: "AWS API KEY"
+        - in: header
+          name: Language
+          description: "Language for the error descriptions."
+          schema:
+            type: string
+            enum: ["EN", "FR"]
+            default: "EN"
+          required: true
+        - in: header
+          name: RequestReference
+          schema:
+            $ref: "#/components/schemas/RequestReference"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GetHistoryRequest"
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HistoryApiResponse"
+        "204":
+          description: No Content, No Pickup matches your search query
+
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "503":
+          description: Service Unavailable
+        "504":
+          description: Gateway Timeout
+
+  /pickup/v1/void:
+    put:
+      tags:
+        - pickup
+      summary: Void pickup
+      description: "The void pickup method is used to cancel scheduled pickup using Purolator E-Ship Web Services"
+      operationId: "void_pickup"
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: x-api-key
+          required: true
+          schema:
+            type: string
+          description: "AWS API KEY"
+        - in: header
+          name: Language
+          description: "Language for the error descriptions."
+          schema:
+            type: string
+            enum: ["EN", "FR"]
+            default: "EN"
+          required: true
+        - in: header
+          name: RequestReference
+          schema:
+            $ref: "#/components/schemas/RequestReference"
+      requestBody:
+        description: Void pickup payload
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/voidRequest"
+        required: true
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VoidPickupResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ForbiddenResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "503":
+          description: Service Unavailable
+        "504":
+          description: Gateway Timeout
+
+components:
+  schemas:
+    PickupInstructions:
+      type: object
+      properties:
+        date:
+          type: string
+          description: Requested pickup date. Required date format "YYYY-MM-DD".
+          example: "2024-04-19"
+        anyTimeAfter:
+          type: string
+          description: Earliest pickup time. Time format in 24-hour notation("HH:mm").
+          example: "12:30"
+        untilTime:
+          type: string
+          description: Latest pickup time. Time format in 24-hour notation("HH:mm").
+          example: "19:50"
+        measurementUnit:
+          type: string
+          description: The unit of measurement used for package weight and lengths. Imperial uses pounds and inches, while metric uses kilograms and centimeters. Case-insensitive.
+          example: Imperial
+          enum:
+            - Imperial
+            - Metric
+        totalWeight:
+          type: number
+          example: "10.5"
+        pickupLocation:
+          type: string
+          description: Location for where to pickup the shipment. Case-insensitive.
+          example: FrontDesk
+          enum:
+            - BackDoor
+            - Basement
+            - BetweenDoors
+            - Counter
+            - Desk
+            - FrontDesk
+            - FrontDoor
+            - FrontPorch
+            - Garage
+            - GateHouse
+            - Kiosk
+            - Lab
+            - LoadingDock
+            - Lobby
+            - Mailbox
+            - MailRoom
+            - Office
+            - OutsideDoor
+            - PartsDepartment
+            - Pharmacy
+            - ProShop
+            - Receiving
+            - Reception
+            - Security
+            - ServiceCounter
+            - Shipping
+            - SideDoor
+            - Switchboard
+            - Vault
+            - Warehouse
+        additionalInstructions:
+          type: string
+          description: Additional pickup instructions.
+          example: Additional comments
+          maxLength: 70
+        supplyRequestCodes:
+          type: array
+          description: Request supplies with pickup. Case-insensitive.
+          example:
+            - "ExpressEnvelope"
+          enum:
+            - 1030AMStickers
+            - 9AMStickers
+            - AirStickers
+            - ExpressEnvelope
+            - ExpressPack
+            - HeavyWeightSticker
+            - HoldforPUSticker
+            - InternationalBillOfLading
+            - Labelope
+            - Manifest
+            - RegularBillOfLading
+            - SaturdayServiceSticker
+          items:
+            type: string
+        trailerAccessible:
+          type: boolean
+          description: Whether or not your location can accommodate a 53' trailer.
+          example: "false"
+        loadingDockAvailable:
+          type: boolean
+          description: Whether or not a loading dock is available at your location.
+          example: "false"
+        shipmentOnSkids:
+          type: boolean
+          description: Whether or not your shipment is on skids.
+          example: "false"
+        numberOfSkids:
+          type: integer
+          description: Number of skids
+          example: "1"
+          minimum: 0
+          maximum: 9999
+      required:
+        - anyTimeAfter
+        - date
+        - pickupLocation
+        - untilTime
+        - measurementUnit
+    PickupAddress:
+      type: object
+      properties:
+        address:
+          type: array
+          description: A maximum of 3 strings are allowed, with at least one line required, and each line can contain up to 35 characters.
+          example:
+            - 123 Main St
+          items:
+            type: string
+        province:
+          type: string
+          description: Province cod. Case-insensitive.
+          example: "ON"
+          enum:
+            - AB
+            - BC
+            - MB
+            - NB
+            - NL
+            - NS
+            - NT
+            - NU
+            - ON
+            - PE
+            - QC
+            - SK
+            - YT
+        city:
+          type: string
+          description: Name of the city
+          example: TORONTO
+          maxLength: 40
+        country:
+          type: string
+          description: Country code. Case-insensitive.
+          example: CA
+          enum:
+            - CA
+        postalCode:
+          type: string
+          description: Expected format L5R3T8 or L5R 3T8 and should be a valid postal code
+          example: L5R3T8
+      required:
+        - address
+        - city
+        - country
+        - postalCode
+        - province
+    ShipmentSummaryDetails:
+      type: object
+      properties:
+        destinationCode:
+          type: string
+          description: Shipment destination code. Case-insensitive.
+          enum:
+            - DOM
+            - INTL
+            - USA
+        totalPieces:
+          type: integer
+          description: Number of pieces for a shipment destination
+          minimum: 1
+          maximum: 9999
+          example: 4
+        totalWeight:
+          type: number
+          description: "Weight for per piece cannot exceed 150LB or 68KG"
+          example: 200
+        modeOfTransport:
+          type: string
+          description: Mode of transport. Case-insensitive.
+          example: Ground
+          enum:
+            - Air
+            - Ground
+            - Air/Ground
+      required:
+        - destinationCode
+        - totalPieces
+        - totalWeight
+        - modeOfTransport
+    ContactInformation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the contact.
+          example: John Doe
+          minimum: 2
+          maxLength: 30
+        company:
+          type: string
+          description: Company name.
+          example: Purolator
+          maxLength: 30
+        phoneNumber:
+          type: string
+          description: Expected format '14031234567', '4031234567' '416-569-5654', '(416)-569-5654'
+          example: "14031234567 or 4031234567"
+        phoneExtension:
+          type: string
+          description: Expected format, Only digit with length upto 10
+          example: "12365"
+      required:
+        - name
+        - phoneNumber
+    PaymentInformation:
+      type: object
+      properties:
+        paymentType:
+          type: string
+          description: Specifies where shipping charges should be billed to
+          example: Sender
+          enum:
+            - Sender
+            - Receiver
+            - ThirdParty
+        billingAccountNumber:
+          type: string
+          description: Registered freight account number tied to the production key. It is a required when paymentType is ThirdParty, and optional for Sender or Receiver.
+      required:
+        - paymentType
+    LineItem:
+      type: object
+      required:
+        - lineNumber
+        - pieces
+        - handlingUnit
+        - handlingUnitType
+        - weight
+        - length
+        - width
+        - height
+      properties:
+        lineNumber:
+          type: integer
+          example: 1
+          description: Line item number of the corresponding shipment description.
+        pieces:
+          type: integer
+          example: 1
+          description: Number of pieces on the handling unit
+        handlingUnit:
+          type: integer
+          example: 1
+          description: Number of handling units
+        handlingUnitType:
+          type: string
+          enum:
+            - PALLET
+            - BOX
+            - SKID
+            - REEL
+            - ROLL
+            - BIN
+            - BUNDLE
+            - CAGE
+            - UNIT
+            - DRUM
+          example: BOX
+          description: Type of handling unit
+        description:
+          type: string
+          maximum: 250
+          example: Description here
+          description: Description of handling unit type
+        freightClass:
+          type: string
+          example: Freight class here
+          description: ""
+        weight:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 1000000000000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Weight of the line item in your selected unit of measure (kg
+            or lbs). Weight must be greater than 0.
+        length:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 1000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Length of the line item in your selected unit of measure (in
+            or cm). Length must be greater than 0.
+        width:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 1000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Width of the line item in your selected unit of measure (in
+            or cm). Width must be greater than 0.
+        height:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 1000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Height of the line item in your selected unit of measure (in
+            or cm). Height must be greater than 0.
+    Freight:
+      type: object
+      properties:
+        paymentInfo:
+          $ref: "#/components/schemas/PaymentInformation"
+        declaredValue:
+          type: number
+          format: double
+          multipleOf: 0.01
+          example: "100.00"
+          description: ""
+        codAmount:
+          type: number
+          format: double
+          multipleOf: 0.01
+          example: "100.00"
+          description: Cash on delivery amount.
+        accessorialParameters:
+          type: array
+          items:
+            "$ref": "#/components/schemas/BoolValuePair"
+        pickUpOptions:
+          type: string
+          example:
+            - Oversize
+          enum:
+            - DG
+            - Oversize
+            - Rush
+            - TempCtrl
+        lineItemDetails:
+          description: Shipment particulars
+          type: array
+          items:
+            $ref: "#/components/schemas/LineItem"
+        customerReferences:
+          type: array
+          example:
+            - PO
+            - BOL
+          enum:
+            - PO
+            - BOL
+          items:
+            type: string
+      required:
+        - paymentInfo
+    PickupCourier:
+      type: object
+      properties:
+        registeredAccountNumber:
+          type: string
+          description: Purolator Business Account Number
+          maxLength: 10
+          minLength: 1
+          example: "1234567"
+        pickupInstructions:
+          $ref: "#/components/schemas/PickupInstructions"
+        pickupAddress:
+          $ref: "#/components/schemas/PickupAddress"
+        shipmentSummary:
+          type: array
+          description: Shipment Summary Details cannot contain multiple entries with the same Destination Code.
+          items:
+            $ref: "#/components/schemas/ShipmentSummaryDetails"
+        contactInfo:
+          $ref: "#/components/schemas/ContactInformation"
+        pickupNotificationEmail:
+          type: string
+          description: Email address must not exceed 70 char.
+          example: "info@purolator.com"
+        lineOfBusiness:
+          type: string
+          description: Line of business which the pickup is for. Case-insensitive.
+          example: Courier
+          enum:
+            - Courier
+            - Freight
+      required:
+        - registeredAccountNumber
+        - lineOfBusiness
+        - contactInfo
+        - pickupAddress
+        - pickupInstructions
+        - shipmentSummary
+    PickupFreight:
+      allOf:
+        - $ref: "#/components/schemas/PickupCourier"
+        - type: object
+          properties:
+            freight:
+              $ref: "#/components/schemas/Freight"
+    ApiResponse:
+      type: object
+      properties:
+        pickupConfirmationNumber:
+          type: string
+          description: Shipment pickup confirmation number
+          example: "2214236"
+      required:
+        - pickupConfirmationNumber
+    VoidPickupResponse:
+      type: object
+      properties:
+        pickupVoided:
+          type: boolean
+          description: Confirmation for void pickup request
+          example: false
+    ModifyShipmentSummaryDetails:
+      type: object
+      properties:
+        destinationCode:
+          type: string
+          description: Shipment destination code. Case-insensitive.
+          enum:
+            - DOM
+            - INTL
+            - USA
+        totalPieces:
+          type: integer
+          description: Number of pieces for a shipment destination
+          minimum: 1
+          maximum: 9999
+          example: 1
+        totalWeight:
+          type: number
+          description: ""
+          example: 10.2
+      required:
+        - destinationCode
+        - totalPieces
+        - totalWeight
+    ModifyPickup:
+      type: object
+      properties:
+        registeredAccountNumber:
+          type: string
+          description: Purolator Business Account Number
+          maxLength: 10
+          minLength: 1
+          example: "1234567"
+        pickupConfirmationNumber:
+          type: string
+          description: Shipment pickup confirmation number
+          example: "2214236"
+        pickupInstructions:
+          $ref: "#/components/schemas/ModifyPickupInstructions"
+        shipmentSummary:
+          description: In Modify pickup 'destinationCode' is not modifiable
+          type: array
+          items:
+            $ref: "#/components/schemas/ModifyShipmentSummaryDetails"
+      required:
+        - registeredAccountNumber
+        - pickupConfirmationNumber
+        - pickupInstructions
+        - shipmentSummary
+    HistoryApiResponse:
+      type: object
+      properties:
+        pickupDetails:
+          type: array
+          items:
+            oneOf:
+              - $ref: "#/components/schemas/GetPickupCourierResponse"
+              - $ref: "#/components/schemas/GetPickupFreightResponse"
+      required:
+        - pickupDetails
+    GetHistoryRequest:
+      type: object
+      properties:
+        registeredAccountNumber:
+          type: string
+          description: Purolator Business Account Number
+          maxLength: 10
+          minLength: 1
+          example: "1234567"
+        pickupConfirmationNumber:
+          type: array
+          description: Shipment pickup confirmation number. Accept up to 50 confirmation
+            number
+          example:
+            - "2214236"
+            - "3326587"
+          items:
+            type: string
+        fromDate:
+          type: string
+          description: Date format should be YYYY-MM-DD
+          example: "2024-04-25"
+        toDate:
+          type: string
+          description: Date format should be YYYY-MM-DD
+          example: "2024-04-29"
+        status:
+          type: string
+          example: PickedUp
+          description: Filter by particular status. Case-insensitive.
+          enum:
+            - Scheduled
+            - Dispatched
+            - Cancelled
+            - NoPickup
+            - PickedUp
+            - Pending
+        lineOfBusiness:
+          type: string
+          description: Line of business which the pickup is for. Case-insensitive.
+          example: Courier
+          enum:
+            - Courier
+            - Freight
+      required:
+        - lineOfBusiness
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Unique Error code
+          example: "9001-19"
+        description:
+          type: string
+          description: Detailed error description
+          example: "Shipment summary is required."
+    ErrorResponse:
+      type: array
+      items:
+        $ref: "#/components/schemas/Error"
+    ModifyPickupInstructions:
+      type: object
+      properties:
+        untilTime:
+          type: string
+          description: Latest pickup time. Time format in 24-hour notation(HH:mm)
+          example: "19:50"
+        measurementUnit:
+          type: string
+          description: Unit of measure for weight.
+          example: imperial
+          enum:
+            - imperial
+            - metric
+        pickupLocation:
+          type: string
+          description: Location for where to pickup the shipment. Case-insensitive.
+          example: FrontDesk
+          enum:
+            - BackDoor
+            - Basement
+            - BetweenDoors
+            - Counter
+            - Desk
+            - FrontDesk
+            - FrontDoor
+            - FrontPorch
+            - Garage
+            - GateHouse
+            - Kiosk
+            - Lab
+            - LoadingDock
+            - Lobby
+            - Mailbox
+            - MailRoom
+            - Office
+            - OutsideDoor
+            - PartsDepartment
+            - Pharmacy
+            - ProShop
+            - Receiving
+            - Reception
+            - Security
+            - ServiceCounter
+            - Shipping
+            - SideDoor
+            - Switchboard
+            - Vault
+            - Warehouse
+        additionalInstructions:
+          type: string
+          description: Additionial pickup instructions.
+          example: Additionial comments
+          maxLength: 70
+        supplyRequestCodes:
+          type: array
+          description: Request supplies with pickup. Case-insensitive.
+          example:
+            - "ExpressEnvelope"
+          enum:
+            - 1030AMStickers
+            - 9AMStickers
+            - AirStickers
+            - ExpressEnvelope
+            - ExpressPack
+            - HeavyWeightSticker
+            - HoldforPUSticker
+            - InternationalBillOfLading
+            - Labelope
+            - Manifest
+            - RegularBillOfLading
+            - SaturdayServiceSticker
+          items:
+            type: string
+      required:
+        - pickupLocation
+        - untilTime
+        - measurementUnit
+    RequestReference:
+      type: string
+      maximum: 36
+      description: "RequestReference"
+    GetBaseResponse:
+      type: object
+      properties:
+        pickupConfirmationNumber:
+          type: string
+          description: Shipment pickup confirmation number
+          example: "2214236"
+        pickupStatus:
+          type: string
+          example: PickedUp
+          description: Filter by particular status. Case-insensitive.
+          enum:
+            - Scheduled
+            - Dispatched
+            - Cancelled
+            - NoPickup
+            - PickedUp
+            - Pending
+    GetPickupCourierResponse:
+      allOf:
+        - $ref: "#/components/schemas/PickupCourier"
+        - $ref: "#/components/schemas/GetBaseResponse"
+    GetPickupFreightResponse:
+      allOf:
+        - $ref: "#/components/schemas/PickupFreight"
+        - $ref: "#/components/schemas/GetBaseResponse"
+    voidRequest:
+      type: object
+      properties:
+        pickupConfirmationNumber:
+          type: string
+          description: Shipment pickup confirmation number
+          example: "2214236"
+        lineOfBusiness:
+          type: string
+          description: Line of business which the pickup is for. Case-insensitive.
+          example: Courier
+          enum:
+            - Courier
+            - Freight
+      required:
+        - lineOfBusiness
+        - pickupConfirmationNumber
+    BadRequestResponse:
+      type: object
+      properties:
+        errors:
+          $ref: "#/components/schemas/ErrorResponse"
+    ForbiddenResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: "Forbidden - The client does not have access rights to the content."
+          example: "User is not authorized to access this resource with an explicit deny"
+    InternalServerError:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Unique Error code
+          example: "9001-73"
+        description:
+          type: string
+          description: Detailed error description
+          example: "There is an unknown internal server error. Please try again later."
+    BoolValuePair:
+      type: object
+      required:
+        - keyword
+        - keywordValue
+      properties:
+        keyword:
+          type: string
+          enum:
+            - 2MEN
+            - APPT
+            - ID
+            - MULT DRP
+            - OFFDAY
+            - RESID
+            - TAILGATE
+            - TSDEL
+            - VALUE
+            - DG
+            - DGPL
+            - HEAT
+            - PREAPPT
+          example: ID
+          description: Optional accessorial parameter keywords.
+        keywordValue:
+          type: boolean
+          example: "true"
+          description: Whether the keyword value in this object should be true or
+            false.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        For secure access, this API uses Bearer Authentication (also known as token authentication). 
+        You must send a Bearer token in the Authorization header when making requests to protected 
+        endpoints. The token should be prefixed with the word "Bearer" followed by a space. 
+        Example: "Authorization: Bearer <YourTokenHere>".

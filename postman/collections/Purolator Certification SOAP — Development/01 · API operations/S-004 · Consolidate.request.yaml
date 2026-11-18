@@ -1,0 +1,29 @@
+$kind: http-request
+description: |-
+  **Consolidate** — Consolidate
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · ConsolidateResponse · ResponseInformation/Errors empty · Consolidate = true
+url: "{{soapBase}}/EWS/V2/Shipping/ShippingService.asmx"
+method: POST
+headers:
+  Content-Type: text/xml; charset=utf-8
+  SOAPAction: http://purolator.com/pws/service/v2/Consolidate
+body:
+  type: xml
+  content: |-
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://purolator.com/pws/datatypes/v2">
+       <soapenv:Header>
+          <v2:RequestContext>
+             <v2:Version>2.0</v2:Version>
+             <v2:Language>en</v2:Language>
+             <v2:GroupID>123</v2:GroupID>
+             <v2:RequestReference>UserRef</v2:RequestReference>
+          </v2:RequestContext>
+       </soapenv:Header>
+       <soapenv:Body>
+          <v2:ConsolidateRequest/>
+       </soapenv:Body>
+    </soapenv:Envelope>
+order: 4000

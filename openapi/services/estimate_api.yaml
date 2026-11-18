@@ -1,0 +1,1681 @@
+openapi: 3.0.3
+info:
+  title: Estimate
+  version: "1.0"
+  description: |
+    Estimate shipment API
+
+
+    ## Authentication
+
+
+    This API requires **Bearer Token** authentication. Include your token in the
+    `Authorization` header:
+
+
+    ```
+
+    Authorization: Bearer <your-token>
+
+    ```
+
+
+    All endpoints also require an `x-api-key` header.
+servers:
+  - url: https://shipapi.purolator.com
+  - url: https://shipapi-sandbox.purolator.com
+tags:
+  - name: Estimate
+    description: Estimate endpoint
+security:
+  - bearerAuth: []
+paths:
+  /rate/v1/shipment:
+    post:
+      tags:
+        - Estimate
+      summary: Estimate a shipment
+      description: Obtain a quick or full estimate for a shipment
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: x-api-key
+          required: true
+          schema:
+            type: string
+          description: x-api-key
+        - in: header
+          name: Language
+          schema:
+            $ref: "#/components/schemas/Language"
+          required: false
+        - in: header
+          name: RequestReference
+          schema:
+            $ref: "#/components/schemas/RequestReference"
+          required: false
+      requestBody:
+        description: Provide all the information needed to obtain an estimate.
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/CourierEstimateRequest"
+                - $ref: "#/components/schemas/FreightEstimateRequest"
+        required: true
+      responses:
+        "200":
+          description: Successful estimate comprising of outbound and return shipment
+            estimates
+          headers:
+            Language:
+              schema:
+                $ref: "#/components/schemas/Language"
+            RequestReference:
+              schema:
+                $ref: "#/components/schemas/RequestReference"
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/CourierEstimateResponse"
+                  - $ref: "#/components/schemas/FreightEstimateResponse"
+        "400":
+          description: An error based on user input occurred.
+          headers:
+            Language:
+              schema:
+                $ref: "#/components/schemas/Language"
+            RequestReference:
+              schema:
+                $ref: "#/components/schemas/RequestReference"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: An internal server error occured.
+          headers:
+            Language:
+              schema:
+                $ref: "#/components/schemas/Language"
+            RequestReference:
+              schema:
+                $ref: "#/components/schemas/RequestReference"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    EstimateRequest:
+      type: object
+      required:
+        - lineOfBusiness
+      properties:
+        lineOfBusiness:
+          $ref: "#/components/schemas/LineOfBusiness"
+        shipmentDate:
+          $ref: "#/components/schemas/ShipmentDate"
+    CourierEstimateRequest:
+      allOf:
+        - $ref: "#/components/schemas/EstimateRequest"
+        - type: object
+          required:
+            - outboundShipment
+          properties:
+            outboundShipment:
+              $ref: "#/components/schemas/OutboundShipmentCourier"
+            returnShipment:
+              $ref: "#/components/schemas/ReturnShipment"
+            trackingReferenceInformation:
+              $ref: "#/components/schemas/TrackingReferenceInformation"
+    FreightEstimateRequest:
+      allOf:
+        - $ref: "#/components/schemas/EstimateRequest"
+        - type: object
+          required:
+            - outboundShipment
+          properties:
+            outboundShipment:
+              $ref: "#/components/schemas/OutboundShipmentFreight"
+            trackingReferenceInformation:
+              $ref: "#/components/schemas/TrackingReferenceInformation"
+    OutboundShipmentBase:
+      type: object
+      required:
+        - senderInformation
+        - receiverInformation
+        - billingInformation
+      properties:
+        billingInformation:
+          $ref: "#/components/schemas/BillingInformation"
+        senderInformation:
+          $ref: "#/components/schemas/SenderAddress"
+        receiverInformation:
+          $ref: "#/components/schemas/ReceiverAddress"
+    OutboundShipmentCourier:
+      allOf:
+        - $ref: "#/components/schemas/OutboundShipmentBase"
+        - type: object
+          required:
+            - shipmentInformation
+          properties:
+            shipmentInformation:
+              $ref: "#/components/schemas/CourierPackageInformation"
+            usOriginInformation:
+              $ref: "#/components/schemas/USOriginInformation"
+    OutboundShipmentFreight:
+      allOf:
+        - $ref: "#/components/schemas/OutboundShipmentBase"
+        - type: object
+          required:
+            - shipmentInformation
+          properties:
+            shipmentInformation:
+              $ref: "#/components/schemas/FreightPackageInformation"
+    ReturnShipment:
+      type: object
+      required:
+        - numberOfReturnShipments
+        - billingInformation
+        - senderInformation
+        - receiverInformation
+        - shipmentInformation
+      properties:
+        numberOfReturnShipments:
+          type: integer
+          minimum: 1
+          maximum: 100
+          example: "100"
+          description: Number of Return Shipments to generate for current Shipment. Min
+            Value is 1 and Max value is 100. Mandatory if Shipment Type is
+            Return
+        billingInformation:
+          $ref: "#/components/schemas/BillingInformation"
+        senderInformation:
+          $ref: "#/components/schemas/SenderAddress"
+        receiverInformation:
+          $ref: "#/components/schemas/ReceiverAddress"
+        shipmentInformation:
+          $ref: "#/components/schemas/ReturnCourierPackageInformation"
+    LineOfBusiness:
+      type: string
+      enum:
+        - Freight
+        - Courier
+      description: Line of business which the estimate is for. Case-insensitive.
+      example: Courier
+    ShipmentDate:
+      type: string
+      format: date
+      default: Today's Date
+      example: 2024-06-26
+      description: "Date of shipment. Up to 10 days in advance. Date format:
+        YYYY-MM-DD. If not present, default to today's date."
+    BillingInformation:
+      type: object
+      required:
+        - billingAccountNumber
+      properties:
+        billingAccountNumber:
+          type: string
+          maximum: 10
+          description: The account number that would be billed for this shipment. Used to
+            associate user-level discounts and other info that contributes to
+            the rate estimate.
+          example: "9999999"
+        displayPublishedRates:
+          type: boolean
+          description: Whether to non-discounted (published) rates. If not present or
+            false, defaults to display account rates
+          example: false
+          default: false
+    SenderAddress:
+      type: object
+      required:
+        - city
+        - provinceStateCode
+        - country
+        - postalZipCode
+      properties:
+        companyName:
+          type: string
+          maximum: 30
+          example: SHIPPER
+          description: Company Name information.
+        streetAddress:
+          type: array
+          maximum: 3
+          minimum: 1
+          items:
+            $ref: "#/components/schemas/AddressLine"
+          example:
+            - SUITE 101
+          description: Maximum 3 addresses allowed. Each address has a max length of 40
+            characters
+        city:
+          type: string
+          maximum: 40
+          example: MISSISSAUGA
+          description: City
+        provinceStateCode:
+          type: string
+          maximum: 40
+          example: ON
+          enum:
+            - AB
+            - BC
+            - MB
+            - NB
+            - NL
+            - NS
+            - NT
+            - NU
+            - ON
+            - PE
+            - QC
+            - SK
+            - YT
+          description: "2 character code for the Province/State, required for Canadian and
+            US addresses. Note that currently only Canadian addresses are
+            accepted for the sender. Valid Province Codes for Canada: AB, BC,
+            MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT."
+        country:
+          type: string
+          maximum: 2
+          example: CA
+          enum:
+            - CA
+          description: 2-character CountryCode. Note that currently only Canadian
+            addresses are accepted for the sender.
+        postalZipCode:
+          type: string
+          maximum: 10
+          example: A7A 4Y7
+          description: Canadian Postal Code or USA Zip Code or Intl Postal Code. Note that
+            currently only Canadian addresses are accepted for the sender.
+    ReceiverAddress:
+      type: object
+      required:
+        - city
+        - country
+        - postalZipCode
+      properties:
+        companyName:
+          type: string
+          maximum: 30
+          example: SHIPPER
+          description: Company Name information.
+        streetAddress:
+          type: array
+          maximum: 3
+          items:
+            $ref: "#/components/schemas/AddressLine"
+          example:
+            - SUITE 101
+          description: Maximum 3 addresses allowed. Each address has a max length of 40
+            characters
+        city:
+          type: string
+          maximum: 40
+          example: MISSISSAUGA
+          description: City
+        provinceStateCode:
+          type: string
+          maximum: 40
+          example: ON
+          description: "2 character code for the Province/State, required for Canadian and
+            US addresses. Note that currently only Canadian addresses are
+            accepted for the sender. Valid Province Codes for Canada: AB, BC,
+            MB, NB, NL, NS, NT, NU, ON, PE, QC, SK, YT. Valid State Codes for
+            US: AK, AL, AR, AZ, CA, CO, CT, DC, DE, FL, GA, HI, IA, ID, IL, IN,
+            KS, KY, LA, MA, MD, ME, MI, MN, MO, MS, MT, NC, ND, NE, NH, NJ, NM,
+            NV, NY, OH, OK, OR, PA, RI, SC, SD, TN, TX, UT, VA, VT, WA, WI, WV,
+            WY."
+        country:
+          type: string
+          maximum: 2
+          example: CA
+          enum:
+            - AD
+            - AE
+            - AF
+            - AG
+            - AI
+            - AL
+            - AM
+            - AN
+            - AO
+            - AQ
+            - AR
+            - AS
+            - AT
+            - AU
+            - AW
+            - AX
+            - AZ
+            - BA
+            - BB
+            - BD
+            - BE
+            - BF
+            - BG
+            - BH
+            - BI
+            - BJ
+            - BL
+            - BM
+            - BN
+            - BO
+            - BR
+            - BS
+            - BT
+            - BV
+            - BW
+            - BY
+            - BZ
+            - CA
+            - CC
+            - CD
+            - CF
+            - CG
+            - CH
+            - CI
+            - CK
+            - CL
+            - CM
+            - CN
+            - CO
+            - CR
+            - CU
+            - CV
+            - CX
+            - CY
+            - CZ
+            - DE
+            - DJ
+            - DK
+            - DM
+            - DO
+            - DZ
+            - EC
+            - EE
+            - EG
+            - EH
+            - ER
+            - ES
+            - ET
+            - EU
+            - FI
+            - FJ
+            - FK
+            - FM
+            - FO
+            - FR
+            - GA
+            - GB
+            - GD
+            - GE
+            - GF
+            - GG
+            - GH
+            - GI
+            - GL
+            - GM
+            - GN
+            - GP
+            - GQ
+            - GR
+            - GS
+            - GT
+            - GU
+            - GW
+            - GY
+            - HK
+            - HM
+            - HN
+            - HR
+            - HT
+            - HU
+            - IC
+            - ID
+            - IE
+            - IL
+            - IM
+            - IN
+            - IO
+            - IQ
+            - IR
+            - IS
+            - IT
+            - JE
+            - JM
+            - JO
+            - JP
+            - KE
+            - KG
+            - KH
+            - KI
+            - KM
+            - KN
+            - KP
+            - KR
+            - KW
+            - KY
+            - KZ
+            - LA
+            - LB
+            - LC
+            - LI
+            - LK
+            - LR
+            - LS
+            - LT
+            - LU
+            - LV
+            - LY
+            - MA
+            - MC
+            - MD
+            - ME
+            - MG
+            - MH
+            - MK
+            - ML
+            - MM
+            - MN
+            - MO
+            - MP
+            - MQ
+            - MR
+            - MS
+            - MT
+            - MU
+            - MV
+            - MW
+            - MX
+            - MY
+            - MZ
+            - NA
+            - NC
+            - NE
+            - NF
+            - NG
+            - NI
+            - NL
+            - NO
+            - NP
+            - NR
+            - NT
+            - NU
+            - NZ
+            - OM
+            - OR
+            - PA
+            - PE
+            - PF
+            - PG
+            - PH
+            - PK
+            - PL
+            - PM
+            - PN
+            - PR
+            - PS
+            - PT
+            - PW
+            - PY
+            - QA
+            - RE
+            - RO
+            - RS
+            - RU
+            - RW
+            - SA
+            - SB
+            - SC
+            - SD
+            - SE
+            - SG
+            - SH
+            - SI
+            - SJ
+            - SK
+            - SL
+            - SM
+            - SN
+            - SO
+            - SR
+            - ST
+            - SV
+            - SY
+            - SZ
+            - TC
+            - TD
+            - TF
+            - TG
+            - TH
+            - TJ
+            - TK
+            - TL
+            - TM
+            - TN
+            - TO
+            - TP
+            - TR
+            - TT
+            - TV
+            - TW
+            - TZ
+            - UA
+            - UG
+            - UM
+            - UN
+            - US
+            - UY
+            - UZ
+            - VA
+            - VC
+            - VE
+            - VG
+            - VI
+            - VN
+            - VU
+            - WF
+            - WS
+            - XB
+            - XC
+            - XE
+            - XM
+            - XN
+            - XS
+            - XY
+            - YE
+            - YT
+            - ZA
+            - ZM
+            - ZW
+            - ZZ
+          description: "2-character CountryCode. Valid codes are: AD, AE, AF, AG, AI, AL,
+            AM, AN, AO, AQ, AR, AS, AT, AU, AW, AX, AZ, BA, BB, BD, BE, BF, BG,
+            BH, BI, BJ, BL, BM, BN, BO, BR, BS, BT, BV, BW, BY, BZ, CA, CC, CD,
+            CF, CG, CH, CI, CK, CL, CM, CN, CO, CR, CU, CV, CX, CY, CZ, DE, DJ,
+            DK, DM, DO, DZ, EC, EE, EG, EH, ER, ES, ET, EU, FI, FJ, FK, FM, FO,
+            FR, GA, GB, GD, GE, GF, GG, GH, GI, GL, GM, GN, GP, GQ, GR, GS, GT,
+            GU, GW, GY, HK, HM, HN, HR, HT, HU, IC, ID, IE, IL, IM, IN, IO, IQ,
+            IR, IS, IT, JE, JM, JO, JP, KE, KG, KH, KI, KM, KN, KP, KR, KW, KY,
+            KZ, LA, LB, LC, LI, LK, LR, LS, LT, LU, LV, LY, MA, MC, MD, ME, MG,
+            MH, MK, ML, MM, MN, MO, MP, MQ, MR, MS, MT, MU, MV, MW, MX, MY, MZ,
+            NA, NC, NE, NF, NG, NI, NL, NO, NP, NR, NT, NU, NZ, OM, OR, PA, PE,
+            PF, PG, PH, PK, PL, PM, PN, PR, PS, PT, PW, PY, QA, RE, RO, RS, RU,
+            RW, SA, SB, SC, SD, SE, SG, SH, SI, SJ, SK, SL, SM, SN, SO, SR, ST,
+            SV, SY, SZ, TC, TD, TF, TG, TH, TJ, TK, TL, TM, TN, TO, TP, TR, TT,
+            TV, TW, TZ, UA, UG, UM, UN, US, UY, UZ, VA, VC, VE, VG, VI, VN, VU,
+            WF, WS, XB, XC, XE, XM, XN, XS, XY, YE, YT, ZA, ZM, ZW, ZZ."
+        postalZipCode:
+          type: string
+          maximum: 10
+          example: A7A 4Y7
+          description: Canadian Postal Code or USA Zip Code or Intl Postal Code. Only
+            Canadian and US postal codes are required.
+    USOriginInformation:
+      type: object
+      description: US origin address information. Required when the shipment originates
+        from the United States. Only US country code is accepted.
+      required:
+        - city
+        - provinceStateCode
+        - country
+        - postalZipCode
+      properties:
+        companyName:
+          type: string
+          maximum: 30
+          example: US SHIPPER
+          description: Company Name information.
+        streetAddress:
+          type: array
+          maximum: 3
+          minimum: 1
+          items:
+            $ref: "#/components/schemas/AddressLine"
+          example:
+            - 456 MARKET ST
+          description: Maximum 3 addresses allowed. Each address has a max length of 40
+            characters.
+        city:
+          type: string
+          maximum: 40
+          example: LOS ANGELES
+          description: City
+        provinceStateCode:
+          type: string
+          maximum: 40
+          example: CA
+          enum:
+            - AK
+            - AL
+            - AR
+            - AZ
+            - CA
+            - CO
+            - CT
+            - DC
+            - DE
+            - FL
+            - GA
+            - HI
+            - IA
+            - ID
+            - IL
+            - IN
+            - KS
+            - KY
+            - LA
+            - MA
+            - MD
+            - ME
+            - MI
+            - MN
+            - MO
+            - MS
+            - MT
+            - NC
+            - ND
+            - NE
+            - NH
+            - NJ
+            - NM
+            - NV
+            - NY
+            - OH
+            - OK
+            - OR
+            - PA
+            - RI
+            - SC
+            - SD
+            - TN
+            - TX
+            - UT
+            - VA
+            - VT
+            - WA
+            - WI
+            - WV
+            - WY
+          description: "2 character code for the US State. Valid State Codes: AK, AL, AR,
+            AZ, CA, CO, CT, DC, DE, FL, GA, HI, IA, ID, IL, IN, KS, KY, LA, MA,
+            MD, ME, MI, MN, MO, MS, MT, NC, ND, NE, NH, NJ, NM, NV, NY, OH, OK,
+            OR, PA, RI, SC, SD, TN, TX, UT, VA, VT, WA, WI, WV, WY."
+        country:
+          type: string
+          maximum: 2
+          example: US
+          enum:
+            - US
+          description: 2-character CountryCode. Only US is accepted for US origin information.
+        postalZipCode:
+          type: string
+          maximum: 10
+          example: "90001"
+          description: USA Zip Code.
+    AddressLine:
+      type: object
+      required:
+        - Address
+      properties:
+        Address:
+          type: string
+          maximum: 40
+          description: Street address line.
+          example: SUITE 101
+    PackageInformationDateUOMBase:
+      type: object
+      properties:
+        unitOfMeasurement:
+          type: string
+          enum:
+            - Metric
+            - Imperial
+          example: Imperial
+          default: Imperial
+          description: The unit of measurement used for package weight and lengths.
+            Imperial uses pounds and inches, while metric uses kilograms and
+            centimeters. If not provided, defaults to imperial.
+    PackageInformationSpecialInstructionsBase:
+      type: object
+      properties:
+        specialInstructions:
+          type: string
+          maximum: 250
+          description: ""
+          example: Special instructions here.
+    TrackingReferenceInformation:
+      type: object
+      properties:
+        reference1:
+          $ref: "#/components/schemas/TrackingReference"
+        reference2:
+          $ref: "#/components/schemas/TrackingReference"
+        reference3:
+          $ref: "#/components/schemas/TrackingReference"
+        reference4:
+          $ref: "#/components/schemas/TrackingReference"
+        reference5:
+          $ref: "#/components/schemas/TrackingReference"
+    TrackingReference:
+      type: string
+      maximum: 35
+      description: Tracking reference information
+    CourierPackageInformation:
+      allOf:
+        - $ref: "#/components/schemas/CourierServiceId"
+        - $ref: "#/components/schemas/PackageInformationDateUOMBase"
+        - type: object
+          required:
+            - totalWeight
+            - totalPackages
+          properties:
+            showAlternativeServicesIndicator:
+              type: boolean
+              example: true
+              default: true
+              description: Whether or not to show estimates for alternative services. If not
+                provided, defaults to true
+            totalWeight:
+              type: number
+              format: double
+              multipleOf: 0.01
+              maximum: 100000
+              minimum: 0
+              exclusiveMaximum: true
+              exclusiveMinimum: true
+              example: "14999.99"
+              description: Total weight of the package in your selected unit of measure (kg or
+                lbs). Total weight is the sum of all piece weights in the
+                shipment. Weight must be greater than 0.
+            totalPackages:
+              type: integer
+              example: 99
+              maximum: 100
+              minimum: 1
+              description: Total number of pieces.
+            shipmentOptionsInformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/OptionIdValuePair"
+            packageInformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/Piece"
+    ReturnCourierPackageInformation:
+      allOf:
+        - $ref: "#/components/schemas/ReturnCourierServiceId"
+        - $ref: "#/components/schemas/PackageInformationDateUOMBase"
+        - type: object
+          required:
+            - totalWeight
+            - totalPackages
+          properties:
+            showAlternativeServicesIndicator:
+              type: boolean
+              example: true
+              default: true
+              description: Whether or not to show estimates for alternative services. If not
+                provided, defaults to true
+            totalWeight:
+              type: number
+              format: double
+              multipleOf: 0.01
+              maximum: 100000
+              minimum: 0
+              exclusiveMaximum: true
+              exclusiveMinimum: true
+              example: "14999.99"
+              description: Total weight of the package in your selected unit of measure (kg or
+                lbs). Total weight is the sum of all piece weights in the
+                shipment. Weight must be greater than 0.
+            totalPackages:
+              type: integer
+              example: 1
+              description: Total number of pieces. Must be 1 for outbound return shipments.
+            shipmentOptionsInformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/ReturnOptionIdValuePair"
+            packageInformation:
+              type: array
+              items:
+                $ref: "#/components/schemas/Piece"
+    FreightPackageInformation:
+      allOf:
+        - $ref: "#/components/schemas/FreightServiceId"
+        - $ref: "#/components/schemas/PackageInformationDateUOMBase"
+        - type: object
+          properties:
+            declaredValue:
+              type: number
+              format: double
+              multipleOf: 0.01
+              example: "100.00"
+              description: $2 per pound maximum.
+            codAmount:
+              type: number
+              format: double
+              minimum: 0
+              maximum: 100000
+              multipleOf: 0.01
+              example: "100.00"
+              description: Cash on delivery amount.
+        - $ref: "#/components/schemas/PackageInformationSpecialInstructionsBase"
+        - type: object
+          required:
+            - lineItemDetails
+          properties:
+            lineItemDetails:
+              type: array
+              items:
+                $ref: "#/components/schemas/LineItemRequest"
+              minimum: 1
+            accessorialParameters:
+              type: array
+              items:
+                $ref: "#/components/schemas/BoolValuePair"
+    CourierServiceId:
+      type: object
+      required:
+        - serviceId
+      properties:
+        serviceId:
+          type: string
+          maximum: 128
+          example: PurolatorExpressBox9AM
+          description: The service name being used. Case-insensitive
+          enum:
+            - PurolatorExpress
+            - PurolatorExpress10:30AM
+            - PurolatorExpress12PM
+            - PurolatorExpress9AM
+            - PurolatorExpressEvening
+            - PurolatorExpressInternational
+            - PurolatorExpressInternational10:30AM
+            - PurolatorExpressInternational12:00
+            - PurolatorExpressInternational9AM
+            - PurolatorExpressU.S.
+            - PurolatorExpressU.S.10:30AM
+            - PurolatorExpressU.S.12:00
+            - PurolatorExpressU.S.9AM
+            - PurolatorExpressBox
+            - PurolatorExpressBox10:30AM
+            - PurolatorExpressBox12PM
+            - PurolatorExpressBox9AM
+            - PurolatorExpressBoxEvening
+            - PurolatorExpressBoxInternational
+            - PurolatorExpressBoxU.S.
+            - PurolatorExpressInternationalBox10:30AM
+            - PurolatorExpressInternationalBox12:00
+            - PurolatorExpressInternationalBox9AM
+            - PurolatorExpressU.S.Box10:30AM
+            - PurolatorExpressU.S.Box12:00
+            - PurolatorExpressU.S.Box9AM
+            - PurolatorExpressEnvelope
+            - PurolatorExpressEnvelope10:30AM
+            - PurolatorExpressEnvelope12PM
+            - PurolatorExpressEnvelope9AM
+            - PurolatorExpressEnvelopeEvening
+            - PurolatorExpressEnvelopeInternational
+            - PurolatorExpressEnvelopeU.S.
+            - PurolatorExpressInternationalEnvelope10:30AM
+            - PurolatorExpressInternationalEnvelope12:00
+            - PurolatorExpressInternationalEnvelope9AM
+            - PurolatorExpressU.S.Envelope10:30AM
+            - PurolatorExpressU.S.Envelope12:00
+            - PurolatorExpressU.S.Envelope9AM
+            - PurolatorExpressInternationalPack10:30AM
+            - PurolatorExpressInternationalPack12:00
+            - PurolatorExpressInternationalPack9AM
+            - PurolatorExpressPack
+            - PurolatorExpressPack10:30AM
+            - PurolatorExpressPack12PM
+            - PurolatorExpressPack9AM
+            - PurolatorExpressPackEvening
+            - PurolatorExpressPackInternational
+            - PurolatorExpressPackU.S.
+            - PurolatorExpressU.S.Pack10:30AM
+            - PurolatorExpressU.S.Pack12:00
+            - PurolatorExpressU.S.Pack9AM
+            - PurolatorGround
+            - PurolatorGround10:30AM
+            - PurolatorGround9AM
+            - PurolatorGroundEvening
+            - PurolatorGroundU.S.
+            - PurolatorQuickShip
+    ReturnCourierServiceId:
+      type: object
+      required:
+        - serviceId
+      properties:
+        serviceId:
+          type: string
+          maximum: 128
+          example: PurolatorExpressBox9AM
+          description: The service name being used. Case-insensitive
+          enum:
+            - PurolatorExpress
+            - PurolatorExpress10:30AM
+            - PurolatorExpress12PM
+            - PurolatorExpress9AM
+            - PurolatorExpressEvening
+            - PurolatorExpressInternational
+            - PurolatorExpressInternational10:30AM
+            - PurolatorExpressInternational12:00
+            - PurolatorExpressInternational9AM
+            - PurolatorExpressU.S.
+            - PurolatorExpressU.S.10:30AM
+            - PurolatorExpressU.S.12:00
+            - PurolatorExpressU.S.9AM
+            - PurolatorExpressBox
+            - PurolatorExpressBox10:30AM
+            - PurolatorExpressBox12PM
+            - PurolatorExpressBox9AM
+            - PurolatorExpressBoxEvening
+            - PurolatorExpressBoxInternational
+            - PurolatorExpressBoxU.S.
+            - PurolatorExpressInternationalBox10:30AM
+            - PurolatorExpressInternationalBox12:00
+            - PurolatorExpressInternationalBox9AM
+            - PurolatorExpressU.S.Box10:30AM
+            - PurolatorExpressU.S.Box12:00
+            - PurolatorExpressU.S.Box9AM
+            - PurolatorExpressEnvelope
+            - PurolatorExpressEnvelope10:30AM
+            - PurolatorExpressEnvelope12PM
+            - PurolatorExpressEnvelope9AM
+            - PurolatorExpressEnvelopeEvening
+            - PurolatorExpressEnvelopeInternational
+            - PurolatorExpressEnvelopeU.S.
+            - PurolatorExpressInternationalEnvelope10:30AM
+            - PurolatorExpressInternationalEnvelope12:00
+            - PurolatorExpressInternationalEnvelope9AM
+            - PurolatorExpressU.S.Envelope10:30AM
+            - PurolatorExpressU.S.Envelope12:00
+            - PurolatorExpressU.S.Envelope9AM
+            - PurolatorExpressInternationalPack10:30AM
+            - PurolatorExpressInternationalPack12:00
+            - PurolatorExpressInternationalPack9AM
+            - PurolatorExpressPack
+            - PurolatorExpressPack10:30AM
+            - PurolatorExpressPack12PM
+            - PurolatorExpressPack9AM
+            - PurolatorExpressPackEvening
+            - PurolatorExpressPackInternational
+            - PurolatorExpressPackU.S.
+            - PurolatorExpressU.S.Pack10:30AM
+            - PurolatorExpressU.S.Pack12:00
+            - PurolatorExpressU.S.Pack9AM
+            - PurolatorGround
+            - PurolatorGround10:30AM
+            - PurolatorGround9AM
+            - PurolatorGroundEvening
+            - PurolatorGroundU.S.
+            - PurolatorQuickShip
+    FreightServiceId:
+      type: object
+      required:
+        - serviceId
+      properties:
+        serviceId:
+          type: string
+          maximum: 128
+          example: PurolatorFreightStandard
+          description: The service name being used. Case-insensitive
+          enum:
+            - PurolatorFreightExpedited
+            - PurolatorFreightStandard
+    OptionIdValuePair:
+      type: object
+      properties:
+        optionId:
+          type: string
+          enum:
+            - AdultSignatureRequired
+            - ChainOfSignature
+            - DangerousGoods
+            - DangerousGoodsClass
+            - DangerousGoodsMode
+            - DeclaredValue
+            - ExpressCheque
+            - HealthCare
+            - HoldForPickup
+            - OriginSignatureNotRequired
+            - ResidentialSignatureDomestic
+            - ResidentialSignatureIntl
+            - SaturdayDelivery
+            - SaturdayPickup
+          description: ""
+          example: AdultSignatureRequired
+          maximum: 30
+        optionIdValue:
+          type: string
+          enum:
+            - "true"
+            - "false"
+            - Air
+            - Ground
+            - FullyRegulated
+            - UN3373
+            - UN1845
+            - LessThan500kgExempt
+            - LimitedQuantities
+          description: Conditionally required, depending on the value of optionId.
+          example: Yes
+          maximum: 30
+    ReturnOptionIdValuePair:
+      type: object
+      properties:
+        optionId:
+          type: string
+          enum:
+            - AdultSignatureRequired
+            - ChainOfSignature
+            - DangerousGoods
+            - DangerousGoodsClass
+            - DangerousGoodsMode
+            - DeclaredValue
+            - ExpressCheque
+            - HealthCare
+            - HoldForPickup
+            - OriginSignatureNotRequired
+            - ResidentialSignatureDomestic
+            - ResidentialSignatureIntl
+            - SaturdayDelivery
+            - SaturdayPickup
+          description: ""
+          example: AdultSignatureRequired
+          maximum: 30
+        optionIdValue:
+          type: string
+          enum:
+            - "true"
+            - "false"
+            - Air
+            - Ground
+            - FullyRegulated
+            - UN3373
+            - UN1845
+            - LessThan500kgExempt
+            - LimitedQuantities
+          description: Conditionally required, depending on the value of optionId.
+          example: Yes
+          maximum: 30
+    PieceOptionIdValuePair:
+      type: object
+      properties:
+        optionId:
+          type: string
+          enum:
+            - SpecialHandling
+            - SpecialHandlingType
+          description: ""
+          example: SpecialHandling
+          maximum: 30
+        optionIdValue:
+          type: string
+          enum:
+            - "true"
+            - "false"
+            - ResidentialAreaHeavyweight
+            - FlatPackage
+            - AdditionalHandling
+            - LargePackage
+            - Oversized
+          description: Conditionally required, depending on the value of optionId.
+          example: Yes
+          maximum: 30
+    Piece:
+      type: object
+      required:
+        - packageWeight
+      properties:
+        packageWeight:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 100000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Weight of the piece in your selected unit of measure (kg or lbs).
+            Piece weight maximum varies by selected service. Weight must be
+            greater than 0.
+        packageLength:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 10000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Length of the piece in your selected unit of measure (in or cm).
+            Width and height must be provided if this field is provided. Length
+            must be greater than 0.
+        packageWidth:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 10000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Width of the piece in your selected unit of measure (in or cm).
+            Length and height must be provided if this field is provided. Width
+            must be greater than 0.
+        packageHeight:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 10000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Height of the piece in your selected unit of measure (in or cm).
+            Width and length must be provided if this field is provided. Height
+            must be greater than 0.
+        packageOptionsInformation:
+          type: array
+          items:
+            $ref: "#/components/schemas/PieceOptionIdValuePair"
+    LineItemRequest:
+      allOf:
+        - $ref: "#/components/schemas/LineItemBase"
+        - $ref: "#/components/schemas/LineItemRequestMeasurements"
+    LineItemBase:
+      type: object
+      required:
+        - lineItem
+        - pieces
+        - handlingUnit
+        - handlingUnitType
+      properties:
+        lineItem:
+          type: integer
+          example: 1
+          description: Line item number of the corresponding shipment description.
+        pieces:
+          type: integer
+          example: 1
+          description: Number of pieces on the handling unit
+        handlingUnit:
+          type: integer
+          example: 1
+          description: Number of handling units
+        handlingUnitType:
+          type: string
+          enum:
+            - PALLET
+            - BOX
+            - SKID
+            - REEL
+            - ROLL
+            - BIN
+            - BUNDLE
+            - CAGE
+            - UNIT
+            - DRUM
+          example: BOX
+          description: Type of handling unit
+        description:
+          type: string
+          maximum: 250
+          example: Description here
+          description: Description of handling unit type
+        freightClass:
+          type: string
+          example: Freight class here
+          description: ""
+    LineItemRequestMeasurements:
+      type: object
+      required:
+        - weight
+      properties:
+        weight:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 100000
+          minimum: 0
+          exclusiveMinimum: true
+          exclusiveMaximum: true
+          example: "52999.01"
+          description: Weight of the line item in your selected unit of measure (kg or
+            lbs). Weight must be greater than 0.
+        length:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 10000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Length of the line item in your selected unit of measure (in or
+            cm). If you supply dimensions, you must supply length, width and
+            height.
+        width:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 10000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Width of the line item in your selected unit of measure (in or cm).
+            If you supply dimensions, you must supply length, width and height
+        height:
+          type: number
+          format: double
+          multipleOf: 0.01
+          maximum: 10000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Height of the line item in your selected unit of measure (in or
+            cm). If you supply dimensions, you must supply length, width and
+            height
+    BoolValuePair:
+      type: object
+      required:
+        - keyword
+        - keywordValue
+      properties:
+        keyword:
+          type: string
+          enum:
+            - 2MEN
+            - APPT
+            - ID
+            - MULT DRP
+            - OFFDAY
+            - RESID
+            - TAILGATE
+            - TSDEL
+            - VALUE
+            - DG
+            - DGPL
+            - HEAT
+            - PREAPPT
+          example: ID
+          description: Optional accessorial parameter keywords.
+        keywordValue:
+          type: boolean
+          example: "true"
+          description: Whether the keyword value in this object should be true or false.
+    CourierEstimateResponse:
+      type: object
+      required:
+        - outboundShipmentEstimates
+      properties:
+        outboundShipmentEstimates:
+          $ref: "#/components/schemas/CourierOutboundShipmentEstimate"
+        returnShipmentEstimates:
+          $ref: "#/components/schemas/CourierReturnShipmentEstimate"
+    FreightEstimateResponse:
+      type: object
+      required:
+        - outboundShipmentEstimates
+      properties:
+        outboundShipmentEstimates:
+          $ref: "#/components/schemas/FreightOutboundShipmentEstimate"
+    FreightOutboundShipmentEstimate:
+      type: object
+      required:
+        - shipmentEstimate
+      properties:
+        shipmentEstimate:
+          type: array
+          items:
+            $ref: "#/components/schemas/FreightShipmentEstimate"
+    CourierOutboundShipmentEstimate:
+      type: object
+      required:
+        - shipmentEstimate
+      properties:
+        shipmentEstimate:
+          type: array
+          items:
+            $ref: "#/components/schemas/CourierOutboundEstimate"
+    CourierReturnShipmentEstimate:
+      type: object
+      required:
+        - shipmentEstimate
+      properties:
+        shipmentEstimate:
+          type: array
+          items:
+            $ref: "#/components/schemas/CourierReturnEstimate"
+    ShipmentEstimateDaysBase:
+      type: object
+      required:
+        - expectedDeliveryDate
+        - estimatedTransitDays
+      properties:
+        shipmentDate:
+          $ref: "#/components/schemas/ShipmentDate"
+        expectedDeliveryDate:
+          type: string
+          format: date
+          example: 2024-06-30
+          description: "Estimated delivery date based on shipment date. Date format:
+            YYYY-MM-DD"
+        estimatedTransitDays:
+          type: integer
+          example: 2
+          description: Estimated number of transit days.
+    ShipmentEstimatePriceBase:
+      type: object
+      required:
+        - subTotal
+        - taxes
+        - totalPrice
+      properties:
+        subTotal:
+          type: number
+          format: double
+          multipleOf: 0.01
+          example: "390.17"
+          description: Subtotal before taxes.
+        taxes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tax"
+        totalPrice:
+          type: number
+          format: double
+          multipleOf: 0.01
+          example: "400.99"
+          description: Total price of the estimate.
+    CourierOutboundEstimate:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - $ref: "#/components/schemas/CourierServiceId"
+        - $ref: "#/components/schemas/PackageInformationDateUOMBase"
+        - $ref: "#/components/schemas/ShipmentEstimateDaysBase"
+        - type: object
+          required:
+            - basePrice
+            - unitOfMeasurement
+            - shipmentDate
+          properties:
+            basePrice:
+              type: number
+              format: double
+              multipleOf: 0.01
+              example: 18.55
+              description: ""
+            surcharges:
+              type: array
+              items:
+                $ref: "#/components/schemas/Surcharge"
+            optionPrices:
+              type: array
+              items:
+                $ref: "#/components/schemas/OptionPrice"
+        - $ref: "#/components/schemas/ShipmentEstimatePriceBase"
+    CourierReturnEstimate:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - $ref: "#/components/schemas/ReturnCourierServiceId"
+        - $ref: "#/components/schemas/PackageInformationDateUOMBase"
+        - $ref: "#/components/schemas/ShipmentEstimateDaysBase"
+        - type: object
+          required:
+            - basePrice
+            - unitOfMeasurement
+            - shipmentDate
+          properties:
+            basePrice:
+              type: number
+              format: double
+              multipleOf: 0.01
+              example: 18.55
+              description: ""
+            surcharges:
+              type: array
+              items:
+                $ref: "#/components/schemas/Surcharge"
+            optionPrices:
+              type: array
+              items:
+                $ref: "#/components/schemas/OptionPrice"
+        - $ref: "#/components/schemas/ShipmentEstimatePriceBase"
+    FreightShipmentEstimate:
+      allOf:
+        - $ref: "#/components/schemas/BaseResponse"
+        - $ref: "#/components/schemas/FreightServiceId"
+        - type: object
+          properties:
+            tariffCode:
+              type: string
+              example: PREFERRED
+              description: Tariff code to indicate what rules were applied to the estimation
+                of the shipment.
+        - $ref: "#/components/schemas/PackageInformationDateUOMBase"
+        - $ref: "#/components/schemas/ShipmentEstimateDaysBase"
+        - $ref: "#/components/schemas/ShipmentEstimatePriceBase"
+        - type: object
+          required:
+            - lineItemDetails
+            - unitOfMeasurement
+            - shipmentDate
+          properties:
+            lineItemDetails:
+              type: array
+              items:
+                $ref: "#/components/schemas/LineItemResponse"
+              minimum: 1
+            accessorialDetails:
+              type: array
+              items:
+                $ref: "#/components/schemas/AccessorialItem"
+    Surcharge:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          multipleOf: 0.01
+          example: "20.13"
+          description: ""
+        type:
+          type: string
+          example: Fuel
+          description: ""
+        description:
+          type: string
+          example: Fuel
+          description: ""
+    OptionPrice:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          multipleOf: 0.01
+          example: "20.13"
+          description: ""
+        id:
+          type: string
+          example: AdditionalHandling
+          description: ""
+        description:
+          type: string
+          example: Special Handling - Additional Handling(2pcs)
+          description: ""
+    Tax:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          multipleOf: 0.01
+          example: "20.13"
+          description: ""
+        type:
+          type: string
+          example: HST
+          description: ""
+        description:
+          type: string
+          example: HST
+          description: ""
+    LineItemResponse:
+      allOf:
+        - $ref: "#/components/schemas/LineItemBase"
+        - $ref: "#/components/schemas/LineItemResponseMeasurements"
+        - type: object
+          required:
+            - basePrice
+            - charge
+          properties:
+            basePrice:
+              type: number
+              format: double
+              multipleOf: 0.01
+              example: 50.18
+              description: ""
+            charge:
+              type: number
+              format: double
+              multipleOf: 0.01
+              example: 4.7
+              description: ""
+    LineItemResponseMeasurements:
+      type: object
+      required:
+        - weight
+        - length
+        - width
+        - height
+      properties:
+        weight:
+          type: integer
+          maximum: 1000000000000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Weight of the line item in your selected unit of measure (kg or
+            lbs). Weight must be greater than 0.
+        length:
+          type: integer
+          maximum: 1000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Length of the line item in your selected unit of measure (in or
+            cm). Length must be greater than 0.
+        width:
+          type: integer
+          maximum: 1000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Width of the line item in your selected unit of measure (in or cm).
+            Width must be greater than 0.
+        height:
+          type: integer
+          maximum: 1000
+          minimum: 0
+          exclusiveMaximum: true
+          exclusiveMinimum: true
+          example: "12.21"
+          description: Height of the line item in your selected unit of measure (in or
+            cm). Height must be greater than 0.
+    AccessorialItem:
+      type: object
+      properties:
+        code:
+          type: string
+          example: PREAPPT
+          description: ""
+        description:
+          type: string
+          example: PRE-BOOKED APPT
+          description: ""
+        charge:
+          type: number
+          format: double
+          multipleOf: 0.01
+          example: "68.69"
+          description: ""
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+          example: 9001-10
+        description:
+          type: string
+          description: Detailed error description
+          example: ProductID is required.
+    ErrorResponse:
+      type: object
+      required:
+        - errors
+      properties:
+        errors:
+          type: array
+          description: Array of Estimate Error
+          items:
+            $ref: "#/components/schemas/Error"
+    BaseResponse:
+      type: object
+      required:
+        - lineOfBusiness
+      properties:
+        lineOfBusiness:
+          $ref: "#/components/schemas/LineOfBusiness"
+    RequestReference:
+      type: string
+      maximum: 40
+      description: A unique identifier for the request. Can be used match request with
+        the response. If not provided by the user, a random UUID will be given
+        in this response header.
+      example: d7173d5c-1b5d-4883-a6f0-5f77456ebf6e
+    Language:
+      type: string
+      enum:
+        - EN
+        - FR
+      default: EN
+      description: Response language. Case-insensitive. If not provided, defaults to
+        EN (English)
+      example: EN
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        For secure access, this API uses Bearer Authentication (also known as
+        token authentication). 
+
+        You must send a Bearer token in the Authorization header when making
+        requests to protected 
+
+        endpoints. The token should be prefixed with the word "Bearer" followed
+        by a space. 
+
+        Example: "Authorization: Bearer <YourTokenHere>".

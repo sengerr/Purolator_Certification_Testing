@@ -1,0 +1,36 @@
+$kind: http-request
+description: |-
+  **Modify pickup** — PUT /pickup/v1/modify
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Production 2026-11-06. HTTP 200 · pickup updated
+url: "{{restBase}}/pickup/v1/modify"
+method: PUT
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "Courier",
+      "registeredAccountNumber": "{{AccountNumber}}",
+      "pickupConfirmationNumber": "{{PickUpConfirmationNumber}}",
+      "pickupInstructions": {
+        "untilTime": "18:00",
+        "measurementUnit": "imperial",
+        "pickupLocation": "BackDoor",
+        "additionalInstructions": "Updated sample pickup"
+      },
+      "shipmentSummary": [
+        {
+          "destinationCode": "DOM",
+          "totalPieces": 2,
+          "totalWeight": 14
+        }
+      ]
+    }
+order: 9000

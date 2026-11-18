@@ -1,0 +1,34 @@
+$kind: http-request
+description: |-
+  **Void Shipment** — VoidShipment
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · VoidShipmentResponse · ResponseInformation/Errors empty · ShipmentVoided = true
+url: "{{soapBase}}/EWS/V2/Shipping/ShippingService.asmx"
+method: POST
+headers:
+  Content-Type: text/xml; charset=utf-8
+  SOAPAction: http://purolator.com/pws/service/v2/VoidShipment
+body:
+  type: xml
+  content: |-
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v2="http://purolator.com/pws/datatypes/v2">
+       <soapenv:Header><v2:RequestContext>
+             <v2:Version>2.0</v2:Version>
+             <v2:Language>en</v2:Language>
+             <v2:GroupID>1</v2:GroupID>
+             <v2:RequestReference>UserRef</v2:RequestReference>
+             <v2:UserToken></v2:UserToken>
+          </v2:RequestContext>
+       </soapenv:Header>
+       <soapenv:Body>
+          <v2:VoidShipmentRequest>
+             <!--Optional:-->
+             <v2:PIN>
+                <v2:Value>{{PIN}}</v2:Value>
+             </v2:PIN>
+          </v2:VoidShipmentRequest>
+       </soapenv:Body>
+    </soapenv:Envelope>
+order: 3000

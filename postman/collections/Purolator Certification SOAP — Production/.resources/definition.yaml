@@ -1,0 +1,40 @@
+$kind: collection
+description: |-
+  Purolator SOAP certification checklist — **Production** (https://webservices.purolator.com).
+
+  Generated from samples/index.csv by tooling/build-postman.js — do not edit by hand.
+
+  Credentials and account numbers are NOT stored here. Create your own local Postman environment (never committed) with: SOAP_Key, SOAP_Password, AccountNumber, Different_AccountNumber, Freight_account.
+
+  > **Production creates real, billable shipments.** Void everything you create.
+variables:
+  soapBase: https://webservices.purolator.com
+  PIN: ""
+scripts:
+  - type: beforeRequest
+    code: |-
+      // Purolator validates the shipment date in ITS timezone (Toronto), so build
+      // Current_Date there, not in the machine's local time. en-CA gives yyyy-mm-dd.
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      pm.variables.set('Current_Date', now.toLocaleDateString('en-CA', { timeZone: 'America/Toronto' }));
+      // REQ + YYYYMMDDHHMMSS, the same RequestReference convention as Purolator_2026.
+      pm.variables.set('RequestReference', 'REQ' + now.getFullYear() + pad(now.getMonth() + 1) + pad(now.getDate())
+        + pad(now.getHours()) + pad(now.getMinutes()) + pad(now.getSeconds()));
+    language: text/javascript
+  - type: afterResponse
+    code: |-
+      // Keep the last shipment PIN for the requests that follow, and fail on SOAP errors.
+      const xml = pm.response.text();
+      const m = xml.match(/<(?:\w+:)?ShipmentPIN>\s*<(?:\w+:)?Value>([^<]+)</);
+      if (m) pm.collectionVariables.set('PIN', m[1]);
+      pm.test('HTTP 200', () => pm.response.to.have.status(200));
+      pm.test('No errors in ResponseInformation', () => pm.expect(xml).to.not.match(/<(?:\w+:)?Error>/));
+    language: text/javascript
+auth:
+  - id: 40a139e3-ecc0-0809-a0f5-5ce9b2f85be0
+    type: basic
+    name: basic auth
+    credentials:
+      username: "{{SOAP_Key}}"
+      password: "{{SOAP_Password}}"

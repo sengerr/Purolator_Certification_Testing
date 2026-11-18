@@ -1,0 +1,38 @@
+$kind: http-request
+description: |-
+  **Track Packages By Reference** — TrackPackagesByReference
+
+  Checklist status: **Not yet verified**
+
+  Expected: Not yet verified. Production accepted the call and answered 2800003 (no PIN matches the reference) because the sample reference does not exist. Use a reference from one of your own shipments.
+url: "{{soapBase}}/EWS/V1/Tracking/TrackingService.asmx"
+method: POST
+headers:
+  Content-Type: text/xml; charset=utf-8
+  SOAPAction: http://purolator.com/pws/service/v1/TrackPackagesByReference
+body:
+  type: xml
+  content: |-
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+       <soapenv:Header>
+          <RequestContext>
+             <Version>1.0</Version>
+             <Language>en</Language>
+             <GroupID>1</GroupID>
+             <RequestReference>{{RequestReference}}</RequestReference>
+          </RequestContext>
+       </soapenv:Header>
+       <soapenv:Body>
+          <TrackPackagesByReferenceRequest>
+             <TrackPackageByReferenceSearchCriteria>
+                <Reference>{{Reference}}</Reference>
+                <DestinationPostalCode>L5R3T8</DestinationPostalCode>
+                <DestinationCountryCode>CA</DestinationCountryCode>
+                <BillingAccountNumber>{{AccountNumber}}</BillingAccountNumber>
+                <ShipmentFromDate>{{trackDateFrom}}</ShipmentFromDate>
+                <ShipmentToDate>{{trackDateTo}}</ShipmentToDate>
+             </TrackPackageByReferenceSearchCriteria>
+          </TrackPackagesByReferenceRequest>
+       </soapenv:Body>
+    </soapenv:Envelope>
+order: 20000

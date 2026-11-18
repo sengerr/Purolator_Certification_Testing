@@ -1,0 +1,35 @@
+$kind: http-request
+description: |-
+  **Get Locations By Point Of Interest** — GetLocationsByPointOfInterest
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Production 2026-11-06. HTTP 200 · GetLocationsResponse · ResponseInformation/Errors empty · Locations returned
+url: "{{soapBase}}/EWS/V1/Locator/LocatorService.asmx"
+method: POST
+headers:
+  Content-Type: text/xml; charset=utf-8
+  SOAPAction: http://purolator.com/pws/service/v1/GetLocationsByPointOfInterest
+body:
+  type: xml
+  content: |-
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://purolator.com/pws/datatypes/v1">
+       <soapenv:Header>
+          <RequestContext>
+             <Version>1.0</Version>
+             <Language>en</Language>
+             <GroupID>1</GroupID>
+             <RequestReference>{{RequestReference}}</RequestReference>
+          </RequestContext>
+       </soapenv:Header>
+       <soapenv:Body>
+          <GetLocationsByPointOfInterestRequest>
+             <PointOfInterest>CN Tower</PointOfInterest>
+             <SearchOptions>
+                <RadialDistanceInKM>5</RadialDistanceInKM>
+                <MaxNumberOfLocations>5</MaxNumberOfLocations>
+             </SearchOptions>
+          </GetLocationsByPointOfInterestRequest>
+       </soapenv:Body>
+    </soapenv:Envelope>
+order: 27000

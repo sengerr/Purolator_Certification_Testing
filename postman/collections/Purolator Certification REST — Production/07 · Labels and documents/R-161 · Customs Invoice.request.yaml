@@ -1,0 +1,30 @@
+$kind: http-request
+description: |-
+  **Customs Invoice** — CustomsInvoice
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · documentStatus: Completed
+url: "{{restBase}}/ship/v1/documents"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "COURIER",
+      "requestReference": "{{RequestReference}}",
+      "documentCriteria": [
+        {
+          "shipmentPIN": "{{PIN}}",
+          "documentType": [
+            "CustomsInvoice"
+          ]
+        }
+      ]
+    }
+order: 16000

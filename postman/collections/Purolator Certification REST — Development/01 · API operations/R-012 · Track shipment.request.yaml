@@ -1,0 +1,27 @@
+$kind: http-request
+description: |-
+  **Track shipment** — POST /track/v1/shipment
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · searchResult status FOUND
+url: "{{restBase}}/track/v1/shipment"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "language": "en",
+      "search": [
+        {
+          "trackingId": "{{PIN}}",
+          "pod": false
+        }
+      ]
+    }
+order: 12000

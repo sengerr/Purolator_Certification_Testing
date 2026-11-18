@@ -1,0 +1,521 @@
+openapi: 3.0.1
+info:
+  title: Tracking
+  version: "1.0"
+  description: |
+    Tracking API
+
+    ## Authentication
+
+    This API requires **Bearer Token** authentication. Include your token in the `Authorization` header:
+
+    ```
+    Authorization: Bearer <your-token>
+    ```
+
+    All endpoints also require an `x-api-key` header.
+servers:
+  - url: https://shipapi.purolator.com
+  - url: https://shipapi-sandbox.purolator.com
+security:
+  - bearerAuth: []
+paths:
+  /track/v1/shipment:
+    post:
+      tags:
+        - tracking
+      summary: "search by tracking id or reference"
+      operationId: getTrackingInfo
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: x-api-key
+          required: true
+          schema:
+            type: string
+          description: "pass x-api-key"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TrackingSearchCriteria"
+        required: true
+      responses:
+        "200":
+          description: Request processed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnlineTrackingResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnlineTrackingResponse"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OnlineTrackingResponse"
+
+    options:
+      summary: CORS support
+      description: Enable CORS by returning the correct headers
+      responses:
+        "200":
+          description: Default response for CORS method
+          headers:
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: "*"
+            Access-Control-Allow-Methods:
+              schema:
+                type: string
+                example: "POST,OPTIONS"
+            Access-Control-Allow-Headers:
+              schema:
+                type: string
+                example: "Content-Type, X-Amz-Date, Authorization, X-Api-Key"
+          content: {}
+      x-amazon-apigateway-integration:
+        type: mock
+        requestTemplates:
+          application/json: '{"statusCode": 200}'
+        responses:
+          default:
+            statusCode: "200"
+            responseParameters:
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type, X-Amz-Date, Authorization, X-Api-Key'"
+              method.response.header.Access-Control-Allow-Methods: "'POST,OPTIONS'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"
+
+components:
+  schemas:
+    CodeDesc:
+      type: object
+      required:
+        - code
+        - description
+      properties:
+        code:
+          type: string
+          description: Shipment status code
+        description:
+          type: string
+          description: Shipment status description
+    CodeSubCodeDesc:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Shipment status code
+        description:
+          type: string
+          description: Shipment status description
+
+    packageCodeSubCodeDesc:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Shipment status code
+        description:
+          type: string
+          description: Shipment status description
+        subCode:
+          type: string
+          description: status subcode
+        subDescription:
+          type: string
+          description: status subdescription
+    DeliveryDetails:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the person who actually recieved the package
+        deliveryDateTime:
+          type: string
+          format: date-time
+          description: Delivery date of the package
+        image:
+          type: string
+          description: Proof of delivery image (Signature or Scanner Photo)
+        locationCode:
+          type: string
+          description: Package delivery location code
+        locationDescription:
+          type: string
+          description: Package delivery location
+      description: package delivery details
+    Event:
+      type: object
+      properties:
+        dateTime:
+          type: string
+          format: date-time
+          description: Local Timestamp associated with the current scan
+        code:
+          type: string
+          description: Scan code associated with the event
+        reasonCode:
+          type: string
+          description: Scan reason code associated with the event
+        description:
+          type: string
+          description: Description of the event
+        terminal:
+          type: string
+          description: Local terminal from scan
+        routeId:
+          type: string
+          description: Local route from scan
+        location:
+          $ref: "#/components/schemas/Location"
+        x12:
+          $ref: "#/components/schemas/ExternalEvent"
+        xreference:
+          type: string
+          description: The new pin for an overlable shipment
+      description: Array of scan events
+    ExternalEvent:
+      type: object
+      properties:
+        AT701:
+          type: string
+        AT702:
+          type: string
+    Location:
+      type: object
+      properties:
+        streetaddress1:
+          type: string
+          description: Address of the scan location
+        streetaddress2:
+          type: string
+          description: Address of the scan location
+        city:
+          type: string
+          description: city name associated with the event
+        provinceState:
+          type: string
+          description: Province name associated with the event
+        postalCode:
+          type: string
+        countryCode:
+          type: string
+          description: country name associated with the event
+      description: Event location details
+    Package:
+      type: object
+      required:
+        - pin
+      properties:
+        id:
+          type: integer
+          description: The array index value
+          format: int32
+        pin:
+          type: string
+          description: Package Pin
+        status:
+          $ref: "#/components/schemas/packageCodeSubCodeDesc"
+        estimatedDeliveryDate:
+          type: string
+          format: date
+          description: estimated delivery date of the package
+        transitDays:
+          type: integer
+          format: int32
+          description: Number of days it has been in transit
+        packageCreated:
+          type: string
+          format: date
+          description: Revised shipment date from piece state
+        packageReceived:
+          type: string
+          format: date-time
+          description: The date that the shipment was inducted
+        lastEvent:
+          $ref: "#/components/schemas/Event"
+        details:
+          $ref: "#/components/schemas/PackageDetails"
+        events:
+          type: array
+          description: Array of scan events
+          items:
+            $ref: "#/components/schemas/Event"
+    NameValue:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Service Name
+        value:
+          type: string
+          description: Service Value
+        description:
+          type: string
+          description: Service Description
+    OnlineTrackingResponse:
+      type: object
+      properties:
+        searchResult:
+          type: array
+          description: Array of all the search requests
+          items:
+            $ref: "#/components/schemas/SearchResult"
+        errors:
+          type: array
+          items:
+            $ref: "#/components/schemas/CodeSubCodeDesc"
+    PackageDetails:
+      type: object
+      properties:
+        references:
+          type: array
+          description: Array of all references
+          items:
+            type: string
+            description: Tracking Reference defined when creating the package
+        services:
+          type: array
+          description: Array of package service details
+          items:
+            $ref: "#/components/schemas/NameValue"
+        weight:
+          $ref: "#/components/schemas/PackageWeight"
+        holdForPickupLocationId:
+          type: string
+          description: Hold for pickup location id
+        deliveryDetails:
+          $ref: "#/components/schemas/DeliveryDetails"
+      description: Array of the package services used
+    Receiver:
+      type: object
+      properties:
+        streetAddress1:
+          type: string
+          description: Address of the scan location
+        streetAddress2:
+          type: string
+          description: Address of the scan location
+        streetAddress3:
+          type: string
+          description: Address of the scan location
+        city:
+          type: string
+          description: Destination city
+        provinceState:
+          type: string
+          description: Destination province
+        countryCode:
+          type: string
+          description: Destination countryCode
+        postalzipcode:
+          type: string
+          description: Origin shipper address
+      description: Object containing all reciever details
+    SearchResult:
+      type: object
+      required:
+        - pin
+      properties:
+        pin:
+          type: object
+          required:
+            - trackingId
+          properties:
+            trackingId:
+              type: string
+              description: The pin or reference that was searched
+            shipmentDateFrom:
+              type: string
+              description: Date provided for duplicate pins
+            shipmentDateTo:
+              type: string
+              description: Date provided for duplicate pins
+            status:
+              type: string
+              description: Status of the search (Found/Not Found/Error/Overflow/etc...)
+            type:
+              type: string
+              description: What type of data was the search value (PIN or Reference)
+              format: int32
+            errors:
+              type: array
+              items:
+                $ref: "#/components/schemas/CodeSubCodeDesc"
+            shipment:
+              $ref: "#/components/schemas/Shipment"
+      description: Search result for a single tracking query
+    Shipment:
+      type: object
+      required:
+        - shipmentPin
+      properties:
+        shipmentPin:
+          type: string
+          description: Lead pin
+        status:
+          $ref: "#/components/schemas/CodeDesc"
+        shipmentCreated:
+          type: string
+          description: Shipment date
+          format: date
+        pieceTotalCount:
+          type: integer
+          description: Total number of the pieces in the shipment
+          format: int32
+        details:
+          $ref: "#/components/schemas/ShipmentDetails"
+        package:
+          type: array
+          items:
+            $ref: "#/components/schemas/Package"
+          description: An array of all packages within the shipment
+      description: Array of all unique shipments found in the requested searches
+    ShipmentDetails:
+      type: object
+      properties:
+        references:
+          type: array
+          description: Array of all references
+          items:
+            type: string
+            description: Array of all references
+        returnShipment:
+          type: boolean
+          description: Flag to identify a return shipment
+        product:
+          $ref: "#/components/schemas/CodeDesc"
+        services:
+          type: array
+          description: Array of package service details
+          items:
+            $ref: "#/components/schemas/NameValue"
+        shipper:
+          $ref: "#/components/schemas/Shipper"
+        receiver:
+          $ref: "#/components/schemas/Receiver"
+        note:
+          type: string
+        weight:
+          $ref: "#/components/schemas/ShipmentWeight"
+      description: The shipment details object tied to the shipmentDetails API option
+    Shipper:
+      type: object
+      properties:
+        streetAddress1:
+          type: string
+          description: Address of the scan location
+        streetAddress2:
+          type: string
+          description: Address of the scan location
+        streetAddress3:
+          type: string
+          description: Address of the scan location
+
+        city:
+          type: string
+          description: Origin city
+        provinceState:
+          type: string
+          description: Origin province / state
+        countryCode:
+          type: string
+          description: Origin country code
+        postalzipcode:
+          type: string
+          description: Origin shipper address
+
+      description: Object containing all shipper details
+    ShipmentWeight:
+      type: object
+      properties:
+        unit:
+          type: string
+          description: Unit of the shipment weight
+        value:
+          type: number
+          description: Actual weight of the shipment
+          format: double
+      description: Shipment weight details
+    PackageWeight:
+      type: object
+      properties:
+        declaredUnit:
+          type: string
+          description: Unit of the declared package weight
+        declaredValue:
+          type: number
+          description: Declared package weight
+          format: double
+        actualUnit:
+          type: string
+          description: Unit of the package weight
+        actualValue:
+          type: number
+          description: Actual package weight
+          format: double
+      description: Shipment weight details
+    TrackingSearchCriteria:
+      type: object
+      properties:
+        language:
+          type: string
+          description: Language expected in response customer facing fields
+          example: en
+        search:
+          type: array
+          items:
+            $ref: "#/components/schemas/OnlineTrackingSearchRequest"
+
+    OnlineTrackingSearchRequest:
+      type: object
+      required:
+        - trackingId
+      properties:
+        trackingId:
+          type: string
+          example: "DJA001717665"
+          description: requested pin/reference
+        pod:
+          type: boolean
+          description: Proof of delivery image (Signature or Scanner Photo)
+        shipmentDateFrom:
+          type: string
+          example: "2023-11-14"
+          description: Shipment Date From - Date provided for duplicate pins
+        shipmentDateTo:
+          type: string
+          example: "2022-11-14"
+          description: Shipment Date To - Date provided for duplicate pins
+        account:
+          type: string
+          example: "2347890"
+          description: Shipper account
+        destinationPostalZipCode:
+          type: string
+          example: "A1A 1A1"
+          description: Destination Postal Code
+        eventSortOrder:
+          type: string
+          example: "d"
+          description: Event Sort Order - a/d Assending/decending
+      description: Array of all the search requests
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        For secure access, this API uses Bearer Authentication (also known as token authentication). 
+        You must send a Bearer token in the Authorization header when making requests to protected 
+        endpoints. The token should be prefixed with the word "Bearer" followed by a space. 
+        Example: "Authorization: Bearer <YourTokenHere>".

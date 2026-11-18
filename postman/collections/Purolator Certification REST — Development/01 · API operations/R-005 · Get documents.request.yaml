@@ -1,0 +1,29 @@
+$kind: http-request
+description: |-
+  **Get documents** — POST /ship/v1/documents
+
+  Checklist status: **Verified**
+
+  Expected: Verified in Development / Certification. HTTP 200 · documentStatus: Completed
+url: "{{restBase}}/ship/v1/documents"
+method: POST
+headers:
+  x-api-key: "{{REST_XApiKey}}"
+  RequestReference: "{{RequestReference}}"
+  Language: en
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "lineOfBusiness": "Courier",
+      "documentCriteria": [
+        {
+          "shipmentPIN": "{{PIN}}"
+        },
+        {
+          "shipmentPIN": "{{PIN}}"
+        }
+      ]
+    }
+order: 5000
